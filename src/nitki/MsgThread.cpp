@@ -39,13 +39,13 @@ std::mutex quitMessageMutex;
 
 
 
-void MsgThread::PushPreallocatedQuitMessage()noexcept{
+void MsgThread::pushPreallocatedQuitMessage()noexcept{
 	std::lock_guard<decltype(quitMessageMutex)> mutexGuard(quitMessageMutex);
 	
 	if(!this->quitMessage){
 		return;
 	}
 	
-	this->queue.PushMessage(std::move(this->quitMessage));
+	this->queue.pushMessage(std::move(this->quitMessage));
 }
 

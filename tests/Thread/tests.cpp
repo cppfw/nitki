@@ -19,10 +19,10 @@ public:
 	int a, b;
 
 	//override
-	void Run(){
+	void run(){
 		this->a = 10;
 		this->b = 20;
-		nitki::Thread::Sleep(1000);
+		nitki::Thread::sleep(1000);
 		this->a = this->b;
 	}
 };
@@ -35,11 +35,11 @@ void Run(){
 	{
 		TestThread t;
 
-		t.Start();
+		t.start();
 
-		nitki::Thread::Sleep(2000);
+		nitki::Thread::sleep(2000);
 
-		t.Join();
+		t.join();
 	}
 
 
@@ -48,9 +48,9 @@ void Run(){
 	{
 		TestThread t;
 
-		t.Start();
+		t.start();
 
-		t.Join();
+		t.join();
 	}
 }
 
@@ -67,14 +67,14 @@ public:
 	int a, b;
 
 	//override
-	void Run(){
+	void run(){
 		pogodi::WaitSet ws(1);
 		
 		ws.add(this->queue, pogodi::Waitable::READ);
 		
 		while(!this->quitFlag){
 			ws.wait();
-			while(auto m = this->queue.PeekMsg()){
+			while(auto m = this->queue.peekMsg()){
 				m();
 			}
 		}
@@ -97,14 +97,14 @@ void Run(){
 		> thr;
 
 	for(TestThread1 *i = thr.begin(); i != thr.end(); ++i){
-		i->Start();
+		i->start();
 	}
 
-	nitki::Thread::Sleep(1000);
+	nitki::Thread::sleep(1000);
 
 	for(TestThread1 *i = thr.begin(); i != thr.end(); ++i){
-		i->PushQuitMessage();
-		i->Join();
+		i->pushQuitMessage();
+		i->join();
 	}
 }
 
@@ -122,7 +122,7 @@ class ImmediateExitThread : public nitki::Thread{
 public:
 
 	//override
-	void Run(){
+	void run(){
 		return;
 	}
 };
@@ -131,8 +131,8 @@ public:
 void Run(){
 	for(unsigned i = 0; i < 100; ++i){
 		ImmediateExitThread t;
-		t.Start();
-		t.Join();
+		t.start();
+		t.join();
 	}
 }
 
@@ -151,15 +151,15 @@ public:
 		public:
 
 			//overrun
-			void Run(){
+			void run(){
 			}
 		} inner;
 
 		//override
-		void Run(){
-			this->inner.Start();
-			nitki::Thread::Sleep(100);
-			this->inner.Join();
+		void run(){
+			this->inner.start();
+			nitki::Thread::sleep(100);
+			this->inner.join();
 		}
 	} top;
 
@@ -170,9 +170,9 @@ public:
 	{}
 
 	//override
-	void Run(){
-		this->top.Start();
-		this->top.Join();
+	void run(){
+		this->top.start();
+		this->top.join();
 		this->success = true;
 	}
 };
@@ -181,13 +181,13 @@ public:
 
 void Run(){
 	TestRunnerThread runner;
-	runner.Start();
+	runner.start();
 
-	nitki::Thread::Sleep(1000);
+	nitki::Thread::sleep(1000);
 
 	ASSERT_ALWAYS(runner.success)
 
-	runner.Join();
+	runner.join();
 }
 
 

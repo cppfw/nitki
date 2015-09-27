@@ -27,18 +27,18 @@ std::mutex threadMutex2;
 //Tread Run function
 //static
 #if M_OS == M_OS_WINDOWS
-unsigned int __stdcall Thread::RunThread(void *data)
+unsigned int __stdcall Thread::runThread(void *data)
 #elif M_OS == M_OS_SYMBIAN
-TInt Thread::RunThread(TAny *data)
+TInt Thread::runThread(TAny *data)
 #elif M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
-void* Thread::RunThread(void *data)
+void* Thread::runThread(void *data)
 #else
 #	error "Unsupported OS"
 #endif
 {
 	Thread *thr = reinterpret_cast<Thread*>(data);
 	try{
-		thr->Run();
+		thr->run();
 	}catch(utki::Exc& DEBUG_CODE(e)){
 		ASSERT_INFO(false, "uncaught utki::Exc exception in Thread::Run(): " << e.What())
 	}catch(std::exception& DEBUG_CODE(e)){
@@ -52,7 +52,7 @@ void* Thread::RunThread(void *data)
 		//this->state variable before Start() has finished.
 		std::lock_guard<decltype(threadMutex2)> mutexGuard(threadMutex2);
 
-		thr->state = STOPPED;
+		thr->state = E_State::STOPPED;
 	}
 
 #if M_OS == M_OS_WINDOWS
@@ -100,7 +100,7 @@ Thread::~Thread()noexcept{
 
 
 
-void Thread::Start(size_t stackSize){
+void Thread::start(size_t stackSize){
 	//Protect by mutex to avoid several Start() methods to be called
 	//by concurrent threads simultaneously and to protect call to Join() before Start()
 	//has returned.
@@ -110,8 +110,8 @@ void Thread::Start(size_t stackSize){
 	//exits before the Start() method returned.
 	std::lock_guard<decltype(threadMutex2)> mutexGuard2(threadMutex2);
 
-	if(this->state != NEW){
-		throw HasAlreadyBeenStartedExc();
+	if(this->state != E_State::NEW){
+		throw ThreadHasAlreadyBeenStartedExc();
 	}
 
 #if M_OS == M_OS_WINDOWS
@@ -119,7 +119,7 @@ void Thread::Start(size_t stackSize){
 			_beginthreadex(
 					NULL,
 					stackSize > size_t(unsigned(-1)) ? unsigned(-1) : unsigned(stackSize),
-					&RunThread,
+					&runThread,
 					reinterpret_cast<void*>(this),
 					0,
 					NULL
@@ -129,7 +129,7 @@ void Thread::Start(size_t stackSize){
 		throw Exc("Thread::Start(): _beginthreadex failed");
 	}
 #elif M_OS == M_OS_SYMBIAN
-	if(this->th.Create(_L("ting thread"), &RunThread,
+	if(this->th.Create(_L("ting thread"), &runThread,
 				stackSize == 0 ? KDefaultStackSize : stackSize,
 				NULL, reinterpret_cast<TAny*>(this)) != KErrNone
 			)
@@ -145,7 +145,7 @@ void Thread::Start(size_t stackSize){
 		pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 		pthread_attr_setstacksize(&attr, stackSize);
 
-		int res = pthread_create(&this->th, &attr, &RunThread, this);
+		int res = pthread_create(&this->th, &attr, &runThread, this);
 		if(res != 0){
 			pthread_attr_destroy(&attr);
 			TRACE_AND_LOG(<< "Thread::Start(): pthread_create() failed, error code = " << res
@@ -160,33 +160,33 @@ void Thread::Start(size_t stackSize){
 #else
 #	error "Unsupported OS"
 #endif
-	this->state = RUNNING;
+	this->state = E_State::RUNNING;
 }
 
 
 
-void Thread::Join() noexcept{
+void Thread::join() noexcept{
 //	TRACE(<< "Thread::Join(): enter" << std::endl)
 
 	//protect by mutex to avoid several Join() methods to be called by concurrent threads simultaneously.
 	//NOTE: excerpt from pthread docs: "If multiple threads simultaneously try to join with the same thread, the results are undefined."
 	std::lock_guard<decltype(this->mutex1)> mutexGuard(this->mutex1);
 
-	if(this->state == NEW){
+	if(this->state == E_State::NEW){
 		//thread was not started, do nothing
 		return;
 	}
 
-	if(this->state == JOINED){
+	if(this->state == E_State::JOINED){
 		return;
 	}
 
-	ASSERT(this->state == RUNNING || this->state == STOPPED)
+	ASSERT(this->state == E_State::RUNNING || this->state == E_State::STOPPED)
 	
 #if M_OS == M_OS_WINDOWS
 	ASSERT_INFO(this->th != GetCurrentThread(), "tried to call Join() on the current thread")
 #else
-	ASSERT_INFO(T_ThreadID(this->th) != nitki::Thread::GetCurrentThreadID(), "tried to call Join() on the current thread")
+	ASSERT_INFO(T_ThreadID(this->th) != nitki::Thread::getCurrentThreadID(), "tried to call Join() on the current thread")
 #endif
 
 #if M_OS == M_OS_WINDOWS
@@ -210,9 +210,9 @@ void Thread::Join() noexcept{
 
 	//NOTE: at this point the thread's Run() method should already exit and state
 	//should be set to STOPPED
-	ASSERT_INFO(this->state == STOPPED, "this->state = " << this->state)
+	ASSERT_INFO(this->state == E_State::STOPPED, "this->state = " << this->state)
 
-	this->state = JOINED;
+	this->state = E_State::JOINED;
 
 //	TRACE(<< "Thread::Join(): exit" << std::endl)
 }

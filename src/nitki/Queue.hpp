@@ -74,7 +74,7 @@ public:
 	 * @brief Pushes a new message to the queue.
 	 * @param msg - the message to push into the queue.
 	 */
-	void PushMessage(T_Message&& msg)noexcept;
+	void pushMessage(T_Message&& msg)noexcept;
 
 
 
@@ -85,7 +85,7 @@ public:
 	 * @return auto-pointer to Message instance.
 	 * @return invalid auto-pointer if there are no messages in the queue.
 	 */
-	T_Message PeekMsg();
+	T_Message peekMsg();
 
 
 private:

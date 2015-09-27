@@ -6,7 +6,7 @@
 #endif
 
 
-using namespace ting::mt;
+using namespace nitki;
 
 
 
@@ -53,7 +53,56 @@ Semaphore::~Semaphore()noexcept{
 
 
 
-bool Semaphore::Wait(std::uint32_t timeoutMillis){
+void Semaphore::wait(){
+#if M_OS == M_OS_WINDOWS
+	switch(WaitForSingleObject(this->s, DWORD(INFINITE))){
+		case WAIT_OBJECT_0:
+			//				TRACE(<< "Semaphore::Wait(): exit" << std::endl)
+			break;
+		case WAIT_TIMEOUT:
+			ASSERT(false)
+			break;
+		default:
+			throw utki::Exc("Semaphore::Wait(): wait failed");
+			break;
+	}
+#elif M_OS == M_OS_SYMBIAN
+	this->s.Wait();
+#elif M_OS == M_OS_MACOSX
+	if(pthread_mutex_lock(&this->m) != 0){
+		throw utki::Exc("Semaphore::Wait(): failed to lock the mutex");
+	}
+
+	if(this->v == 0){
+		if(pthread_cond_wait(&this->c, &this->m) != 0){
+			if(pthread_mutex_unlock(&this->m) != 0){
+				ASSERT(false)
+			}
+			throw utki::Exc("Semaphore::Wait(): pthread_cond_wait() failed");
+		}
+	}
+
+	--this->v;
+
+	if(pthread_mutex_unlock(&this->m) != 0){
+		ASSERT(false)
+	}
+#elif M_OS == M_OS_LINUX
+	int retVal;
+	do{
+		retVal = sem_wait(&this->s);
+	}while(retVal == -1 && errno == EINTR);
+	if(retVal < 0){
+		throw utki::Exc("Semaphore::Wait(): wait failed");
+	}
+#else
+#error "unknown OS"
+#endif
+}
+
+
+
+bool Semaphore::wait(std::uint32_t timeoutMillis){
 #if M_OS == M_OS_WINDOWS
 	static_assert(INFINITE == 0xffffffff, "error");
 	switch(WaitForSingleObject(this->s, DWORD(timeoutMillis == INFINITE ? INFINITE - 1 : timeoutMillis))){
@@ -137,4 +186,44 @@ bool Semaphore::Wait(std::uint32_t timeoutMillis){
 #	error "unknown OS"
 #endif
 	return true;
+}
+
+
+
+
+void Semaphore::signal()noexcept{
+	//		TRACE(<< "Semaphore::Signal(): invoked" << std::endl)
+#if M_OS == M_OS_WINDOWS
+	if(ReleaseSemaphore(this->s, 1, NULL) == 0){
+		ASSERT(false)
+	}
+#elif M_OS == M_OS_SYMBIAN
+	this->s.Signal();
+#elif M_OS == M_OS_MACOSX
+	if(pthread_mutex_lock(&this->m) != 0){
+		ASSERT(false)
+		return;
+	}
+
+	if(this->v < std::uint32_t(-1)){
+		++this->v;
+	}else{
+		ASSERT(false)
+	}
+
+	if(this->v - 1 == 0){
+		//someone is waiting on the semaphore
+		pthread_cond_signal(&this->c);
+	}
+
+	if(pthread_mutex_unlock(&this->m) != 0){
+		ASSERT(false)
+	}
+#elif M_OS == M_OS_LINUX
+	if(sem_post(&this->s) < 0){
+		ASSERT(false)
+	}
+#else
+#error "unknown OS"
+#endif
 }

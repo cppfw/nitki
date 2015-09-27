@@ -49,6 +49,7 @@
           <cleanCommand>${MAKE} -f makefile clean</cleanCommand>
           <executablePath></executablePath>
           <ccTool>
+            <standard>8</standard>
             <incDir>
               <pElem>.</pElem>
             </incDir>

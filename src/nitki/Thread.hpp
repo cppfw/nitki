@@ -50,11 +50,11 @@ class Thread{
 
 //Tread Run function
 #if M_OS == M_OS_WINDOWS
-	static unsigned int __stdcall RunThread(void *data);
+	static unsigned int __stdcall runThread(void *data);
 #elif M_OS == M_OS_SYMBIAN
-	static TInt RunThread(TAny *data);
+	static TInt runThread(TAny *data);
 #elif M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX
-	static void* RunThread(void *data);
+	static void* runThread(void *data);
 #else
 #	error "Unsupported OS"
 #endif
@@ -63,14 +63,14 @@ class Thread{
 	std::mutex mutex1;
 
 
-	enum E_State{
+	enum class E_State{
 		NEW,
 		RUNNING,
 		STOPPED,
 		JOINED
 	};
 	
-	volatile E_State state = NEW;
+	volatile E_State state = E_State::NEW;
 
 	//system dependent handle
 #if M_OS == M_OS_WINDOWS
@@ -100,9 +100,9 @@ public:
 		{}
 	};
 	
-	class HasAlreadyBeenStartedExc : public Exc{
+	class ThreadHasAlreadyBeenStartedExc : public Exc{
 	public:
-		HasAlreadyBeenStartedExc() :
+		ThreadHasAlreadyBeenStartedExc() :
 				Exc("The thread has already been started.")
 		{}
 	};
@@ -118,7 +118,7 @@ public:
 	 * @brief This should be overridden, this is what to be run in new thread.
 	 * Pure virtual method, it is called in new thread when thread runs.
 	 */
-	virtual void Run() = 0;
+	virtual void run() = 0;
 
 
 
@@ -130,7 +130,7 @@ public:
 	 *                    If stackSize is 0 then system default stack size is used
 	 *                    (stack size depends on underlying OS).
 	 */
-	void Start(size_t stackSize = 0);
+	void start(size_t stackSize = 0);
 
 
 
@@ -141,7 +141,7 @@ public:
 	 * Note: it is safe to call Join() on not started threads,
 	 *       in that case it will return immediately.
 	 */
-	void Join()noexcept;
+	void join()noexcept;
 
 
 
@@ -152,7 +152,7 @@ public:
 	 * AT LEAST 'msec' milliseconds.
 	 * @param msec - number of milliseconds the thread should be suspended.
 	 */
-	static void Sleep(unsigned msec = 0)noexcept{
+	static void sleep(unsigned msec = 0)noexcept{
 #if M_OS == M_OS_WINDOWS
 		SleepEx(DWORD(msec), FALSE);// Sleep() crashes on MinGW (I do not know why), this is why SleepEx() is used here.
 #elif M_OS == M_OS_SYMBIAN
@@ -197,7 +197,7 @@ public:
 	 * created.
 	 * @return unique thread identifier.
 	 */
-	static inline T_ThreadID GetCurrentThreadID()noexcept{
+	static inline T_ThreadID getCurrentThreadID()noexcept{
 #if M_OS == M_OS_WINDOWS
 		return T_ThreadID(GetCurrentThreadId());
 #elif M_OS == M_OS_MACOSX || M_OS == M_OS_LINUX

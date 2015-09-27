@@ -74,7 +74,7 @@ Queue::~Queue()noexcept{
 
 
 
-void Queue::PushMessage(std::function<void()>&& msg)noexcept{
+void Queue::pushMessage(std::function<void()>&& msg)noexcept{
 	std::lock_guard<decltype(this->mut)> mutexGuard(this->mut);
 	this->messages.push_back(std::move(msg));
 	
@@ -113,7 +113,7 @@ void Queue::PushMessage(std::function<void()>&& msg)noexcept{
 
 
 
-Queue::T_Message Queue::PeekMsg(){
+Queue::T_Message Queue::peekMsg(){
 	std::lock_guard<decltype(this->mut)> mutexGuard(this->mut);
 	if(this->messages.size() != 0){
 		ASSERT(this->CanRead())

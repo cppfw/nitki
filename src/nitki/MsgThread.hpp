@@ -59,15 +59,15 @@ public:
 	 * @brief Send preallocated 'Quit' message to thread's queue.
 	 * This function throws no exceptions. It can send the quit message only once.
 	 */
-	void PushPreallocatedQuitMessage()noexcept;
+	void pushPreallocatedQuitMessage()noexcept;
 	
 	
 	
 	/**
 	 * @brief Send 'Quit' message to thread's queue.
 	 */
-	void PushQuitMessage(){
-		this->PushMessage([this](){this->quitFlag = true;});
+	void pushQuitMessage(){
+		this->pushMessage([this](){this->quitFlag = true;});
 	}
 
 
@@ -75,8 +75,8 @@ public:
 	/**
 	 * @brief Send "no operation" message to thread's queue.
 	 */
-	void PushNopMessage(){
-		this->PushMessage([](){});
+	void pushNopMessage(){
+		this->pushMessage([](){});
 	}
 
 
@@ -85,8 +85,8 @@ public:
 	 * @brief Send a message to thread's queue.
 	 * @param msg - a message to send.
 	 */
-	void PushMessage(Queue::T_Message&& msg)noexcept{
-		this->queue.PushMessage(std::move(msg));
+	void pushMessage(Queue::T_Message&& msg)noexcept{
+		this->queue.pushMessage(std::move(msg));
 	}
 };
 
