@@ -36,7 +36,7 @@ THE SOFTWARE. */
 
 
 
-namespace ting{
+namespace nitki{
 namespace mt{
 
 

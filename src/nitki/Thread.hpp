@@ -1,29 +1,3 @@
-/* The MIT License:
-
-Copyright (c) 2008-2013 Ivan Gagis <igagis@gmail.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-
-// Home page: http://ting.googlecode.com
-
-
-
 /**
  * @file Thread.hpp
  * @author Ivan Gagis <igagis@gmail.com>
@@ -33,17 +7,16 @@ THE SOFTWARE. */
 
 #pragma once
 
-#include "../config.hpp"
-#include "../debug.hpp"
-#include "../types.hpp"
-#include "../Exc.hpp"
+#include <utki/config.hpp>
+#include <utki/debug.hpp>
+#include <utki/Exc.hpp>
 
 #include <mutex>
 
 
 
 #if M_OS == M_OS_WINDOWS
-#	include "../windows.hpp"
+#	include <utki/windows.hpp>
 
 #elif M_OS == M_OS_SYMBIAN
 #	include <string.h>
@@ -64,8 +37,7 @@ THE SOFTWARE. */
 
 
 
-namespace ting{
-namespace mt{
+namespace nitki{
 
 
 
@@ -121,10 +93,10 @@ public:
 	 * @brief Basic exception type thrown by Thread class.
 	 * @param msg - human friendly exception description.
 	 */
-	class Exc : public ting::Exc{
+	class Exc : public nitki::Exc{
 	public:
 		Exc(const std::string& msg) :
-				ting::Exc(msg)
+				nitki::Exc(msg)
 		{}
 	};
 	
@@ -240,5 +212,5 @@ public:
 
 
 
-}//~namespace
+
 }//~namespace
