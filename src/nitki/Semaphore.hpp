@@ -1,29 +1,3 @@
-/* The MIT License:
-
-Copyright (c) 2008-2013 Ivan Gagis <igagis@gmail.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-
-// Home page: http://ting.googlecode.com
-
-
-
 /**
  * @author Ivan Gagis <igagis@gmail.com>
  * @author Jose Luis Hidalgo <joseluis.hidalgo@gmail.com> - Mac OS X initial port
@@ -31,14 +5,13 @@ THE SOFTWARE. */
 
 #pragma once
 
-#include "../config.hpp"
-#include "../debug.hpp"
-#include "../types.hpp"
-#include "../Exc.hpp"
+#include <utki/config.hpp>
+#include <utki/debug.hpp>
+#include <utki/Exc.hpp>
 
 
 #if M_OS == M_OS_WINDOWS
-#	include "../windows.hpp"
+#	include <utki/windows.hpp>
 
 #elif M_OS == M_OS_SYMBIAN
 #	include <string.h>
@@ -120,14 +93,14 @@ public:
 				ASSERT(false)
 				break;
 			default:
-				throw ting::Exc("Semaphore::Wait(): wait failed");
+				throw utki::Exc("Semaphore::Wait(): wait failed");
 				break;
 		}
 #elif M_OS == M_OS_SYMBIAN
 		this->s.Wait();
 #elif M_OS == M_OS_MACOSX
 		if(pthread_mutex_lock(&this->m) != 0){
-			throw ting::Exc("Semaphore::Wait(): failed to lock the mutex");
+			throw utki::Exc("Semaphore::Wait(): failed to lock the mutex");
 		}
 		
 		if(this->v == 0){
@@ -135,7 +108,7 @@ public:
 				if(pthread_mutex_unlock(&this->m) != 0){
 					ASSERT(false)
 				}
-				throw ting::Exc("Semaphore::Wait(): pthread_cond_wait() failed");
+				throw utki::Exc("Semaphore::Wait(): pthread_cond_wait() failed");
 			}
 		}
 		
@@ -150,7 +123,7 @@ public:
 			retVal = sem_wait(&this->s);
 		}while(retVal == -1 && errno == EINTR);
 		if(retVal < 0){
-			throw ting::Exc("Semaphore::Wait(): wait failed");
+			throw utki::Exc("Semaphore::Wait(): wait failed");
 		}
 #else
 #	error "unknown OS"

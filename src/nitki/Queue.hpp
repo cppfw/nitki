@@ -7,7 +7,7 @@
 
 #include <utki/config.hpp>
 #include <utki/debug.hpp>
-#include "../WaitSet.hpp"
+#include <pogodi/WaitSet.hpp>
 
 #include <utki/SpinLock.hpp>
 
@@ -25,12 +25,12 @@ namespace nitki{
  * means of sending messages to each other. Thus, when one thread sends a message to another one,
  * it asks that another thread to execute some code portion - handler code of the message.
  * NOTE: Queue implements Waitable interface which means that it can be used in conjunction
- * with ting::WaitSet. But, note, that the implementation of the Waitable is that it
+ * with pogodi::WaitSet. But, note, that the implementation of the Waitable is that it
  * shall only be used to wait for READ. If you are trying to wait for WRITE the behavior will be
  * undefined.
  */
-class Queue : public nitki::Waitable{
-	nitki::mt::SpinLock mut;
+class Queue : public pogodi::Waitable{
+	utki::SpinLock mut;
 
 public:
 	typedef std::function<void()> T_Message;
@@ -90,20 +90,20 @@ public:
 
 private:
 #if M_OS == M_OS_WINDOWS
-	HANDLE GetHandle()override;
+	HANDLE getHandle()override;
 
 	std::uint32_t flagsMask;//flags to wait for
 
-	void SetWaitingEvents(std::uint32_t flagsToWaitFor)override;
+	void setWaitingEvents(std::uint32_t flagsToWaitFor)override;
 
 	//returns true if signaled
-	bool CheckSignaled()override;
+	bool checkSignaled()override;
 
 #elif M_OS == M_OS_LINUX
-	int GetHandle()override;
+	int getHandle()override;
 
 #elif M_OS == M_OS_MACOSX
-	int GetHandle()override;
+	int getHandle()override;
 
 #else
 #	error "Unsupported OS"

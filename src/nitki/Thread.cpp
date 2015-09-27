@@ -1,27 +1,3 @@
-/* The MIT License:
-
-Copyright (c) 2008-2013 Ivan Gagis <igagis@gmail.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-
-// Home page: http://ting.googlecode.com
-
 #include "Thread.hpp"
 
 
@@ -29,9 +5,10 @@ THE SOFTWARE. */
 #	include <process.h>
 #endif
 
+#include <cstring>
 
 
-using namespace ting::mt;
+using namespace nitki;
 
 
 
@@ -62,8 +39,8 @@ void* Thread::RunThread(void *data)
 	Thread *thr = reinterpret_cast<Thread*>(data);
 	try{
 		thr->Run();
-	}catch(ting::Exc& DEBUG_CODE(e)){
-		ASSERT_INFO(false, "uncaught ting::Exc exception in Thread::Run(): " << e.What())
+	}catch(utki::Exc& DEBUG_CODE(e)){
+		ASSERT_INFO(false, "uncaught utki::Exc exception in Thread::Run(): " << e.What())
 	}catch(std::exception& DEBUG_CODE(e)){
 		ASSERT_INFO(false, "uncaught std::exception exception in Thread::Run(): " << e.what())
 	}catch(...){
@@ -209,7 +186,7 @@ void Thread::Join() noexcept{
 #if M_OS == M_OS_WINDOWS
 	ASSERT_INFO(this->th != GetCurrentThread(), "tried to call Join() on the current thread")
 #else
-	ASSERT_INFO(T_ThreadID(this->th) != ting::mt::Thread::GetCurrentThreadID(), "tried to call Join() on the current thread")
+	ASSERT_INFO(T_ThreadID(this->th) != nitki::Thread::GetCurrentThreadID(), "tried to call Join() on the current thread")
 #endif
 
 #if M_OS == M_OS_WINDOWS

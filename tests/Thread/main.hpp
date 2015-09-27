@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../src/ting/debug.hpp"
+#include <utki/debug.hpp>
 
 #include "tests.hpp"
 

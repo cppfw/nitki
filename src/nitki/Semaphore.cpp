@@ -30,7 +30,7 @@ Semaphore::Semaphore(unsigned initialValue){
 #endif
 	{
 		TRACE(<< "Semaphore::Semaphore(): failed" << std::endl)
-		throw ting::Exc("Semaphore::Semaphore(): creating semaphore failed");
+		throw utki::Exc("Semaphore::Semaphore(): creating semaphore failed");
 	}
 }
 
@@ -62,7 +62,7 @@ bool Semaphore::Wait(std::uint32_t timeoutMillis){
 		case WAIT_TIMEOUT:
 			return false;
 		default:
-			throw ting::Exc("Semaphore::Wait(u32): wait failed");
+			throw utki::Exc("Semaphore::Wait(u32): wait failed");
 			break;
 	}
 #elif M_OS == M_OS_MACOSX
@@ -81,7 +81,7 @@ bool Semaphore::Wait(std::uint32_t timeoutMillis){
 	ts.tv_nsec = ts.tv_nsec % (1000 * 1000 * 1000);
 	
 	if(pthread_mutex_lock(&this->m) != 0){
-		throw ting::Exc("Semaphore::Wait(): failed to lock the mutex");
+		throw utki::Exc("Semaphore::Wait(): failed to lock the mutex");
 	}
 
 	if(this->v == 0){
@@ -93,7 +93,7 @@ bool Semaphore::Wait(std::uint32_t timeoutMillis){
 				return false;
 			}else{
 				TRACE(<< "Semaphore::Wait(): pthread_cond_wait() failed, error code = " << err << std::endl)
-				throw ting::Exc("Semaphore::Wait(): pthread_cond_wait() failed");
+				throw utki::Exc("Semaphore::Wait(): pthread_cond_wait() failed");
 			}
 		}
 	}
@@ -110,14 +110,14 @@ bool Semaphore::Wait(std::uint32_t timeoutMillis){
 			if(errno == EAGAIN){
 				return false;
 			}else{
-				throw ting::Exc("Semaphore::Wait(u32): error: sem_trywait() failed");
+				throw utki::Exc("Semaphore::Wait(u32): error: sem_trywait() failed");
 			}
 		}
 	}else{
 		timespec ts;
 
 		if(clock_gettime(CLOCK_REALTIME, &ts) == -1){
-			throw ting::Exc("Semaphore::Wait(): clock_gettime() returned error");
+			throw utki::Exc("Semaphore::Wait(): clock_gettime() returned error");
 		}
 
 		ts.tv_sec += timeoutMillis / 1000;
@@ -129,7 +129,7 @@ bool Semaphore::Wait(std::uint32_t timeoutMillis){
 			if(errno == ETIMEDOUT){
 				return false;
 			}else{
-				throw ting::Exc("Semaphore::Wait(u32): error: sem_timedwait() failed");
+				throw utki::Exc("Semaphore::Wait(u32): error: sem_timedwait() failed");
 			}
 		}
 	}

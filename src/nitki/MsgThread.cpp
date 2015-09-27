@@ -27,7 +27,7 @@ THE SOFTWARE. */
 #include <mutex>
 
 
-using namespace nitki::mt;
+using namespace nitki;
 
 
 

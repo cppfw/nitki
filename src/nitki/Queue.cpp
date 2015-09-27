@@ -4,6 +4,7 @@
 
 #if M_OS == M_OS_LINUX
 #	include <sys/eventfd.h>
+#	include <cstring>
 #endif
 
 
@@ -16,13 +17,14 @@
 
 
 
-using namespace ting::mt;
+
+using namespace nitki;
 
 
 
 Queue::Queue(){
 	//can write will always be set because it is always possible to post a message to the queue
-	this->SetCanWriteFlag();
+	this->setCanWriteFlag();
 
 #if M_OS == M_OS_WINDOWS
 	this->eventForWaitable = CreateEvent(
@@ -32,7 +34,7 @@ Queue::Queue(){
 			NULL //no name
 		);
 	if(this->eventForWaitable == NULL){
-		throw ting::Exc("Queue::Queue(): could not create event (Win32) for implementing Waitable");
+		throw utki::Exc("Queue::Queue(): could not create event (Win32) for implementing Waitable");
 	}
 #elif M_OS == M_OS_MACOSX
 	if(::pipe(&this->pipeEnds[0]) < 0){
@@ -40,7 +42,7 @@ Queue::Queue(){
 		ss << "Queue::Queue(): could not create pipe (*nix) for implementing Waitable,"
 				<< " error code = " << errno << ": " << strerror(errno);
 		TRACE(<< ss.str() << std::endl)
-		throw ting::Exc(ss.str().c_str());
+		throw utki::Exc(ss.str().c_str());
 	}
 #elif M_OS == M_OS_LINUX
 	this->eventFD = eventfd(0, EFD_NONBLOCK);
@@ -48,7 +50,7 @@ Queue::Queue(){
 		std::stringstream ss;
 		ss << "Queue::Queue(): could not create eventfd (linux) for implementing Waitable,"
 				<< " error code = " << errno << ": " << strerror(errno);
-		throw ting::Exc(ss.str().c_str());
+		throw utki::Exc(ss.str().c_str());
 	}
 #else
 #	error "Unsupported OS"
@@ -84,7 +86,7 @@ void Queue::PushMessage(std::function<void()>&& msg)noexcept{
 		//if do it after then some other thread which was waiting on the WaitSet
 		//may read the CanRead flag while it was not set yet.
 		ASSERT(!this->CanRead())
-		this->SetCanReadFlag();
+		this->setCanReadFlag();
 
 #if M_OS == M_OS_WINDOWS
 		if(SetEvent(this->eventForWaitable) == 0){
@@ -120,29 +122,29 @@ Queue::T_Message Queue::PeekMsg(){
 #if M_OS == M_OS_WINDOWS
 			if(ResetEvent(this->eventForWaitable) == 0){
 				ASSERT(false)
-				throw ting::Exc("Queue::Wait(): ResetEvent() failed");
+				throw utki::Exc("Queue::Wait(): ResetEvent() failed");
 			}
 #elif M_OS == M_OS_MACOSX
 			{
 				std::uint8_t oneByteBuf[1];
 				if(read(this->pipeEnds[0], oneByteBuf, 1) != 1){
-					throw ting::Exc("Queue::Wait(): read() failed");
+					throw utki::Exc("Queue::Wait(): read() failed");
 				}
 			}
 #elif M_OS == M_OS_LINUX
 			{
 				eventfd_t value;
 				if(eventfd_read(this->eventFD, &value) < 0){
-					throw ting::Exc("Queue::Wait(): eventfd_read() failed");
+					throw utki::Exc("Queue::Wait(): eventfd_read() failed");
 				}
 				ASSERT(value == 1)
 			}
 #else
 #	error "Unsupported OS"
 #endif
-			this->ClearCanReadFlag();
+			this->clearCanReadFlag();
 		}else{
-			ASSERT(this->CanRead())
+			ASSERT(this->canRead())
 		}
 		
 		T_Message ret = std::move(this->messages.front());
@@ -171,9 +173,9 @@ void Queue::SetWaitingEvents(std::uint32_t flagsToWaitFor){
 	//because it is always possible to push new message to queue.
 	//Error condition is not possible for Queue.
 	//Thus, only possible flag values are READ and 0 (NOT_READY)
-	if(flagsToWaitFor != 0 && flagsToWaitFor != ting::Waitable::READ){
+	if(flagsToWaitFor != 0 && flagsToWaitFor != pogodi::Waitable::READ){
 		ASSERT_INFO(false, "flagsToWaitFor = " << flagsToWaitFor)
-		throw ting::Exc("Queue::SetWaitingEvents(): flagsToWaitFor should be ting::Waitable::READ or 0, other values are not allowed");
+		throw utki::Exc("Queue::SetWaitingEvents(): flagsToWaitFor should be pogodi::Waitable::READ or 0, other values are not allowed");
 	}
 
 	this->flagsMask = flagsToWaitFor;
@@ -185,7 +187,7 @@ void Queue::SetWaitingEvents(std::uint32_t flagsToWaitFor){
 //override
 bool Queue::CheckSignaled(){
 	//error condition is not possible for queue
-	ASSERT((this->readinessFlags & ting::Waitable::ERROR_CONDITION) == 0)
+	ASSERT((this->readinessFlags & pogodi::Waitable::ERROR_CONDITION) == 0)
 
 /*
 #ifdef DEBUG
@@ -226,7 +228,7 @@ int Queue::GetHandle(){
 
 #elif M_OS == M_OS_LINUX
 //override
-int Queue::GetHandle(){
+int Queue::getHandle(){
 	return this->eventFD;
 }
 

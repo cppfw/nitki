@@ -13,7 +13,7 @@ this_cflags += -fstrict-aliasing #strict aliasing!!!
 
 this_srcs += main.cpp tests.cpp
 
-this_ldlibs += -lnitki
+this_ldlibs += -lnitki -lpogodi
 
 ifeq ($(prorab_os),macosx)
     this_cflags += -stdlib=libc++ #this is needed to be able to use c++11 std lib

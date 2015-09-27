@@ -93,10 +93,10 @@ public:
 	 * @brief Basic exception type thrown by Thread class.
 	 * @param msg - human friendly exception description.
 	 */
-	class Exc : public nitki::Exc{
+	class Exc : public utki::Exc{
 	public:
 		Exc(const std::string& msg) :
-				nitki::Exc(msg)
+				utki::Exc(msg)
 		{}
 	};
 	

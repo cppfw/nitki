@@ -1,10 +1,12 @@
-#include "../../src/ting/debug.hpp"
-#include "../../src/ting/mt/Thread.hpp"
-#include "../../src/ting/mt/MsgThread.hpp"
-#include "../../src/ting/Buffer.hpp"
-#include "../../src/ting/types.hpp"
-#include "../../src/ting/config.hpp"
-#include "../../src/ting/WaitSet.hpp"
+#include <utki/debug.hpp>
+#include <utki/config.hpp>
+#include <utki/Buf.hpp>
+
+#include <pogodi/WaitSet.hpp>
+
+#include "../../src/nitki/Thread.hpp"
+#include "../../src/nitki/MsgThread.hpp"
+
 
 #include "tests.hpp"
 
@@ -12,7 +14,7 @@
 
 namespace TestJoinBeforeAndAfterThreadHasFinished{
 
-class TestThread : public ting::mt::Thread{
+class TestThread : public nitki::Thread{
 public:
 	int a, b;
 
@@ -20,7 +22,7 @@ public:
 	void Run(){
 		this->a = 10;
 		this->b = 20;
-		ting::mt::Thread::Sleep(1000);
+		nitki::Thread::Sleep(1000);
 		this->a = this->b;
 	}
 };
@@ -35,7 +37,7 @@ void Run(){
 
 		t.Start();
 
-		ting::mt::Thread::Sleep(2000);
+		nitki::Thread::Sleep(2000);
 
 		t.Join();
 	}
@@ -60,24 +62,24 @@ void Run(){
 //====================
 namespace TestManyThreads{
 
-class TestThread1 : public ting::mt::MsgThread{
+class TestThread1 : public nitki::MsgThread{
 public:
 	int a, b;
 
 	//override
 	void Run(){
-		ting::WaitSet ws(1);
+		pogodi::WaitSet ws(1);
 		
-		ws.Add(this->queue, ting::Waitable::READ);
+		ws.add(this->queue, pogodi::Waitable::READ);
 		
 		while(!this->quitFlag){
-			ws.Wait();
+			ws.wait();
 			while(auto m = this->queue.PeekMsg()){
 				m();
 			}
 		}
 		
-		ws.Remove(this->queue);
+		ws.remove(this->queue);
 	}
 };
 
@@ -98,7 +100,7 @@ void Run(){
 		i->Start();
 	}
 
-	ting::mt::Thread::Sleep(1000);
+	nitki::Thread::Sleep(1000);
 
 	for(TestThread1 *i = thr.begin(); i != thr.end(); ++i){
 		i->PushQuitMessage();
@@ -116,7 +118,7 @@ void Run(){
 
 namespace TestImmediateExitThread{
 
-class ImmediateExitThread : public ting::mt::Thread{
+class ImmediateExitThread : public nitki::Thread{
 public:
 
 	//override
@@ -140,12 +142,12 @@ void Run(){
 
 namespace TestNestedJoin{
 
-class TestRunnerThread : public ting::mt::Thread{
+class TestRunnerThread : public nitki::Thread{
 public:
-	class TopLevelThread : public ting::mt::Thread{
+	class TopLevelThread : public nitki::Thread{
 	public:
 
-		class InnerLevelThread : public ting::mt::Thread{
+		class InnerLevelThread : public nitki::Thread{
 		public:
 
 			//overrun
@@ -156,7 +158,7 @@ public:
 		//override
 		void Run(){
 			this->inner.Start();
-			ting::mt::Thread::Sleep(100);
+			nitki::Thread::Sleep(100);
 			this->inner.Join();
 		}
 	} top;
@@ -181,7 +183,7 @@ void Run(){
 	TestRunnerThread runner;
 	runner.Start();
 
-	ting::mt::Thread::Sleep(1000);
+	nitki::Thread::Sleep(1000);
 
 	ASSERT_ALWAYS(runner.success)
 
