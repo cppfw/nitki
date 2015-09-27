@@ -2,7 +2,7 @@ Source: libnitki
 Section: misc
 Priority: extra
 Maintainer: Ivan Gagis <igagis@gmail.com>
-Build-Depends: debhelper (>= 9), libc6-dev, prorab, libutki-dev
+Build-Depends: debhelper (>= 9), libc6-dev, prorab, libutki-dev, libpogodi-dev
 Build-Depends-Indep: doxygen
 Standards-Version: 3.9.2
 
@@ -22,7 +22,7 @@ Description: debugging symbols for libnitki$(soname) package.
 Package: libnitki-dev
 Section: devel
 Architecture: all
-Depends: libutki-dev, libnitki$(soname) (= ${binary:Version}), ${misc:Depends}
+Depends: libutki-dev, libpogodi-dev, libnitki$(soname) (= ${binary:Version}), ${misc:Depends}
 Suggests: libnitki$(soname)-dbg (= ${binary:Version}), libnitki-doc
 Description: cross-platform C++ threading library.
  Threading library.
