@@ -1,6 +1,6 @@
 Name: papki   # human-readable name
 Description: C++ threading library # human-readable description
-Version: 1.0.0
+Version: 1.0.1
 URL: https://github.com/igagis/nitki
 Requires:
 Conflicts:

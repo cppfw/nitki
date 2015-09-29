@@ -1,3 +1,9 @@
+libnitki (1.0.1-1) stable; urgency=medium
+
+  * bumping up version
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 29 Sep 2015 16:39:08 +0300
+
 libnitki (1.0.0-1) stable; urgency=low
 
   * Initial release
