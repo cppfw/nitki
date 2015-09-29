@@ -19,3 +19,14 @@ this_soname := $(shell cat $(this_soname_dependency))
 
 
 $(eval $(prorab-build-deb))
+
+
+#Update version rule
+$(prorab-clear-this-vars)
+
+this_version := $(firstword $(subst -, ,$(shell dpkg-parsechangelog --show-field Version)))
+
+this_version_files += doc/doxygen.cfg.in
+this_version_files += pkg-config/nitki.pc.in
+
+$(eval $(prorab-apply-version))
