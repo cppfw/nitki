@@ -221,7 +221,7 @@ bool Queue::CheckSignaled(){
 
 #elif M_OS == M_OS_MACOSX
 //override
-int Queue::GetHandle(){
+int Queue::getHandle(){
 	//return read end of pipe
 	return this->pipeEnds[0];
 }
