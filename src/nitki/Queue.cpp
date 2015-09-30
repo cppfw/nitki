@@ -85,7 +85,7 @@ void Queue::pushMessage(std::function<void()>&& msg)noexcept{
 		//NOTE: set CanRead flag before event notification/pipe write, because
 		//if do it after then some other thread which was waiting on the WaitSet
 		//may read the CanRead flag while it was not set yet.
-		ASSERT(!this->CanRead())
+		ASSERT(!this->canRead())
 		this->setCanReadFlag();
 
 #if M_OS == M_OS_WINDOWS
@@ -108,7 +108,7 @@ void Queue::pushMessage(std::function<void()>&& msg)noexcept{
 #endif
 	}
 
-	ASSERT(this->CanRead())
+	ASSERT(this->canRead())
 }
 
 
@@ -116,7 +116,7 @@ void Queue::pushMessage(std::function<void()>&& msg)noexcept{
 Queue::T_Message Queue::peekMsg(){
 	std::lock_guard<decltype(this->mut)> mutexGuard(this->mut);
 	if(this->messages.size() != 0){
-		ASSERT(this->CanRead())
+		ASSERT(this->canRead())
 
 		if(this->messages.size() == 1){//if we are taking away the last message from the queue
 #if M_OS == M_OS_WINDOWS
@@ -159,16 +159,14 @@ Queue::T_Message Queue::peekMsg(){
 
 
 #if M_OS == M_OS_WINDOWS
-//override
-HANDLE Queue::GetHandle(){
+HANDLE Queue::getHandle(){
 	//return event handle
 	return this->eventForWaitable;
 }
 
 
 
-//override
-void Queue::SetWaitingEvents(std::uint32_t flagsToWaitFor){
+void Queue::setWaitingEvents(std::uint32_t flagsToWaitFor){
 	//It is not allowed to wait on queue for write,
 	//because it is always possible to push new message to queue.
 	//Error condition is not possible for Queue.
@@ -184,8 +182,7 @@ void Queue::SetWaitingEvents(std::uint32_t flagsToWaitFor){
 
 
 //returns true if signaled
-//override
-bool Queue::CheckSignaled(){
+bool Queue::checkSignaled(){
 	//error condition is not possible for queue
 	ASSERT((this->readinessFlags & pogodi::Waitable::ERROR_CONDITION) == 0)
 

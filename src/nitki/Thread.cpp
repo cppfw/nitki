@@ -25,7 +25,6 @@ std::mutex threadMutex2;
 
 
 //Tread Run function
-//static
 #if M_OS == M_OS_WINDOWS
 unsigned int __stdcall Thread::runThread(void *data)
 #elif M_OS == M_OS_SYMBIAN
@@ -40,7 +39,7 @@ void* Thread::runThread(void *data)
 	try{
 		thr->run();
 	}catch(utki::Exc& DEBUG_CODE(e)){
-		ASSERT_INFO(false, "uncaught utki::Exc exception in Thread::Run(): " << e.What())
+		ASSERT_INFO(false, "uncaught utki::Exc exception in Thread::Run(): " << e.what())
 	}catch(std::exception& DEBUG_CODE(e)){
 		ASSERT_INFO(false, "uncaught std::exception exception in Thread::Run(): " << e.what())
 	}catch(...){
@@ -84,7 +83,7 @@ Thread::Thread(){
 
 Thread::~Thread()noexcept{
 	ASSERT_INFO(
-			this->state == JOINED || this->state == NEW,
+			this->state == E_State::JOINED || this->state == E_State::NEW,
 			"~Thread() destructor is called while the thread was not joined before. "
 			<< "Make sure the thread is joined by calling Thread::Join() "
 			<< "before destroying the thread object."
@@ -210,7 +209,7 @@ void Thread::join() noexcept{
 
 	//NOTE: at this point the thread's Run() method should already exit and state
 	//should be set to STOPPED
-	ASSERT_INFO(this->state == E_State::STOPPED, "this->state = " << this->state)
+	ASSERT_INFO(this->state == E_State::STOPPED, "this->state = " << unsigned(this->state))
 
 	this->state = E_State::JOINED;
 
