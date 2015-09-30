@@ -96,13 +96,13 @@ void Run(){
 #endif
 		> thr;
 
-	for(TestThread1 *i = thr.begin(); i != thr.end(); ++i){
+	for(TestThread1 *i = &*thr.begin(); i != &*thr.end(); ++i){
 		i->start();
 	}
 
 	nitki::Thread::sleep(1000);
 
-	for(TestThread1 *i = thr.begin(); i != thr.end(); ++i){
+	for(TestThread1 *i = &*thr.begin(); i != &*thr.end(); ++i){
 		i->pushQuitMessage();
 		i->join();
 	}
