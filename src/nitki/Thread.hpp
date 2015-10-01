@@ -46,9 +46,8 @@ namespace nitki{
  * This class should be used as a base class for thread objects, one should override the
  * Thread::Run() method.
  */
-class Thread{
+class DLLEXPORT Thread{
 
-//Tread Run function
 #if M_OS == M_OS_WINDOWS
 	static unsigned int __stdcall runThread(void *data);
 #elif M_OS == M_OS_SYMBIAN
@@ -59,9 +58,14 @@ class Thread{
 #	error "Unsupported OS"
 #endif
 
-
+#if M_COMPILER == M_COMPILER_MSVC
+#	pragma warning(push)
+#	pragma warning( disable : 4251)
+#endif
 	std::mutex mutex1;
-
+#if M_COMPILER == M_COMPILER_MSVC
+#	pragma warning(pop)
+#endif
 
 	enum class E_State{
 		NEW,
@@ -83,12 +87,11 @@ class Thread{
 #	error "Unsupported OS"
 #endif
 
-	//forbid copying
-	Thread(const Thread& );
-	Thread& operator=(const Thread& );
-
 public:
-	
+	Thread(const Thread&) = delete;
+	Thread& operator=(const Thread&) = delete;
+
+
 	/**
 	 * @brief Basic exception type thrown by Thread class.
 	 * @param msg - human friendly exception description.

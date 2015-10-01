@@ -46,7 +46,7 @@ namespace nitki{
  * some other thread increments it then only one of the hanging threads will be
  * resumed, other threads will remain waiting for next increment.
  */
-class Semaphore{
+class DLLEXPORT Semaphore{
 	//system dependent handle
 #if M_OS == M_OS_WINDOWS
 	HANDLE s;

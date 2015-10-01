@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <utki/config.hpp>
+
 #include "Thread.hpp"
 #include "Queue.hpp"
 
@@ -23,7 +25,7 @@ class QuitMessage;
  * @brief a thread with message queue.
  * This is just a facility class which already contains message queue and boolean 'quit' flag.
  */
-class MsgThread : public Thread{
+class DLLEXPORT MsgThread : public Thread{
 protected:
 	/**
 	 * @brief Flag indicating that the thread should exit.
@@ -48,7 +50,15 @@ protected:
 
 	Queue queue;
 
+private:
+#if M_COMPILER == M_COMPILER_MSVC
+#	pragma warning(push)
+#	pragma warning( disable : 4251)
+#endif
 	Queue::T_Message quitMessage = [this](){this->quitFlag = true;};
+#if M_COMPILER == M_COMPILER_MSVC
+#	pragma warning(pop)
+#endif
 
 public:
 	MsgThread() = default;

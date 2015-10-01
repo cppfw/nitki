@@ -7,9 +7,9 @@
 
 #include <utki/config.hpp>
 #include <utki/debug.hpp>
-#include <pogodi/WaitSet.hpp>
-
 #include <utki/SpinLock.hpp>
+
+#include <pogodi/WaitSet.hpp>
 
 #include <list>
 #include <functional>
@@ -29,14 +29,21 @@ namespace nitki{
  * shall only be used to wait for READ. If you are trying to wait for WRITE the behavior will be
  * undefined.
  */
-class Queue : public pogodi::Waitable{
-	utki::SpinLock mut;
-
+class DLLEXPORT Queue : public pogodi::Waitable{
 public:
 	typedef std::function<void()> T_Message;
 	
 private:
+#if M_COMPILER == M_COMPILER_MSVC
+#	pragma warning(push)
+#	pragma warning( disable : 4251)
+#endif
+	utki::SpinLock mut;
+
 	std::list<T_Message> messages;
+#if M_COMPILER == M_COMPILER_MSVC
+#	pragma warning(pop)
+#endif
 	
 #if M_OS == M_OS_WINDOWS
 	//use Event to implement Waitable on Windows
