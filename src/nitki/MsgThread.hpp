@@ -51,14 +51,7 @@ protected:
 	Queue queue;
 
 private:
-#if M_COMPILER == M_COMPILER_MSVC
-#	pragma warning(push)
-#	pragma warning( disable : 4251)
-#endif
 	Queue::T_Message quitMessage = [this](){this->quitFlag = true;};
-#if M_COMPILER == M_COMPILER_MSVC
-#	pragma warning(pop)
-#endif
 
 public:
 	MsgThread() = default;

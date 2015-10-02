@@ -34,16 +34,9 @@ public:
 	typedef std::function<void()> T_Message;
 	
 private:
-#if M_COMPILER == M_COMPILER_MSVC
-#	pragma warning(push)
-#	pragma warning( disable : 4251)
-#endif
 	utki::SpinLock mut;
 
 	std::list<T_Message> messages;
-#if M_COMPILER == M_COMPILER_MSVC
-#	pragma warning(pop)
-#endif
 	
 #if M_OS == M_OS_WINDOWS
 	//use Event to implement Waitable on Windows

@@ -58,14 +58,7 @@ class DLLEXPORT Thread{
 #	error "Unsupported OS"
 #endif
 
-#if M_COMPILER == M_COMPILER_MSVC
-#	pragma warning(push)
-#	pragma warning( disable : 4251)
-#endif
 	std::mutex mutex1;
-#if M_COMPILER == M_COMPILER_MSVC
-#	pragma warning(pop)
-#endif
 
 	enum class E_State{
 		NEW,
