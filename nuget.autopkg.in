@@ -19,7 +19,7 @@ nuget{
 	dependencies {
 		packages : {
 			libutki/1.0.8.1;
-			libpogodi/1.0.1.4;
+			libpogodi/1.0.1.6;
 		};
 	}
 	files {
@@ -27,26 +27,26 @@ nuget{
 		
 		[x86,release] { 
 			lib: msvs_solution\Release\libnitki.lib;
-			symbols: msvs_solution\Release\libnitki.pdb;
-			bin: msvs_solution\Release\libnitki.dll;
+//			symbols: msvs_solution\Release\libnitki.pdb;
+//			bin: msvs_solution\Release\libnitki.dll;
 		}
 
 		[x86,debug] { 
 			lib: msvs_solution\Debug\libnitki.lib;
-			symbols: msvs_solution\Debug\libnitki.pdb;
-			bin: msvs_solution\Debug\libnitki.dll;
+//			symbols: msvs_solution\Debug\libnitki.pdb;
+//			bin: msvs_solution\Debug\libnitki.dll;
 		}
 
 		[x64,release] { 
 			lib: msvs_solution\x64\Release\libnitki.lib;
-			symbols: msvs_solution\x64\Release\libnitki.pdb;
-			bin: msvs_solution\x64\Release\libnitki.dll;
+//			symbols: msvs_solution\x64\Release\libnitki.pdb;
+//			bin: msvs_solution\x64\Release\libnitki.dll;
 		}
 
 		[x64,debug] { 
 			lib: msvs_solution\x64\Debug\libnitki.lib;
-			symbols: msvs_solution\x64\Debug\libnitki.pdb;
-			bin: msvs_solution\x64\Debug\libnitki.dll;
+//			symbols: msvs_solution\x64\Debug\libnitki.pdb;
+//			bin: msvs_solution\x64\Debug\libnitki.dll;
 		}  
 	}
 }
