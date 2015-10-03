@@ -19,7 +19,7 @@ nuget{
 	dependencies {
 		packages : {
 			libutki/1.0.8.4;
-			libpogodi/1.0.1.7;
+			libpogodi/1.0.1.8;
 		};
 	}
 	files {

@@ -163,16 +163,14 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\libpogodi.redist.1.0.1.2\build\native\libpogodi.redist.targets" Condition="Exists('..\packages\libpogodi.redist.1.0.1.2\build\native\libpogodi.redist.targets')" />
     <Import Project="..\packages\libutki.1.0.8.4\build\native\libutki.targets" Condition="Exists('..\packages\libutki.1.0.8.4\build\native\libutki.targets')" />
-    <Import Project="..\packages\libpogodi.1.0.1.7\build\native\libpogodi.targets" Condition="Exists('..\packages\libpogodi.1.0.1.7\build\native\libpogodi.targets')" />
+    <Import Project="..\packages\libpogodi.1.0.1.8\build\native\libpogodi.targets" Condition="Exists('..\packages\libpogodi.1.0.1.8\build\native\libpogodi.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\libpogodi.redist.1.0.1.2\build\native\libpogodi.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libpogodi.redist.1.0.1.2\build\native\libpogodi.redist.targets'))" />
     <Error Condition="!Exists('..\packages\libutki.1.0.8.4\build\native\libutki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libutki.1.0.8.4\build\native\libutki.targets'))" />
-    <Error Condition="!Exists('..\packages\libpogodi.1.0.1.7\build\native\libpogodi.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libpogodi.1.0.1.7\build\native\libpogodi.targets'))" />
+    <Error Condition="!Exists('..\packages\libpogodi.1.0.1.8\build\native\libpogodi.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libpogodi.1.0.1.8\build\native\libpogodi.targets'))" />
   </Target>
 </Project>

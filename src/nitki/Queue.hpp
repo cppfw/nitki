@@ -29,7 +29,7 @@ namespace nitki{
  * shall only be used to wait for READ. If you are trying to wait for WRITE the behavior will be
  * undefined.
  */
-class DLLEXPORT Queue : public pogodi::Waitable{
+class Queue : public pogodi::Waitable{
 public:
 	typedef std::function<void()> T_Message;
 	

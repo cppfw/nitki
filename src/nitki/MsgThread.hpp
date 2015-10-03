@@ -25,7 +25,7 @@ class QuitMessage;
  * @brief a thread with message queue.
  * This is just a facility class which already contains message queue and boolean 'quit' flag.
  */
-class DLLEXPORT MsgThread : public Thread{
+class MsgThread : public Thread{
 protected:
 	/**
 	 * @brief Flag indicating that the thread should exit.

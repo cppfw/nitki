@@ -1,7 +1,7 @@
 nuget{
 	nuspec{
 		id = libnitki;
-		version : 1.0.1.5;
+		version : 1.0.1.6;
 		title: C++ threading library;
 		authors: {Ivan Gagis};
 		owners: {Ivan Gagis};
@@ -19,7 +19,7 @@ nuget{
 	dependencies {
 		packages : {
 			libutki/1.0.8.4;
-			libpogodi/1.0.1.7;
+			libpogodi/1.0.1.8;
 		};
 	}
 	files {

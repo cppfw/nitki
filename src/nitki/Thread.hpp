@@ -46,7 +46,7 @@ namespace nitki{
  * This class should be used as a base class for thread objects, one should override the
  * Thread::Run() method.
  */
-class DLLEXPORT Thread{
+class Thread{
 
 #if M_OS == M_OS_WINDOWS
 	static unsigned int __stdcall runThread(void *data);
