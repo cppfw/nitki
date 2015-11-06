@@ -9,6 +9,7 @@ class Libnitki < Formula
   depends_on "libutki"
 
   def install
+    ENV['PATH'] += ':/usr/local/bin'
     system "make", "install"
   end
 
