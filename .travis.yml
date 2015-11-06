@@ -26,7 +26,6 @@ before_install:
     sudo apt-get install -qq debhelper prorab doxygen libutki-dev libpogodi-dev;
   fi
 - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-    export prorab_echo=;
     brew tap igagis/tap;
     brew update > /dev/null;
     brew install prorab libutki libpogodi;
