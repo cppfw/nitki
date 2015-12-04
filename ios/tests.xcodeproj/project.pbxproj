@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C20D0541C112CA200D80409 /* MsgThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C20D0501C112CA200D80409 /* MsgThread.cpp */; };
+		2C20D0551C112CA200D80409 /* Queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C20D0511C112CA200D80409 /* Queue.cpp */; };
+		2C20D0561C112CA200D80409 /* Semaphore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C20D0521C112CA200D80409 /* Semaphore.cpp */; };
+		2C20D0571C112CA200D80409 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C20D0531C112CA200D80409 /* Thread.cpp */; };
 		2C4058921C10F27A0065B444 /* tests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C4058911C10F27A0065B444 /* tests.cpp */; };
 		2CE04F941C10F1A00081D5E0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE04F931C10F1A00081D5E0 /* main.m */; };
 		2CE04F9F1C10F1A00081D5E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CE04F9E1C10F1A00081D5E0 /* Assets.xcassets */; };
@@ -15,12 +19,15 @@
 
 /* Begin PBXFileReference section */
 		10BE6D63CE5642106F3153A3 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		2C20D0501C112CA200D80409 /* MsgThread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MsgThread.cpp; path = ../src/nitki/MsgThread.cpp; sourceTree = "<group>"; };
+		2C20D0511C112CA200D80409 /* Queue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Queue.cpp; path = ../src/nitki/Queue.cpp; sourceTree = "<group>"; };
+		2C20D0521C112CA200D80409 /* Semaphore.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Semaphore.cpp; path = ../src/nitki/Semaphore.cpp; sourceTree = "<group>"; };
+		2C20D0531C112CA200D80409 /* Thread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Thread.cpp; path = ../src/nitki/Thread.cpp; sourceTree = "<group>"; };
 		2C4058911C10F27A0065B444 /* tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tests.cpp; path = ../tests/Thread/tests.cpp; sourceTree = "<group>"; };
 		2CE04F8F1C10F1A00081D5E0 /* tests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tests.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CE04F931C10F1A00081D5E0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2CE04F9E1C10F1A00081D5E0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2CE04FA31C10F1A00081D5E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2CE04FA91C10F1E80081D5E0 /* tests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tests.cpp; path = ../../tests/Thread/tests.cpp; sourceTree = "<group>"; };
 		691D24BE2A884FE989D27E01 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		E79A7AD3424A3FFF500E28B9 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -40,8 +47,11 @@
 		2CE04F861C10F1A00081D5E0 = {
 			isa = PBXGroup;
 			children = (
+				2C20D0501C112CA200D80409 /* MsgThread.cpp */,
+				2C20D0511C112CA200D80409 /* Queue.cpp */,
+				2C20D0521C112CA200D80409 /* Semaphore.cpp */,
+				2C20D0531C112CA200D80409 /* Thread.cpp */,
 				2C4058911C10F27A0065B444 /* tests.cpp */,
-				2CE04FA91C10F1E80081D5E0 /* tests.cpp */,
 				2CE04F911C10F1A00081D5E0 /* tests */,
 				2CE04F901C10F1A00081D5E0 /* Products */,
 				A79797D62923CBF0A956A4DE /* Pods */,
@@ -211,6 +221,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C20D0541C112CA200D80409 /* MsgThread.cpp in Sources */,
+				2C20D0551C112CA200D80409 /* Queue.cpp in Sources */,
+				2C20D0561C112CA200D80409 /* Semaphore.cpp in Sources */,
+				2C20D0571C112CA200D80409 /* Thread.cpp in Sources */,
 				2C4058921C10F27A0065B444 /* tests.cpp in Sources */,
 				2CE04F941C10F1A00081D5E0 /* main.m in Sources */,
 			);
