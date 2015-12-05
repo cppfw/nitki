@@ -32,7 +32,6 @@ before_install:
     sudo apt-get install -qq debhelper prorab doxygen libutki-dev libpogodi-dev;
   fi
 - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-    pod --version;
     sudo gem install cocoapods;
     pod repo add --silent igagis https://$HOMEBREW_GITHUB_USERNAME:$HOMEBREW_GITHUB_ACCESS_TOKEN@github.com/igagis/cocoapods-repo.git;
     pod install --project-directory=ios;
