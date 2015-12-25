@@ -1,6 +1,5 @@
 language: cpp
 sudo: required
-osx_image: xcode7.1
 
 os:
   - linux
