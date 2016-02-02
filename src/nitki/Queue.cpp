@@ -151,7 +151,7 @@ Queue::T_Message Queue::peekMsg(){
 		
 		this->messages.pop_front();
 		
-		return std::move(ret);
+		return ret;
 	}
 	return nullptr;
 }
