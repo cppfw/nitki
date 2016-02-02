@@ -1,3 +1,9 @@
+libnitki (1.0.3) stable; urgency=medium
+
+  * homebrew do not install tests
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 02 Feb 2016 21:12:36 +0200
+
 libnitki (1.0.2-1) stable; urgency=medium
 
   * updating for ci

@@ -20,6 +20,7 @@
                    projectFiles="false"
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>.travis.yml</itemPath>
+      <itemPath>debian/changelog</itemPath>
       <itemPath>nbproject/private/launcher.properties</itemPath>
       <itemPath>cocoapods/libnitki.podspec.in</itemPath>
       <itemPath>homebrew/libnitki.rb.in</itemPath>
