@@ -26,6 +26,7 @@
 #elif M_OS == M_OS_LINUX || M_OS == M_OS_MACOSX || M_OS == M_OS_UNIX
 #	include <pthread.h>
 #	include <unistd.h>
+#	include <ctime>
 
 #	if M_OS_NAME == M_OS_NAME_SOLARIS
 #		include <sched.h> // for sched_yield();
@@ -148,7 +149,7 @@ public:
 	 * AT LEAST 'msec' milliseconds.
 	 * @param msec - number of milliseconds the thread should be suspended.
 	 */
-	static void sleep(unsigned msec = 0)noexcept{
+	static void sleep(std::uint32_t msec = 0)noexcept{
 #if M_OS == M_OS_WINDOWS
 		SleepEx(DWORD(msec), FALSE);// Sleep() crashes on MinGW (I do not know why), this is why SleepEx() is used here.
 #elif M_OS == M_OS_SYMBIAN
@@ -163,7 +164,10 @@ public:
 #		error "Unsupported OS"
 #	endif
 		}else{
-			usleep(msec * 1000);
+			timespec ts;
+			ts.tv_sec = msec / 1000;
+			ts.tv_nsec = (msec % 1000) * 1000000;
+			nanosleep(&ts, nullptr);
 		}
 #else
 #	error "Unsupported OS"
