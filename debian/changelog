@@ -1,3 +1,9 @@
+libnitki (1.0.6) stable; urgency=medium
+
+  * use nanosleep() instead of deprecated usleep()
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 16 Mar 2016 16:42:32 +0200
+
 libnitki (1.0.5) stable; urgency=medium
 
   * nuget fix
