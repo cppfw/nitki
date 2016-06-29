@@ -1,3 +1,9 @@
+libnitki (1.0.8) unstable; urgency=medium
+
+  * nuget: add pdb files to package
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 29 Jun 2016 20:35:21 +0300
+
 libnitki (1.0.7) unstable; urgency=medium
 
   * bintray version fix
