@@ -36,15 +36,8 @@ void* Thread::runThread(void *data)
 #endif
 {
 	Thread *thr = reinterpret_cast<Thread*>(data);
-	try{
-		thr->run();
-	}catch(utki::Exc& DEBUG_CODE(e)){
-		ASSERT_INFO(false, "uncaught utki::Exc exception in Thread::Run(): " << e.what())
-	}catch(std::exception& DEBUG_CODE(e)){
-		ASSERT_INFO(false, "uncaught std::exception exception in Thread::Run(): " << e.what())
-	}catch(...){
-		ASSERT_INFO(false, "uncaught unknown exception in Thread::Run()")
-	}
+	
+	thr->run();
 
 	{
 		//protect by mutex to avoid changing the
@@ -147,7 +140,7 @@ void Thread::start(size_t stackSize){
 		int res = pthread_create(&this->th, &attr, &runThread, this);
 		if(res != 0){
 			pthread_attr_destroy(&attr);
-			TRACE_AND_LOG(<< "Thread::Start(): pthread_create() failed, error code = " << res
+			TRACE(<< "Thread::Start(): pthread_create() failed, error code = " << res
 					<< " meaning: " << strerror(res) << std::endl)
 			std::stringstream ss;
 			ss << "Thread::Start(): starting thread failed,"

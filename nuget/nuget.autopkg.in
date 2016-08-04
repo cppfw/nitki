@@ -23,30 +23,30 @@ nuget{
 		};
 	}
 	files {
-		include: { "..\src\**\*.hpp" };
+		//this is needed to put headers in the nitki folder
+		nestedInclude: {
+			#destination = ${d_include}nitki;
+			"..\src\nitki\**\*.hpp"
+		};
 		
 		[x86,release] { 
 			lib: ..\msvs_solution\Release\libnitki.lib;
 			symbols: ..\msvs_solution\libnitki\Release\libnitki.pdb;
-//			bin: ..\msvs_solution\Release\libnitki.dll;
 		}
 
 		[x86,debug] { 
 			lib: ..\msvs_solution\Debug\libnitki.lib;
 			symbols: ..\msvs_solution\libnitki\Debug\libnitki.pdb;
-//			bin: ..\msvs_solution\Debug\libnitki.dll;
 		}
 
 		[x64,release] { 
 			lib: ..\msvs_solution\x64\Release\libnitki.lib;
 			symbols: ..\msvs_solution\libnitki\x64\Release\libnitki.pdb;
-//			bin: ..\msvs_solution\x64\Release\libnitki.dll;
 		}
 
 		[x64,debug] { 
 			lib: ..\msvs_solution\x64\Debug\libnitki.lib;
 			symbols: ..\msvs_solution\libnitki\x64\Debug\libnitki.pdb;
-//			bin: ..\msvs_solution\x64\Debug\libnitki.dll;
 		}  
 	}
 }
