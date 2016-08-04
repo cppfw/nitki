@@ -19,7 +19,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		10BE6D63CE5642106F3153A3 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		2C20D0501C112CA200D80409 /* MsgThread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MsgThread.cpp; path = ../src/nitki/MsgThread.cpp; sourceTree = "<group>"; };
 		2C20D0511C112CA200D80409 /* Queue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Queue.cpp; path = ../src/nitki/Queue.cpp; sourceTree = "<group>"; };
 		2C20D0521C112CA200D80409 /* Semaphore.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Semaphore.cpp; path = ../src/nitki/Semaphore.cpp; sourceTree = "<group>"; };
@@ -30,7 +29,6 @@
 		2CE04F9E1C10F1A00081D5E0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2CE04FA31C10F1A00081D5E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4E16338E8F5DF8D512DE96A1 /* Pods-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tests/Pods-tests.debug.xcconfig"; sourceTree = "<group>"; };
-		691D24BE2A884FE989D27E01 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A02F5BD2AADA2A840D73811D /* libPods-tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2E196F70D0294FFF22FD06C /* Pods-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-tests/Pods-tests.release.xcconfig"; sourceTree = "<group>"; };
 		E79A7AD3424A3FFF500E28B9 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -93,8 +91,6 @@
 		A79797D62923CBF0A956A4DE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				691D24BE2A884FE989D27E01 /* Pods.debug.xcconfig */,
-				10BE6D63CE5642106F3153A3 /* Pods.release.xcconfig */,
 				4E16338E8F5DF8D512DE96A1 /* Pods-tests.debug.xcconfig */,
 				B2E196F70D0294FFF22FD06C /* Pods-tests.release.xcconfig */,
 			);
