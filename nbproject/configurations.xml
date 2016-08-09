@@ -25,7 +25,7 @@
       <itemPath>nbproject/private/launcher.properties</itemPath>
       <itemPath>cocoapods/libnitki.podspec.in</itemPath>
       <itemPath>homebrew/libnitki.rb.in</itemPath>
-      <itemPath>src/makefile</itemPath>
+      <itemPath>makefile</itemPath>
       <itemPath>nuget/nuget.autopkg.in</itemPath>
     </logicalFolder>
   </logicalFolder>
