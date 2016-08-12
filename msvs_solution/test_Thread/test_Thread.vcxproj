@@ -154,23 +154,23 @@
     <ClCompile Include="..\..\tests\Thread\tests.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\libnitki\libnitki.vcxproj">
       <Project>{07717b6b-3e25-4ce5-b54b-a6f578c35804}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\libutki.1.0.8.4\build\native\libutki.targets" Condition="Exists('..\packages\libutki.1.0.8.4\build\native\libutki.targets')" />
-    <Import Project="..\packages\libpogodi.1.0.1.8\build\native\libpogodi.targets" Condition="Exists('..\packages\libpogodi.1.0.1.8\build\native\libpogodi.targets')" />
+    <Import Project="..\packages\libutki.1.0.22\build\native\libutki.targets" Condition="Exists('..\packages\libutki.1.0.22\build\native\libutki.targets')" />
+    <Import Project="..\packages\libpogodi.1.0.10\build\native\libpogodi.targets" Condition="Exists('..\packages\libpogodi.1.0.10\build\native\libpogodi.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\libutki.1.0.8.4\build\native\libutki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libutki.1.0.8.4\build\native\libutki.targets'))" />
-    <Error Condition="!Exists('..\packages\libpogodi.1.0.1.8\build\native\libpogodi.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libpogodi.1.0.1.8\build\native\libpogodi.targets'))" />
+    <Error Condition="!Exists('..\packages\libutki.1.0.22\build\native\libutki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libutki.1.0.22\build\native\libutki.targets'))" />
+    <Error Condition="!Exists('..\packages\libpogodi.1.0.10\build\native\libpogodi.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libpogodi.1.0.10\build\native\libpogodi.targets'))" />
   </Target>
 </Project>

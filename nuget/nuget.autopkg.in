@@ -13,13 +13,13 @@ nuget{
 
 		description: @"C++ threading library";
 		releaseNotes: "Initial release";
-		copyright: Copyright 2015 Ivan Gagis;
+		copyright: Copyright 2016 Ivan Gagis;
 		tags: { native};
 	}
 	dependencies {
 		packages : {
-			libutki/1.0.8.6;
-			libpogodi/1.0.1.8;
+			libutki/1.0.22;
+			libpogodi/1.0.10;
 		};
 	}
 	files {
@@ -28,25 +28,21 @@ nuget{
 			#destination = ${d_include}nitki;
 			"..\src\nitki\**\*.hpp"
 		};
-		
-		[x86,release] { 
+
+		[x86,release] {
 			lib: ..\msvs_solution\Release\libnitki.lib;
-			symbols: ..\msvs_solution\libnitki\Release\libnitki.pdb;
 		}
 
-		[x86,debug] { 
+		[x86,debug] {
 			lib: ..\msvs_solution\Debug\libnitki.lib;
-			symbols: ..\msvs_solution\libnitki\Debug\libnitki.pdb;
 		}
 
-		[x64,release] { 
+		[x64,release] {
 			lib: ..\msvs_solution\x64\Release\libnitki.lib;
-			symbols: ..\msvs_solution\libnitki\x64\Release\libnitki.pdb;
 		}
 
-		[x64,debug] { 
+		[x64,debug] {
 			lib: ..\msvs_solution\x64\Debug\libnitki.lib;
-			symbols: ..\msvs_solution\libnitki\x64\Debug\libnitki.pdb;
-		}  
+		}
 	}
 }
