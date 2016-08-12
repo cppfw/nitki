@@ -1,3 +1,9 @@
+libnitki (1.0.13) unstable; urgency=medium
+
+  * use old style debug symbols in msvs
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 12 Aug 2016 14:37:57 +0300
+
 libnitki (1.0.12) unstable; urgency=medium
 
   * ios build fixed
