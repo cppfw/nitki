@@ -14,7 +14,7 @@ this_cxxflags += -fstrict-aliasing #strict aliasing!!!
 
 this_srcs += main.cpp tests.cpp
 
-this_ldlibs += -lnitki -lpogodi
+this_ldlibs += -lnitki -lpogodi -lstdc++
 
 ifeq ($(prorab_os),macosx)
     this_cxxflags += -stdlib=libc++ #this is needed to be able to use c++11 std lib
