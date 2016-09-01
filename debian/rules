@@ -11,11 +11,12 @@ override_dh_auto_install:
 	PREFIX=/usr dh_auto_install
 
 
-DEB_TARGET_ARCH ?= $(shell dpkg-architecture -qDEB_TARGET_ARCH)
+DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
 
-ifeq($(DEB_TARGET_ARCH),armhf)
-    .PHONY: override_dh_auto_test
-    override_dh_auto_test:
-    #do nothing
+ifeq($(DEB_HOST_ARCH),armhf)
+.PHONY: override_dh_auto_test
+override_dh_auto_test:
+	#do nothing
+
 endif
 
