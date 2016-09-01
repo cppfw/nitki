@@ -27,6 +27,8 @@
       <itemPath>homebrew/libnitki.rb.in</itemPath>
       <itemPath>makefile</itemPath>
       <itemPath>nuget/nuget.autopkg.in</itemPath>
+      <itemPath>travis_bintray_deb.json.in</itemPath>
+      <itemPath>travis_bintray_deb_rasp.json.in</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
