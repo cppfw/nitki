@@ -13,7 +13,7 @@ override_dh_auto_install:
 
 DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
 
-ifeq($(DEB_HOST_ARCH),armhf)
+ifeq ($(DEB_HOST_ARCH),armhf)
 .PHONY: override_dh_auto_test
 override_dh_auto_test:
 	#do nothing
