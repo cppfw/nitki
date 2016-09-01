@@ -1,3 +1,9 @@
+libnitki (1.0.14) unstable; urgency=medium
+
+  * deploy to rasp
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 01 Sep 2016 18:05:27 +0300
+
 libnitki (1.0.13) unstable; urgency=medium
 
   * use old style debug symbols in msvs
