@@ -11,8 +11,13 @@
 
 	"files": [
 		{
-			"includePattern": "/tmp/rasp/(.[^/]*(\\.deb)$)",
-			"uploadPattern": "$1"
+			"includePattern": "/srv/chroot/rasp-armhf/(.[^/]*(\\.deb)$)",
+			"uploadPattern": "$1",
+			"matrixParams": {
+				"deb_distribution": "unstable",
+				"deb_component": "main",
+				"deb_architecture": "armhf"
+			}
 		}
 	],
 	"publish": true,

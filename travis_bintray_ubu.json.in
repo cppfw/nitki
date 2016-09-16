@@ -1,7 +1,7 @@
 {
 	"package": {
 		"name": "libnitki",
-		"repo": "deb",
+		"repo": "ubu",
 		"subject": "igagis"
 	},
 	

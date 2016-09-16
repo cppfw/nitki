@@ -1,9 +1,9 @@
 Source: libnitki
-Section: misc
+Section: libs
 Priority: extra
 Maintainer: Ivan Gagis <igagis@gmail.com>
 Build-Depends: debhelper (>= 9), prorab,
-		libc6-dev, libutki-dev, libpogodi-dev
+		libutki-dev, libpogodi-dev
 Build-Depends-Indep: doxygen
 Standards-Version: 3.9.2
 
@@ -15,14 +15,15 @@ Description: cross-platform C++ threading library.
  Threading library.
 
 Package: libnitki$(soname)-dbg
-Section: libdevel
+Section: debug
 Architecture: any
 Depends: libnitki$(soname) (= ${binary:Version}), ${misc:Depends}
 Description: debugging symbols for libnitki$(soname) package.
+ Debugging symbols for libnitki.
 
 Package: libnitki-dev
-Section: devel
-Architecture: all
+Section: libdevel
+Architecture: any
 Depends: libnitki$(soname) (= ${binary:Version}), libnitki$(soname)-dbg (= ${binary:Version}), ${misc:Depends},
 		libutki-dev, libpogodi-dev
 Suggests: libnitki-doc
@@ -30,7 +31,7 @@ Description: cross-platform C++ threading library.
  Threading library.
 
 Package: libnitki-doc
-Section: devel
+Section: doc
 Architecture: all
 Depends: ${misc:Depends}
 Description: documentation for libnitki - threading library.

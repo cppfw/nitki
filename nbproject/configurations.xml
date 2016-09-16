@@ -22,6 +22,7 @@
       <itemPath>.travis.yml</itemPath>
       <itemPath>ios/Podfile</itemPath>
       <itemPath>debian/changelog</itemPath>
+      <itemPath>debian/control.in</itemPath>
       <itemPath>nbproject/private/launcher.properties</itemPath>
       <itemPath>cocoapods/libnitki.podspec.in</itemPath>
       <itemPath>homebrew/libnitki.rb.in</itemPath>
@@ -29,6 +30,7 @@
       <itemPath>nuget/nuget.autopkg.in</itemPath>
       <itemPath>travis_bintray_deb.json.in</itemPath>
       <itemPath>travis_bintray_rasp.json.in</itemPath>
+      <itemPath>travis_bintray_ubu.json.in</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
