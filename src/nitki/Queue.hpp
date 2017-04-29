@@ -88,8 +88,8 @@ public:
 	T_Message peekMsg();
 
 
-private:
 #if M_OS == M_OS_WINDOWS
+protected:
 	HANDLE getHandle()override;
 
 	std::uint32_t flagsMask;//flags to wait for
@@ -100,9 +100,11 @@ private:
 	bool checkSignaled()override;
 
 #elif M_OS == M_OS_LINUX
+public:
 	int getHandle()override;
 
 #elif M_OS == M_OS_MACOSX
+public:
 	int getHandle()override;
 
 #else
