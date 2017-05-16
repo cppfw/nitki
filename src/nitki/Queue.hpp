@@ -1,8 +1,3 @@
-/**
- * @author Ivan Gagis <igagis@gmail.com>
- * @author Jose Luis Hidalgo <joseluis.hidalgo@gmail.com> - Mac OS X port
- */
-
 #pragma once
 
 #include <utki/config.hpp>
