@@ -18,6 +18,4 @@ inline void TestTingThread(){
 
 //	TRACE(<< "running TestNestedJoin" << std::endl)
 	TestNestedJoin::Run();
-
-	TRACE_ALWAYS(<< "[PASSED]: Thread test" << std::endl)
 }

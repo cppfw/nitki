@@ -18,8 +18,7 @@ class TestThread : public nitki::Thread{
 public:
 	int a, b;
 
-	//override
-	void run(){
+	void run()override{
 		this->a = 10;
 		this->b = 20;
 		nitki::Thread::sleep(1000);
@@ -30,7 +29,6 @@ public:
 
 
 void Run(){
-
 	//Test join after thread has finished
 	{
 		TestThread t;
@@ -54,7 +52,7 @@ void Run(){
 	}
 }
 
-}//~namespace
+}
 
 
 //====================
@@ -66,8 +64,7 @@ class TestThread1 : public nitki::MsgThread{
 public:
 	int a, b;
 
-	//override
-	void run(){
+	void run()override{
 		pogodi::WaitSet ws(1);
 		
 		ws.add(this->queue, pogodi::Waitable::READ);
@@ -108,7 +105,7 @@ void Run(){
 	}
 }
 
-}//~namespace
+}
 
 
 
@@ -120,9 +117,7 @@ namespace TestImmediateExitThread{
 
 class ImmediateExitThread : public nitki::Thread{
 public:
-
-	//override
-	void run(){
+	void run()override{
 		return;
 	}
 };
@@ -136,7 +131,7 @@ void Run(){
 	}
 }
 
-}//~namespace
+}
 
 
 
@@ -169,8 +164,7 @@ public:
 			success(false)
 	{}
 
-	//override
-	void run(){
+	void run()override{
 		this->top.start();
 		this->top.join();
 		this->success = true;

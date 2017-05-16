@@ -1,9 +1,3 @@
-
-/**
- * @author Ivan Gagis <igagis@gmail.com>
- * @author Jose Luis Hidalgo <joseluis.hidalgo@gmail.com> - Mac OS X port
- */
-
 #pragma once
 
 #include <utki/config.hpp>
@@ -36,7 +30,7 @@ protected:
 	 * @code
 	 * class MyThread : public ting::MsgThread{
 	 *     ...
-	 *     void MyThread::Run(){
+	 *     void MyThread::run(){
 	 *         while(!this->quitFlag){
 	 *             //get and handle thread messages, etc.
 	 *             ...
@@ -95,4 +89,4 @@ public:
 
 
 
-}//~namespace
+}

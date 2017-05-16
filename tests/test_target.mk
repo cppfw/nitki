@@ -1,3 +1,6 @@
+this_dirs := $(subst /, ,$(d))
+this_test := $(word $(words $(this_dirs)),$(this_dirs))
+
 ifeq ($(prorab_os),windows)
     this_test_cmd := (cd $(prorab_this_dir); cp ../../src/libnitki.dll . || true; ./$$(notdir $$^))
 else
@@ -10,8 +13,8 @@ endif
 
 define this_rule
 test:: $(prorab_this_name)
-	@echo running $$^...
-	@$(this_test_cmd)
+	@prorab-running-test.sh $(this_test)
+	@$(this_test_cmd) && prorab-passed.sh || prorab-error.sh "test failed"
 endef
 $(eval $(this_rule))
 
