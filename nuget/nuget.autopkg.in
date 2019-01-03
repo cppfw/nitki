@@ -1,3 +1,11 @@
+configurations {
+	UserPlatformToolset {
+		// Needed because autopackage lacks VS2015+ support
+		key = "PlatformToolset";
+		choices: "v140,v141";
+	};
+}
+
 nuget{
 	nuspec{
 		id = libnitki;
@@ -29,20 +37,36 @@ nuget{
 			"..\src\nitki\**\*.hpp"
 		};
 
-		[x86,release] {
-			lib: ..\msvs_solution\Release\libnitki.lib;
+		[x86,v140,release] {
+			lib: ..\msvs_solution\v140_Release\libnitki.lib;
 		}
 
-		[x86,debug] {
-			lib: ..\msvs_solution\Debug\libnitki.lib;
+		[x86,v140,debug] {
+			lib: ..\msvs_solution\v140_Debug\libnitki.lib;
 		}
 
-		[x64,release] {
-			lib: ..\msvs_solution\x64\Release\libnitki.lib;
+		[x64,v140,release] {
+			lib: ..\msvs_solution\x64\v140_Release\libnitki.lib;
 		}
 
-		[x64,debug] {
-			lib: ..\msvs_solution\x64\Debug\libnitki.lib;
+		[x64,v140,debug] {
+			lib: ..\msvs_solution\x64\v140_Debug\libnitki.lib;
+		}
+
+		[x86,v141,release] {
+			lib: ..\msvs_solution\v141_Release\libnitki.lib;
+		}
+
+		[x86,v141,debug] {
+			lib: ..\msvs_solution\v141_Debug\libnitki.lib;
+		}
+
+		[x64,v141,release] {
+			lib: ..\msvs_solution\x64\v141_Release\libnitki.lib;
+		}
+
+		[x64,v141,debug] {
+			lib: ..\msvs_solution\x64\v141_Debug\libnitki.lib;
 		}
 	}
 }
