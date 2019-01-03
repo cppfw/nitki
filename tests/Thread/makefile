@@ -16,26 +16,24 @@ this_srcs += main.cpp tests.cpp
 
 this_ldlibs += -lnitki -lpogodi -lstdc++
 
-ifeq ($(prorab_os),macosx)
+ifeq ($(os),macosx)
     this_cxxflags += -stdlib=libc++ #this is needed to be able to use c++11 std lib
     this_ldlibs += -lc++
-else ifeq ($(prorab_os),windows)
-    this_cxxflags += -I/usr/include -I/usr/local/include
-    this_ldflags += -L/usr/lib -L/usr/local/lib
+else ifeq ($(os),windows)
 else
     this_ldlibs += -lpthread
 endif
 
-this_ldflags += -L$(prorab_this_dir)../../src/
+this_ldflags += -L$(d)../../src/
 
 #add dependency on libnitki.so
-$(abspath $(prorab_this_dir)tests): $(abspath $(prorab_this_dir)../../src/libnitki$(prorab_lib_extension))
+$(abspath $(d)tests): $(abspath $(d)../../src/libnitki$(soext))
 
 
 $(eval $(prorab-build-app))
 
-include $(prorab_this_dir)../test_target.mk
+include $(d)../test_target.mk
 
 
 #include makefile for building nitki
-$(eval $(call prorab-include,$(prorab_this_dir)../../src/makefile))
+$(eval $(call prorab-include,$(d)../../src/makefile))

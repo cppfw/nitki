@@ -6,7 +6,7 @@ debug := false
 
 this_name := nitki
 
-this_soname := $(shell cat $(prorab_this_dir)soname.txt)
+this_soname := $(shell cat $(d)soname.txt)
 
 
 #Sources
@@ -42,12 +42,11 @@ this_cxxflags += -O3
 
 
 
-ifeq ($(prorab_os),linux)
+ifeq ($(os),linux)
     this_cxxflags += -fPIC # Since we are building shared library, we need Position-Independend Code
     this_ldlibs += -lpthread -lrt
-else ifeq ($(prorab_os),windows)
-    this_cxxflags += -I/usr/include -I/usr/local/include
-else ifeq ($(prorab_os),macosx)
+else ifeq ($(os),windows)
+else ifeq ($(os),macosx)
     this_cxxflags += -stdlib=libc++ #this is needed to be able to use c++11 std lib
 endif
 
