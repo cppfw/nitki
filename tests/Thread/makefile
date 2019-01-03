@@ -26,11 +26,12 @@ endif
 
 this_ldflags += -L$(d)../../src/
 
-#add dependency on libnitki.so
-$(abspath $(d)tests): $(abspath $(d)../../src/libnitki$(soext))
-
 
 $(eval $(prorab-build-app))
+
+
+#add dependency on libnitki.so
+$(abspath $(prorab_this_name)): $(abspath $(d)../../src/libnitki$(soext))
 
 include $(d)../test_target.mk
 
