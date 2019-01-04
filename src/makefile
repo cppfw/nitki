@@ -17,9 +17,6 @@ this_srcs += nitki/Semaphore.cpp
 this_srcs += nitki/Thread.cpp
 
 
-
-this_cxxflags := 
-
 ifeq ($(debug),true)
     this_cxxflags += -DDEBUG
 endif
