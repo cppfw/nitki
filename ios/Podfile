@@ -4,5 +4,5 @@ source 'https://github.com/igagis/cocoapods-repo.git'
 
 target "tests" do
 	pod 'libutki', '>= 1.0.21'
-	pod 'libpogodi', '>= 1.0.3'
+	pod 'pogodi', '>= 1.0.26'
 end
