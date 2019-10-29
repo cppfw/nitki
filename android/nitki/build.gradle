@@ -46,8 +46,8 @@ repositories {
     }
 }
 dependencies {
-    implementation 'io.github.igagis:libutki:+'
-    implementation 'io.github.igagis:libpogodi:+'
+    implementation 'io.github.igagis:utki:+'
+    implementation 'io.github.igagis:pogodi:+'
 }
 
 

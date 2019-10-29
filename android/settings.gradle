@@ -1,1 +1,1 @@
-include ':app', ':libnitki'
+include ':app', ':nitki'
