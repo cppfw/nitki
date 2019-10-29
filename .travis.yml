@@ -139,7 +139,7 @@ deploy:
   script: myci-deploy-debian-bintray.sh -u igagis -r $OS -p $PACKAGE_NAME -c main -d $OS_REL $TRAVIS_BUILD_DIR/../*.deb
 - provider: script
   skip_cleanup: true
-  script: myci-deploy-maven-bintray.sh -u igagis -r android -p io/github/igagis android/$PACKAGE_NAME-$PACKAGE_VERSION.aar
+  script: myci-deploy-maven-bintray.sh -u igagis -r android -d io/github/igagis -p $PACKAGE_NAME -v $PACKAGE_VERSION android/$PACKAGE_NAME-$PACKAGE_VERSION.aar
   on:
     tags: true
     condition: $TRAVIS_JOB_NAME = android
