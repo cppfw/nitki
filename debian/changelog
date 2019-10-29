@@ -1,3 +1,9 @@
+libnitki (1.0.22) unstable; urgency=medium
+
+  * binary cocoapod
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 29 Oct 2019 17:27:52 +0200
+
 libnitki (1.0.21) unstable; urgency=medium
 
   * deploy to bionic
