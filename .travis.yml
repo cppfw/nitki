@@ -47,7 +47,6 @@ env:
   - secure: "R9+89V8MdV6D8BZkLZ2ctwhggMDAK1SvyTWq+p9ZnYbgLDlOyUDH2C9SyIBE1tgQx9sd8pV8oV/G+Ymho7W476pU3cF5YhcFGB0pg7t/y9cZpnsWRYlpLebybKiKPv5D9Kl9vhEzKA8xvGf02bdlF743k/tJqgtqHRNQFItddl6eDcaEW4CVTunrJjh23oq28yuXahf+JdIEDhwxuERsqOg4q0LqCE4/IwvRk83ndbtutnoPpinPuqBiKbuP0nKCKW/gMQRkh/gz0pxUV8bevfJ4RucsAf+JUfEftu6UnjXBpw5EQyKWWI2gRvbB4TaO58g2WvSnD1XDptMiccImdtYQoU8cH2HVgJEZwk16mk0mBgaus8MP8y6dZkg6n7aBAiNso8kgA/TMqNhr+SthHQJYmkVMyHN2eQ6vPcRtuoyEycD9pG6xDLZIIbQFI1jksoWAoSF4pdsoHjZH/e8965sPoGloHX7CapjNWc7lh0MoTy1PPE5390L3mna4d9G0gERE3ZmTtNhQW6pFbb1U5pkdu3rOsLhSaf6+lSoOjMKkvg3Tt69UznuLQPkMsxjLYLwesEwO0sRYiyoSeYNaMHvkozDY8goPUZ+Ic5UET0DSPcHO8dRsbbXwDx/PQ1jTStYO7K08RyhIE0VQZaI1BS7NGF0d9/eJwAFy5wczeNU="
   - MYCI_GIT_USERNAME=igagis
   - PACKAGE_NAME=nitki
-  - PACKAGE_VERSION=$(myci-deb-version.sh debian/changelog)
   matrix:
   - OS_REL=xenial OS=ubuntu DOCKER_IMAGE=$OS:$OS_REL PACKAGE_TYPE=deb
   - OS_REL=bionic OS=ubuntu DOCKER_IMAGE=$OS:$OS_REL PACKAGE_TYPE=deb
@@ -90,6 +89,7 @@ before_install:
     pod repo add --silent igagis https://$MYCI_GIT_USERNAME:$MYCI_GIT_ACCESS_TOKEN@github.com/igagis/cocoapods-repo.git &&
     pod install --project-directory=xcode;
   fi
+- export PACKAGE_VERSION=$(myci-deb-version.sh debian/changelog)
 
 install:
 - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ -z "$TRAVIS_JOB_NAME" ]; then
