@@ -38,4 +38,4 @@ include $(d)../test_target.mk
 
 
 #include makefile for building nitki
-$(eval $(call prorab-include,$(d)../../src/makefile))
+$(eval $(call prorab-include, ../../src/makefile))

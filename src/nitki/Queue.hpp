@@ -2,7 +2,7 @@
 
 #include <utki/config.hpp>
 #include <utki/debug.hpp>
-#include <utki/SpinLock.hpp>
+#include <utki/spin_lock.hpp>
 
 #include <pogodi/WaitSet.hpp>
 
@@ -29,7 +29,7 @@ public:
 	typedef std::function<void()> T_Message;
 	
 private:
-	utki::SpinLock mut;
+	utki::spin_lock mut;
 
 	std::list<T_Message> messages;
 	
