@@ -1,3 +1,9 @@
+libnitki (1.0.26) unstable; urgency=medium
+
+  * build fix
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 20 Dec 2019 23:07:38 +0200
+
 libnitki (1.0.25) unstable; urgency=medium
 
   * debian buster
