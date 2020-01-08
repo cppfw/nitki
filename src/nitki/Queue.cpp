@@ -34,23 +34,16 @@ Queue::Queue(){
 			NULL //no name
 		);
 	if(this->eventForWaitable == NULL){
-		throw utki::Exc("Queue::Queue(): could not create event (Win32) for implementing Waitable");
+		throw std::system_error(GetLastError(), std::generic_category(), "could not create event (Win32) for implementing Waitable");
 	}
 #elif M_OS == M_OS_MACOSX
 	if(::pipe(&this->pipeEnds[0]) < 0){
-		std::stringstream ss;
-		ss << "Queue::Queue(): could not create pipe (*nix) for implementing Waitable,"
-				<< " error code = " << errno << ": " << strerror(errno);
-		TRACE(<< ss.str() << std::endl)
-		throw utki::Exc(ss.str().c_str());
+		throw std::system_error(errno, std::generic_category(), "could not create pipe (*nix) for implementing Waitable");
 	}
 #elif M_OS == M_OS_LINUX
 	this->eventFD = eventfd(0, EFD_NONBLOCK);
 	if(this->eventFD < 0){
-		std::stringstream ss;
-		ss << "Queue::Queue(): could not create eventfd (linux) for implementing Waitable,"
-				<< " error code = " << errno << ": " << strerror(errno);
-		throw utki::Exc(ss.str().c_str());
+		throw std::system_error(errno, std::generic_category(), "could not create eventfd (linux) for implementing Waitable");
 	}
 #else
 #	error "Unsupported OS"
@@ -122,20 +115,20 @@ Queue::T_Message Queue::peekMsg(){
 #if M_OS == M_OS_WINDOWS
 			if(ResetEvent(this->eventForWaitable) == 0){
 				ASSERT(false)
-				throw utki::Exc("Queue::Wait(): ResetEvent() failed");
+				throw std::system_error(GetLastError(), std::generic_category(), "Queue::Wait(): ResetEvent() failed");
 			}
 #elif M_OS == M_OS_MACOSX
 			{
 				std::uint8_t oneByteBuf[1];
 				if(read(this->pipeEnds[0], oneByteBuf, 1) != 1){
-					throw utki::Exc("Queue::Wait(): read() failed");
+					throw std::system_error(errno, std::generic_category(), "Queue::Wait(): read() failed");
 				}
 			}
 #elif M_OS == M_OS_LINUX
 			{
 				eventfd_t value;
 				if(eventfd_read(this->eventFD, &value) < 0){
-					throw utki::Exc("Queue::Wait(): eventfd_read() failed");
+					throw std::system_error(errno, std::generic_category(), "Queue::Wait(): eventfd_read() failed");
 				}
 				ASSERT(value == 1)
 			}
@@ -173,7 +166,7 @@ void Queue::setWaitingEvents(std::uint32_t flagsToWaitFor){
 	//Thus, only possible flag values are READ and 0 (NOT_READY)
 	if(flagsToWaitFor != 0 && flagsToWaitFor != pogodi::Waitable::READ){
 		ASSERT_INFO(false, "flagsToWaitFor = " << flagsToWaitFor)
-		throw utki::Exc("Queue::SetWaitingEvents(): flagsToWaitFor should be pogodi::Waitable::READ or 0, other values are not allowed");
+		throw std::invalid_argument("Queue::SetWaitingEvents(): flagsToWaitFor should be pogodi::Waitable::READ or 0, other values are not allowed");
 	}
 
 	this->flagsMask = flagsToWaitFor;
