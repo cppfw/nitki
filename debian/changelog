@@ -1,3 +1,9 @@
+libnitki (1.0.27) unstable; urgency=medium
+
+  * update to latest libs
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 08 Jan 2020 15:29:46 +0200
+
 libnitki (1.0.26) unstable; urgency=medium
 
   * build fix
