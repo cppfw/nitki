@@ -42,10 +42,10 @@ protected:
 	 */
 	volatile bool quitFlag = false;//looks like it is not necessary to protect this flag by mutex, volatile will be enough
 
-	Queue queue;
+	nitki::queue queue;
 
 private:
-	Queue::T_Message quitMessage = [this](){this->quitFlag = true;};
+	queue::T_Message quitMessage = [this](){this->quitFlag = true;};
 
 public:
 	MsgThread() = default;
@@ -82,7 +82,7 @@ public:
 	 * @brief Send a message to thread's queue.
 	 * @param msg - a message to send.
 	 */
-	void pushMessage(Queue::T_Message&& msg)noexcept{
+	void pushMessage(queue::T_Message&& msg)noexcept{
 		this->queue.pushMessage(std::move(msg));
 	}
 };

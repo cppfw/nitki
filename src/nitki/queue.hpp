@@ -12,23 +12,24 @@
 namespace nitki{
 
 /**
- * @brief Message queue.
- * Message queue is used for communication of separate threads by
- * means of sending messages to each other. Thus, when one thread sends a message to another one,
- * it asks that another thread to execute some code portion - handler code of the message.
- * NOTE: Queue implements waitable interface which means that it can be used in conjunction
+ * @brief Procedure queue.
+ * Procedure queue is used for communication of separate threads by
+ * means of sending procedures to each other. Thus, when one thread sends a procedure to another one,
+ * it asks that another thread to execute some code portion, i.e. procedure.
+ * NOTE: queue implements waitable interface which means that it can be used in conjunction
  * with opros::wait_set. But, note, that the implementation of the waitable is that it
- * shall only be used to wait for READ. If you are trying to wait for WRITE the behavior will be
+ * shall only be used to wait for read. If you are trying to wait for write the behavior will be
  * undefined.
  */
-class Queue : public opros::waitable{
+class queue : public opros::waitable{
 public:
+	// TODO: dprecated, remove.
 	typedef std::function<void()> T_Message;
 	
 private:
-	utki::spin_lock mut;
+	mutable utki::spin_lock mut;
 
-	std::deque<T_Message> messages;
+	std::deque<std::function<void()>> procedures;
 	
 #if M_OS == M_OS_WINDOWS
 	HANDLE event_handle; // use Event to implement waitable on Windows
@@ -40,40 +41,55 @@ private:
 #	error "Unsupported OS"
 #endif
 
-	Queue(const Queue&) = delete;
-	Queue& operator=(const Queue&) = delete;
+	queue(const queue&) = delete;
+	queue& operator=(const queue&) = delete;
 
 public:
 	/**
 	 * @brief Constructor, creates empty message queue.
 	 */
-	Queue();
+	queue();
 
 	
 	/**
 	 * @brief Destructor.
-	 * When called, it also destroys all messages on the queue.
+	 * When called, it also destroys all procedures on the queue.
 	 */
-	~Queue()noexcept;
+	~queue()noexcept;
 
 
 
 	/**
-	 * @brief Pushes a new message to the queue.
-	 * @param msg - the message to push into the queue.
+	 * @brief Pushes a new procedure to the end of the queue.
+	 * @param proc - the procedure to push into the queue.
 	 */
-	void pushMessage(T_Message&& msg)noexcept;
+	void push_back(std::function<void()>&& proc);
 
-
+	// TODO: deprecated, remove.
+	void pushMessage(T_Message&& msg)noexcept{
+		this->push_back(std::move(msg));
+	}
 
 	/**
-	 * @brief Get message from queue, does not block if no messages queued.
-	 * This method gets a message from message queue. If there are no messages on the queue
-	 * it will return invalid auto pointer.
-	 * @return auto-pointer to Message instance.
-	 * @return invalid auto-pointer if there are no messages in the queue.
+	 * @brief Get procedure from queue, does not block if no procedures queued.
+	 * This method gets a procedure from the front of the queue. If there are no procedures on the queue
+	 * it will return nullptr.
+	 * @return procedure.
+	 * @return nullptr if there are no procedures in the queue.
 	 */
-	T_Message peekMsg();
+	std::function<void()> pop_front();
+
+	// TODO: deprecated, remove.
+	T_Message peekMsg(){
+		return this->pop_front();
+	}
+
+	/**
+	 * @brief Get number of procedures in the queue.
+	 * This function involves mutex acquisition.
+	 * @return number of procedures in the queue.
+	 */
+	size_t size()const noexcept;
 
 
 #if M_OS == M_OS_WINDOWS
