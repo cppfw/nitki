@@ -9,10 +9,7 @@
 #include <deque>
 #include <functional>
 
-
 namespace nitki{
-
-
 
 /**
  * @brief Message queue.
@@ -83,7 +80,7 @@ public:
 protected:
 	HANDLE get_handle()override;
 
-	std::uint32_t waiting_flags;
+	utki::flags<opros::ready> waiting_flags;
 
 	void set_waiting_flags(utki::flags<opros::ready> wait_for)override;
 
