@@ -27,7 +27,7 @@ nuget{
 	dependencies {
 		packages : {
 			libutki/1.0.22;
-			libpogodi/1.0.10;
+			libopros/1.0.10;
 		};
 	}
 	files {

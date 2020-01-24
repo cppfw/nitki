@@ -2,7 +2,7 @@
 #include <utki/config.hpp>
 #include <utki/Buf.hpp>
 
-#include <pogodi/WaitSet.hpp>
+#include <opros/wait_set.hpp>
 
 #include "../../src/nitki/Thread.hpp"
 #include "../../src/nitki/MsgThread.hpp"
@@ -55,9 +55,9 @@ void Run(){
 }
 
 
-//====================
-//Test many threads
-//====================
+//===================
+// Test many threads
+//===================
 namespace TestManyThreads{
 
 class TestThread1 : public nitki::MsgThread{
@@ -65,9 +65,9 @@ public:
 	int a, b;
 
 	void run()override{
-		pogodi::WaitSet ws(1);
+		opros::wait_set ws(1);
 		
-		ws.add(this->queue, pogodi::Waitable::READ);
+		ws.add(this->queue, {opros::ready::read});
 		
 		while(!this->quitFlag){
 			ws.wait();

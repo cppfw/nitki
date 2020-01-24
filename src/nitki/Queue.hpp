@@ -4,7 +4,7 @@
 #include <utki/debug.hpp>
 #include <utki/spin_lock.hpp>
 
-#include <pogodi/WaitSet.hpp>
+#include <opros/wait_set.hpp>
 
 #include <list>
 #include <functional>
@@ -19,12 +19,12 @@ namespace nitki{
  * Message queue is used for communication of separate threads by
  * means of sending messages to each other. Thus, when one thread sends a message to another one,
  * it asks that another thread to execute some code portion - handler code of the message.
- * NOTE: Queue implements Waitable interface which means that it can be used in conjunction
- * with pogodi::WaitSet. But, note, that the implementation of the Waitable is that it
+ * NOTE: Queue implements waitable interface which means that it can be used in conjunction
+ * with opros::wait_set. But, note, that the implementation of the waitable is that it
  * shall only be used to wait for READ. If you are trying to wait for WRITE the behavior will be
  * undefined.
  */
-class Queue : public pogodi::Waitable{
+class Queue : public opros::waitable{
 public:
 	typedef std::function<void()> T_Message;
 	
@@ -34,10 +34,10 @@ private:
 	std::list<T_Message> messages;
 	
 #if M_OS == M_OS_WINDOWS
-	//use Event to implement Waitable on Windows
-	HANDLE eventForWaitable;
+	//use Event to implement waitable on Windows
+	HANDLE eventForwaitable;
 #elif M_OS == M_OS_MACOSX
-	//use pipe to implement Waitable in *nix systems
+	//use pipe to implement waitable in *nix systems
 	int pipeEnds[2];
 #elif M_OS == M_OS_LINUX
 	//use eventfd()
@@ -85,28 +85,25 @@ public:
 
 #if M_OS == M_OS_WINDOWS
 protected:
-	HANDLE getHandle()override;
+	HANDLE get_handle()override;
 
-	std::uint32_t flagsMask;//flags to wait for
+	std::uint32_t waiting_flags;
 
-	void setWaitingEvents(std::uint32_t flagsToWaitFor)override;
+	void set_waiting_flags(utki::flags<opros::ready> wait_for)override;
 
-	//returns true if signaled
-	bool checkSignaled()override;
+	bool check_signaled()override;
 
 #elif M_OS == M_OS_LINUX
 public:
-	int getHandle()override;
+	int get_handle()override;
 
 #elif M_OS == M_OS_MACOSX
 public:
-	int getHandle()override;
+	int get_handle()override;
 
 #else
 #	error "Unsupported OS"
 #endif
 };
 
-
-
-}//~namespace
+}

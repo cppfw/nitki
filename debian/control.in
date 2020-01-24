@@ -3,7 +3,7 @@ Section: libs
 Priority: extra
 Maintainer: Ivan Gagis <igagis@gmail.com>
 Build-Depends: debhelper (>= 9), prorab, prorab-extra, myci,
-		libutki-dev, libpogodi-dev
+		libutki-dev, libopros-dev
 Build-Depends-Indep: doxygen
 Standards-Version: 3.9.2
 
@@ -25,7 +25,7 @@ Package: libnitki-dev
 Section: libdevel
 Architecture: any
 Depends: libnitki$(soname) (= ${binary:Version}), libnitki$(soname)-dbg (= ${binary:Version}), ${misc:Depends},
-		libutki-dev, libpogodi-dev
+		libutki-dev, libopros-dev
 Suggests: libnitki-doc
 Description: cross-platform C++ threading library.
  Threading library.

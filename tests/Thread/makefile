@@ -14,7 +14,7 @@ else
     this_cxxflags += -O3
 endif
 
-this_ldlibs += -lnitki -lpogodi -lstdc++
+this_ldlibs += -lnitki -lopros -lstdc++
 
 ifeq ($(os),macosx)
     this_cxxflags += -stdlib=libc++ # this is needed to be able to use c++11 std lib

@@ -31,5 +31,5 @@ include_directories( build/ndkLibs/include/ )
 
 target_link_libraries(
         ${name}
-        android log pogodi
+        android log opros
     )

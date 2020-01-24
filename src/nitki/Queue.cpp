@@ -23,8 +23,8 @@ using namespace nitki;
 
 
 Queue::Queue(){
-	//can write will always be set because it is always possible to post a message to the queue
-	this->setCanWriteFlag();
+	// it is always possible to post a message to the queue, so set ready to write flag
+	this->readiness_flags.set(opros::ready::write);
 
 #if M_OS == M_OS_WINDOWS
 	this->eventForWaitable = CreateEvent(
@@ -38,12 +38,12 @@ Queue::Queue(){
 	}
 #elif M_OS == M_OS_MACOSX
 	if(::pipe(&this->pipeEnds[0]) < 0){
-		throw std::system_error(errno, std::generic_category(), "could not create pipe (*nix) for implementing Waitable");
+		throw std::system_error(errno, std::generic_category(), "could not create pipe (*nix) for implementing waitable");
 	}
 #elif M_OS == M_OS_LINUX
 	this->eventFD = eventfd(0, EFD_NONBLOCK);
 	if(this->eventFD < 0){
-		throw std::system_error(errno, std::generic_category(), "could not create eventfd (linux) for implementing Waitable");
+		throw std::system_error(errno, std::generic_category(), "could not create eventfd (linux) for implementing waitable");
 	}
 #else
 #	error "Unsupported OS"
@@ -71,15 +71,15 @@ void Queue::pushMessage(std::function<void()>&& msg)noexcept{
 	std::lock_guard<decltype(this->mut)> mutexGuard(this->mut);
 	this->messages.push_back(std::move(msg));
 	
-	if(this->messages.size() == 1){//if it is a first message
-		//Set CanRead flag.
-		//NOTE: in linux implementation with epoll(), the CanRead
-		//flag will also be set in WaitSet::Wait() method.
-		//NOTE: set CanRead flag before event notification/pipe write, because
-		//if do it after then some other thread which was waiting on the WaitSet
-		//may read the CanRead flag while it was not set yet.
-		ASSERT(!this->canRead())
-		this->setCanReadFlag();
+	if(this->messages.size() == 1){ // if it is a first message
+		// Set read flag.
+		// NOTE: in linux implementation with epoll(), the read
+		// flag will also be set in wait_set::wait() method.
+		// NOTE: set read flag before event notification/pipe write, because
+		// if do it after then some other thread which was waiting on the wait_set
+		// may check the read flag while it was not set yet.
+		ASSERT(!this->flags().get(opros::ready::read))
+		this->readiness_flags.set(opros::ready::read);
 
 #if M_OS == M_OS_WINDOWS
 		if(SetEvent(this->eventForWaitable) == 0){
@@ -101,7 +101,7 @@ void Queue::pushMessage(std::function<void()>&& msg)noexcept{
 #endif
 	}
 
-	ASSERT(this->canRead())
+	ASSERT(this->flags().get(opros::ready::read))
 }
 
 
@@ -109,9 +109,9 @@ void Queue::pushMessage(std::function<void()>&& msg)noexcept{
 Queue::T_Message Queue::peekMsg(){
 	std::lock_guard<decltype(this->mut)> mutexGuard(this->mut);
 	if(this->messages.size() != 0){
-		ASSERT(this->canRead())
+		ASSERT(this->flags().get(opros::ready::read))
 
-		if(this->messages.size() == 1){//if we are taking away the last message from the queue
+		if(this->messages.size() == 1){ // if we are taking away the last message from the queue
 #if M_OS == M_OS_WINDOWS
 			if(ResetEvent(this->eventForWaitable) == 0){
 				ASSERT(false)
@@ -135,9 +135,9 @@ Queue::T_Message Queue::peekMsg(){
 #else
 #	error "Unsupported OS"
 #endif
-			this->clearCanReadFlag();
+			this->readiness_flags.clear(opros::ready::read);
 		}else{
-			ASSERT(this->canRead())
+			ASSERT(this->flags().get(opros::ready::read))
 		}
 		
 		T_Message ret = std::move(this->messages.front());
@@ -149,36 +149,29 @@ Queue::T_Message Queue::peekMsg(){
 	return nullptr;
 }
 
-
-
 #if M_OS == M_OS_WINDOWS
-HANDLE Queue::getHandle(){
-	//return event handle
+HANDLE Queue::get_handle(){
 	return this->eventForWaitable;
 }
 
-
-
-void Queue::setWaitingEvents(std::uint32_t flagsToWaitFor){
-	//It is not allowed to wait on queue for write,
-	//because it is always possible to push new message to queue.
-	//Error condition is not possible for Queue.
-	//Thus, only possible flag values are READ and 0 (NOT_READY)
-	if(flagsToWaitFor != 0 && flagsToWaitFor != pogodi::Waitable::READ){
-		ASSERT_INFO(false, "flagsToWaitFor = " << flagsToWaitFor)
-		throw std::invalid_argument("Queue::SetWaitingEvents(): flagsToWaitFor should be pogodi::Waitable::READ or 0, other values are not allowed");
+void Queue::set_waiting_flags(utki::flags<opros::ready> wait_for){
+	// It is not allowed to wait on queue for write,
+	// because it is always possible to push new message to queue.
+	// Error condition is not possible for queue.
+	// Thus, only possible flag values are READ and 0 (NOT_READY)
+	if(wait_for.get(opros::ready::write) || wait_for.get(opros::ready::error)){
+		ASSERT_INFO(false, "wait_for = " << wait_for)
+		throw std::invalid_argument("queue::set_waiting_flags(): wait_for can only have read flag set or no flags set");
 	}
 
-	this->flagsMask = flagsToWaitFor;
+	this->waiting_flags = wait_for;
 }
 
+bool Queue::check_signaled(){
+	// error condition is not possible for queue
+	ASSERT(!this->flags().get(opros::ready::error))
 
-
-//returns true if signaled
-bool Queue::checkSignaled(){
-	//error condition is not possible for queue
-	ASSERT((this->readinessFlags & pogodi::Waitable::ERROR_CONDITION) == 0)
-
+// TODO: remove dead code
 /*
 #ifdef DEBUG
 	{
@@ -187,18 +180,18 @@ bool Queue::checkSignaled(){
 			ASSERT_ALWAYS(this->CanRead())
 
 			//event should be in signalled state
-			ASSERT_ALWAYS(WaitForSingleObject(this->eventForWaitable, 0) == WAIT_OBJECT_0)
+			ASSERT_ALWAYS(WaitForSingleObject(this->eventForwaitable, 0) == WAIT_OBJECT_0)
 		}
 
 		if(this->CanRead()){
 			ASSERT_ALWAYS(this->first)
 
 			//event should be in signalled state
-			ASSERT_ALWAYS(WaitForSingleObject(this->eventForWaitable, 0) == WAIT_OBJECT_0)
+			ASSERT_ALWAYS(WaitForSingleObject(this->eventForwaitable, 0) == WAIT_OBJECT_0)
 		}
 
 		//if event is in signalled state
-		if(WaitForSingleObject(this->eventForWaitable, 0) == WAIT_OBJECT_0){
+		if(WaitForSingleObject(this->eventForwaitable, 0) == WAIT_OBJECT_0){
 			ASSERT_ALWAYS(this->CanRead())
 			ASSERT_ALWAYS(this->first)
 		}
@@ -210,15 +203,12 @@ bool Queue::checkSignaled(){
 }
 
 #elif M_OS == M_OS_MACOSX
-//override
-int Queue::getHandle(){
-	//return read end of pipe
-	return this->pipeEnds[0];
+int Queue::get_handle(){
+	return this->pipeEnds[0]; // return read end of pipe
 }
 
 #elif M_OS == M_OS_LINUX
-//override
-int Queue::getHandle(){
+int Queue::get_handle(){
 	return this->eventFD;
 }
 

@@ -16,7 +16,7 @@
 	  </dependency>
 	  <dependency>
 		  <groupId>io.github.igagis</groupId>
-		  <artifactId>pogodi</artifactId>
+		  <artifactId>opros</artifactId>
 		  <version>[1.0.16,)</version>
 		  <type>aar</type>
 		  <scope>compile</scope>

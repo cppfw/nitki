@@ -32,6 +32,12 @@
 			"command": "make test debug=true",
 			"dependsOn": "build_debug",
 			"problemMatcher": []
+		},
+		{
+			"label": "clean",
+			"type": "shell",
+			"command": "make clean",
+			"problemMatcher": []
 		}
 	]
 }

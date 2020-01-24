@@ -5,7 +5,7 @@ class Libnitki < Formula
   sha256 "$(sha256)"
 
   depends_on "prorab" => :build
-  depends_on "libpogodi"
+  depends_on "libopros"
   depends_on "libutki"
 
   def install
