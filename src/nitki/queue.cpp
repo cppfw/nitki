@@ -27,13 +27,13 @@ Queue::Queue(){
 	this->readiness_flags.set(opros::ready::write);
 
 #if M_OS == M_OS_WINDOWS
-	this->eventForWaitable = CreateEvent(
+	this->event_handle = CreateEvent(
 			NULL, //security attributes
 			TRUE, //manual-reset
 			FALSE, //not signalled initially
 			NULL //no name
 		);
-	if(this->eventForWaitable == NULL){
+	if(this->event_handle == NULL){
 		throw std::system_error(GetLastError(), std::generic_category(), "could not create event (Win32) for implementing Waitable");
 	}
 #elif M_OS == M_OS_MACOSX
@@ -54,7 +54,7 @@ Queue::Queue(){
 
 Queue::~Queue()noexcept{
 #if M_OS == M_OS_WINDOWS
-	CloseHandle(this->eventForWaitable);
+	CloseHandle(this->event_handle);
 #elif M_OS == M_OS_MACOSX
 	close(this->pipeEnds[0]);
 	close(this->pipeEnds[1]);
@@ -82,7 +82,7 @@ void Queue::pushMessage(std::function<void()>&& msg)noexcept{
 		this->readiness_flags.set(opros::ready::read);
 
 #if M_OS == M_OS_WINDOWS
-		if(SetEvent(this->eventForWaitable) == 0){
+		if(SetEvent(this->event_handle) == 0){
 			ASSERT(false)
 		}
 #elif M_OS == M_OS_MACOSX
@@ -113,7 +113,7 @@ Queue::T_Message Queue::peekMsg(){
 
 		if(this->messages.size() == 1){ // if we are taking away the last message from the queue
 #if M_OS == M_OS_WINDOWS
-			if(ResetEvent(this->eventForWaitable) == 0){
+			if(ResetEvent(this->event_handle) == 0){
 				ASSERT(false)
 				throw std::system_error(GetLastError(), std::generic_category(), "Queue::Wait(): ResetEvent() failed");
 			}
@@ -151,7 +151,7 @@ Queue::T_Message Queue::peekMsg(){
 
 #if M_OS == M_OS_WINDOWS
 HANDLE Queue::get_handle(){
-	return this->eventForWaitable;
+	return this->event_handle;
 }
 
 void Queue::set_waiting_flags(utki::flags<opros::ready> wait_for){
@@ -180,18 +180,18 @@ bool Queue::check_signaled(){
 			ASSERT_ALWAYS(this->CanRead())
 
 			//event should be in signalled state
-			ASSERT_ALWAYS(WaitForSingleObject(this->eventForwaitable, 0) == WAIT_OBJECT_0)
+			ASSERT_ALWAYS(WaitForSingleObject(this->event_handle, 0) == WAIT_OBJECT_0)
 		}
 
 		if(this->CanRead()){
 			ASSERT_ALWAYS(this->first)
 
 			//event should be in signalled state
-			ASSERT_ALWAYS(WaitForSingleObject(this->eventForwaitable, 0) == WAIT_OBJECT_0)
+			ASSERT_ALWAYS(WaitForSingleObject(this->event_handle, 0) == WAIT_OBJECT_0)
 		}
 
 		//if event is in signalled state
-		if(WaitForSingleObject(this->eventForwaitable, 0) == WAIT_OBJECT_0){
+		if(WaitForSingleObject(this->event_handle, 0) == WAIT_OBJECT_0){
 			ASSERT_ALWAYS(this->CanRead())
 			ASSERT_ALWAYS(this->first)
 		}
@@ -199,7 +199,7 @@ bool Queue::check_signaled(){
 #endif
 */
 
-	return (this->readinessFlags & this->flagsMask) != 0;
+	return !(this->readiness_flags & this->waiting_flags).is_clear();
 }
 
 #elif M_OS == M_OS_MACOSX

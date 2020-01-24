@@ -34,7 +34,7 @@ private:
 	std::deque<T_Message> messages;
 	
 #if M_OS == M_OS_WINDOWS
-	HANDLE eventForwaitable; // use Event to implement waitable on Windows
+	HANDLE event_handle; // use Event to implement waitable on Windows
 #elif M_OS == M_OS_MACOSX
 	int pipeEnds[2]; // use pipe to implement waitable in *nix systems
 #elif M_OS == M_OS_LINUX
