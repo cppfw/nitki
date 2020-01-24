@@ -5,7 +5,7 @@
 #include "Thread.hpp"
 #include "queue.hpp"
 
-
+// TODO: deprecated, remove whole file.
 
 namespace nitki{
 

@@ -29,7 +29,7 @@
 #	error "Unsupported OS"
 #endif
 
-
+// TODO: deprecated in favor of std::thread, remove whole file.
 
 namespace nitki{
 
