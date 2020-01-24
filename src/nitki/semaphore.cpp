@@ -1,4 +1,4 @@
-#include "Semaphore.hpp"
+#include "semaphore.hpp"
 
 #if M_OS == M_OS_MACOSX
 #	include <cerrno>

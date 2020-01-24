@@ -6,7 +6,7 @@
 
 #include <opros/wait_set.hpp>
 
-#include <list>
+#include <deque>
 #include <functional>
 
 
@@ -31,24 +31,20 @@ public:
 private:
 	utki::spin_lock mut;
 
-	std::list<T_Message> messages;
+	std::deque<T_Message> messages;
 	
 #if M_OS == M_OS_WINDOWS
-	//use Event to implement waitable on Windows
-	HANDLE eventForwaitable;
+	HANDLE eventForwaitable; // use Event to implement waitable on Windows
 #elif M_OS == M_OS_MACOSX
-	//use pipe to implement waitable in *nix systems
-	int pipeEnds[2];
+	int pipeEnds[2]; // use pipe to implement waitable in *nix systems
 #elif M_OS == M_OS_LINUX
-	//use eventfd()
-	int eventFD;
+	int eventFD; // use eventfd()
 #else
 #	error "Unsupported OS"
 #endif
 
-	//forbid copying
-	Queue(const Queue&);
-	Queue& operator=(const Queue&);
+	Queue(const Queue&) = delete;
+	Queue& operator=(const Queue&) = delete;
 
 public:
 	/**
