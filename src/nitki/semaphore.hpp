@@ -2,8 +2,6 @@
 
 #include <utki/config.hpp>
 #include <utki/debug.hpp>
-#include <utki/Exc.hpp>
-
 
 #if M_OS == M_OS_WINDOWS
 #	include <utki/windows.hpp>

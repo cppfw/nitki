@@ -2,11 +2,8 @@
 
 #include <utki/config.hpp>
 #include <utki/debug.hpp>
-#include <utki/Exc.hpp>
 
 #include <mutex>
-
-
 
 #if M_OS == M_OS_WINDOWS
 #	include <utki/windows.hpp>
@@ -32,8 +29,6 @@
 // TODO: deprecated in favor of std::thread, remove whole file.
 
 namespace nitki{
-
-
 
 /**
  * @brief a base class for threads.
@@ -83,10 +78,10 @@ public:
 	 * @brief Basic exception type thrown by Thread class.
 	 * @param msg - human friendly exception description.
 	 */
-	class Exc : public utki::Exc{
+	class Exc : public std::runtime_error{
 	public:
 		Exc(const std::string& msg) :
-				utki::Exc(msg)
+				std::runtime_error(msg)
 		{}
 	};
 	

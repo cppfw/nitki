@@ -1,6 +1,6 @@
 #include <utki/debug.hpp>
 #include <utki/config.hpp>
-#include <utki/Buf.hpp>
+#include <utki/span.hpp>
 
 #include <opros/wait_set.hpp>
 
