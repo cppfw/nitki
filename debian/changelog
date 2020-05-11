@@ -1,3 +1,9 @@
+libnitki (1.0.30) unstable; urgency=medium
+
+  * adapt to latest utki
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 11 May 2020 04:14:24 +0300
+
 libnitki (1.0.29) unstable; urgency=medium
 
   * use libopros
