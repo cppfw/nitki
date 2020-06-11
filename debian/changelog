@@ -1,3 +1,9 @@
+libnitki (1.0.31) unstable; urgency=medium
+
+  * deploy to ubuntu eoan
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 11 Jun 2020 21:33:45 +0300
+
 libnitki (1.0.30) unstable; urgency=medium
 
   * adapt to latest utki
