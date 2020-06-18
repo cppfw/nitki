@@ -1,3 +1,9 @@
+libnitki (1.0.32) unstable; urgency=medium
+
+  * use android native bundle plugin
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 18 Jun 2020 22:23:24 +0300
+
 libnitki (1.0.31) unstable; urgency=medium
 
   * deploy to ubuntu eoan
