@@ -1,3 +1,9 @@
+libnitki (1.0.34) unstable; urgency=medium
+
+  * remove deprecated stuff
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 04 Jul 2020 13:27:07 +0300
+
 libnitki (1.0.33) unstable; urgency=medium
 
   * build for raspbian buster
