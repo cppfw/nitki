@@ -22,11 +22,6 @@ namespace nitki{
  * undefined.
  */
 class queue : public opros::waitable{
-public:
-	// TODO: dprecated, remove.
-	typedef std::function<void()> T_Message;
-	
-private:
 	mutable utki::spin_lock mut;
 
 	std::deque<std::function<void()>> procedures;
@@ -50,25 +45,17 @@ public:
 	 */
 	queue();
 
-	
 	/**
 	 * @brief Destructor.
 	 * When called, it also destroys all procedures on the queue.
 	 */
 	~queue()noexcept;
 
-
-
 	/**
 	 * @brief Pushes a new procedure to the end of the queue.
 	 * @param proc - the procedure to push into the queue.
 	 */
 	void push_back(std::function<void()>&& proc);
-
-	// TODO: deprecated, remove.
-	void pushMessage(T_Message&& msg)noexcept{
-		this->push_back(std::move(msg));
-	}
 
 	/**
 	 * @brief Get procedure from queue, does not block if no procedures queued.
@@ -79,18 +66,12 @@ public:
 	 */
 	std::function<void()> pop_front();
 
-	// TODO: deprecated, remove.
-	T_Message peekMsg(){
-		return this->pop_front();
-	}
-
 	/**
 	 * @brief Get number of procedures in the queue.
 	 * This function involves mutex acquisition.
 	 * @return number of procedures in the queue.
 	 */
 	size_t size()const noexcept;
-
 
 #if M_OS == M_OS_WINDOWS
 protected:

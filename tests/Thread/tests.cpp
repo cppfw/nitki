@@ -4,9 +4,8 @@
 
 #include <opros/wait_set.hpp>
 
-#include "../../src/nitki/Thread.hpp"
-#include "../../src/nitki/MsgThread.hpp"
-
+#include "../../src/nitki/thread.hpp"
+#include "../../src/nitki/queue.hpp"
 
 #include "tests.hpp"
 
@@ -14,14 +13,14 @@
 
 namespace TestJoinBeforeAndAfterThreadHasFinished{
 
-class TestThread : public nitki::Thread{
+class TestThread : public nitki::thread{
 public:
 	int a, b;
 
 	void run()override{
 		this->a = 10;
 		this->b = 20;
-		nitki::Thread::sleep(1000);
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 		this->a = this->b;
 	}
 };
@@ -35,7 +34,7 @@ void Run(){
 
 		t.start();
 
-		nitki::Thread::sleep(2000);
+		std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
 		t.join();
 	}
@@ -60,8 +59,11 @@ void Run(){
 //===================
 namespace TestManyThreads{
 
-class TestThread1 : public nitki::MsgThread{
+class TestThread1 : public nitki::thread{
 public:
+	nitki::queue queue;
+	volatile bool quitFlag = false;
+
 	int a, b;
 
 	void run()override{
@@ -71,7 +73,7 @@ public:
 		
 		while(!this->quitFlag){
 			ws.wait();
-			while(auto m = this->queue.peekMsg()){
+			while(auto m = this->queue.pop_front()){
 				m();
 			}
 		}
@@ -97,10 +99,11 @@ void Run(){
 		i->start();
 	}
 
-	nitki::Thread::sleep(1000);
+	std::this_thread::sleep_for( std::chrono::milliseconds(1000));
 
 	for(auto i = thr.begin(); i != thr.end(); ++i){
-		i->pushQuitMessage();
+		i->quitFlag = true;
+		i->queue.push_back([](){});
 		i->join();
 	}
 }
@@ -115,7 +118,7 @@ void Run(){
 
 namespace TestImmediateExitThread{
 
-class ImmediateExitThread : public nitki::Thread{
+class ImmediateExitThread : public nitki::thread{
 public:
 	void run()override{
 		return;
@@ -137,23 +140,21 @@ void Run(){
 
 namespace TestNestedJoin{
 
-class TestRunnerThread : public nitki::Thread{
+class TestRunnerThread : public nitki::thread{
 public:
-	class TopLevelThread : public nitki::Thread{
+	class TopLevelThread : public nitki::thread{
 	public:
 
-		class InnerLevelThread : public nitki::Thread{
+		class InnerLevelThread : public nitki::thread{
 		public:
 
-			//overrun
-			void run(){
+			void run()override{
 			}
 		} inner;
 
-		//override
-		void run(){
+		void run()override{
 			this->inner.start();
-			nitki::Thread::sleep(100);
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
 			this->inner.join();
 		}
 	} top;
@@ -177,7 +178,7 @@ void Run(){
 	TestRunnerThread runner;
 	runner.start();
 
-	nitki::Thread::sleep(1000);
+	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
 	ASSERT_ALWAYS(runner.success)
 
