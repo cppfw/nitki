@@ -1,7 +1,7 @@
 class Libnitki < Formula
   desc "C++ cross-platform threading library."
-  homepage "https://github.com/igagis/nitki"
-  url "https://github.com/igagis/nitki/archive/$(version).tar.gz"
+  homepage "https://github.com/cppfw/nitki"
+  url "https://github.com/cppfw/nitki/archive/$(version).tar.gz"
   sha256 "$(sha256)"
 
   depends_on "prorab" => :build

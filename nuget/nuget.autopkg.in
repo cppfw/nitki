@@ -18,9 +18,9 @@ nuget{
 		title: C++ threading library;
 		authors: {Ivan Gagis};
 		owners: {Ivan Gagis};
-		licenseUrl: "https://raw.githubusercontent.com/igagis/nitki/master/LICENSE";
-		projectUrl: "https://github.com/igagis/nitki";
-		iconUrl: "https://github.com/igagis/nitki/blob/master/logo.svg";
+		licenseUrl: "https://raw.githubusercontent.com/cppfw/nitki/master/LICENSE";
+		projectUrl: "https://github.com/cppfw/nitki";
+		iconUrl: "https://github.com/cppfw/nitki/blob/master/logo.svg";
 		requireLicenseAcceptance:false;
 		summary: C++ threading library;
 
