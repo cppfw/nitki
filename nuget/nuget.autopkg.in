@@ -31,8 +31,8 @@ nuget{
 	}
 	dependencies {
 		packages : {
-			libutki/1.0.22;
-			libopros/1.0.10;
+			libutki/1.1.112;
+			libopros/1.0.44;
 		};
 	}
 	files {
