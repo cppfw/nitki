@@ -5,6 +5,6 @@ project 'nitki/nitki.xcodeproj'
 platform :ios, '8.0'
 
 target "nitki" do
-	pod 'utki', '>= 1.1.112'
-	pod 'opros', '>= 1.0.44'
+	pod 'utki', '>= 1.1.124'
+	pod 'opros', '>= 1.0.46'
 end
