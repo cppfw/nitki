@@ -34,9 +34,6 @@ public:
 	 * @brief Start thread execution.
 	 * Starts execution of the thread. thread's thread::run() method will
 	 * be run as separate thread of execution.
-	 * @param stackSize - size of the stack in bytes which should be allocated for this thread.
-	 *                    If stackSize is 0 then system default stack size is used
-	 *                    (stack size depends on underlying OS).
 	 */
 	void start();
 
