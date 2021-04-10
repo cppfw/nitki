@@ -22,7 +22,23 @@ public:
 	
 	thread(){}
 	
-	virtual ~thread()noexcept;
+	virtual ~thread()noexcept{
+		ASSERT(
+				!this->thr.joinable(),
+				[](auto&o){
+					o <<"~thread() destructor is called while the thread was not joined before. "
+							<< "Make sure the thread is joined by calling thread::join() "
+							<< "before destroying the thread object.";
+				}
+		)
+
+		// NOTE: it is incorrect to put this->join() to this destructor, because
+		//       thread shall already be stopped at the moment when this destructor
+		//       is called. If it is not, then the thread will be still running
+		//       when part of the thread object is already destroyed, since thread object is
+		//       usually a derived object from thread class and the destructor of this derived
+		//       object will be called before ~thread() destructor.
+	}
 
 	/**
 	 * @brief This should be overridden, this is what to be run in new thread.
