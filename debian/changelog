@@ -1,3 +1,9 @@
+libnitki (1.0.45) unstable; urgency=medium
+
+  * relink to latest utki
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 20 Apr 2021 23:00:53 +0300
+
 libnitki (1.0.44) unstable; urgency=medium
 
   * relink to latest utki
