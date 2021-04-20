@@ -1,3 +1,9 @@
+libnitki (1.0.44) unstable; urgency=medium
+
+  * relink to latest utki
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 20 Apr 2021 19:10:45 +0300
+
 libnitki (1.0.43) unstable; urgency=medium
 
   * deploy to conan
