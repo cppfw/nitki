@@ -1,4 +1,5 @@
 include prorab.mk
+include prorab-test.mk
 include myci.mk
 
 $(eval $(call myci-try-include, $(CONANBUILDINFO_DIR)conanbuildinfo.mak))
@@ -20,7 +21,7 @@ this_no_install := true
 $(eval $(prorab-build-app))
 
 # add dependency on libnitki.so
-$(abspath $(prorab_this_name)): $(abspath $(d)../../src/out/$(c)/libnitki$(dot_so))
+$(eval $(call prorab-depend, $(prorab_this_name), ../../src/out/$(c)/libnitki$(dot_so)))
 
 this_test_cmd := $(prorab_this_name)
 this_test_deps := $(prorab_this_name)
