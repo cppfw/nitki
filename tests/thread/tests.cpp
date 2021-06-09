@@ -96,7 +96,15 @@ void Run(){
 		> thr;
 
 	for(auto i = thr.begin(); i != thr.end(); ++i){
-		i->start();
+		try{
+			i->start();
+		}catch(std::system_error& e){
+			utki::log([&](auto& o){
+				o << "exception caught during thread creation: " << e.what() << ",\n";
+				o << "continuing to stopping already created threads";
+			});
+			break;
+		}
 	}
 
 	std::this_thread::sleep_for( std::chrono::milliseconds(1000));
