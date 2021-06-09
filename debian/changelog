@@ -1,3 +1,9 @@
+libnitki (1.0.47) unstable; urgency=medium
+
+  * relink to latst libs
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 09 Jun 2021 14:43:26 +0300
+
 libnitki (1.0.46) unstable; urgency=medium
 
   * relink to latest utki
