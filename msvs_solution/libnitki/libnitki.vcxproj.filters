@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\src\nitki\queue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -38,5 +35,8 @@
     <ClInclude Include="..\..\src\nitki\thread.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
