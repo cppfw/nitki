@@ -5,16 +5,11 @@
 #	include <sys/time.h>
 #endif
 
-
 using namespace nitki;
-
-
 
 semaphore::semaphore(unsigned initialValue){
 #if M_OS == M_OS_WINDOWS
 	if( (this->s = CreateSemaphore(NULL, initialValue, 0xffffff, NULL)) == NULL)
-#elif M_OS == M_OS_SYMBIAN
-	if(this->s.CreateLocal(initialValue) != KErrNone)
 #elif M_OS == M_OS_MACOSX
 	if(pthread_mutex_init(&this->m, 0) == 0){
 		if(pthread_cond_init(&this->c, 0) == 0){
@@ -34,13 +29,9 @@ semaphore::semaphore(unsigned initialValue){
 	}
 }
 
-
-
 semaphore::~semaphore()noexcept{
 #if M_OS == M_OS_WINDOWS
 	CloseHandle(this->s);
-#elif M_OS == M_OS_SYMBIAN
-	this->s.Close();
 #elif M_OS == M_OS_MACOSX
 	pthread_cond_destroy(&this->c);
 	pthread_mutex_destroy(&this->m);
@@ -50,8 +41,6 @@ semaphore::~semaphore()noexcept{
 #	error "unknown OS"
 #endif
 }
-
-
 
 void semaphore::wait(){
 #if M_OS == M_OS_WINDOWS
@@ -66,8 +55,6 @@ void semaphore::wait(){
 		case WAIT_FAILED:
 			throw std::system_error(GetLastError(), std::generic_category(), "semaphore::wait(): WaitForSingleObject() failed");
 	}
-#elif M_OS == M_OS_SYMBIAN
-	this->s.Wait();
 #elif M_OS == M_OS_MACOSX
 	if(int error = pthread_mutex_lock(&this->m)){
 		throw std::system_error(error, std::generic_category(), "semaphore::wait(): pthread_mutex_lock() failed");
@@ -99,8 +86,6 @@ void semaphore::wait(){
 #	error "unknown OS"
 #endif
 }
-
-
 
 bool semaphore::wait(uint32_t timeout_ms){
 #if M_OS == M_OS_WINDOWS
@@ -187,17 +172,12 @@ bool semaphore::wait(uint32_t timeout_ms){
 	return true;
 }
 
-
-
-
 void semaphore::signal(){
 	//		TRACE(<< "semaphore::signal(): invoked" << std::endl)
 #if M_OS == M_OS_WINDOWS
 	if(ReleaseSemaphore(this->s, 1, NULL) == 0){
 		throw std::system_error(GetLastError(), std::generic_category(), "ReleaseSemaphore() failed");
 	}
-#elif M_OS == M_OS_SYMBIAN
-	this->s.Signal();
 #elif M_OS == M_OS_MACOSX
 	if(int error = pthread_mutex_lock(&this->m)){
 		throw std::system_error(error, std::generic_category(), "pthread_mutex_lock() failed");

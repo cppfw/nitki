@@ -6,11 +6,6 @@
 #if M_OS == M_OS_WINDOWS
 #	include <utki/windows.hpp>
 
-#elif M_OS == M_OS_SYMBIAN
-#	include <string.h>
-#	include <e32std.h>
-#	include <hal.h>
-
 #elif M_OS == M_OS_LINUX || M_OS == M_OS_UNIX
 #	include <semaphore.h>
 #	include <errno.h>
@@ -37,8 +32,6 @@ namespace nitki{
 class semaphore{
 #if M_OS == M_OS_WINDOWS
 	HANDLE s;
-#elif M_OS == M_OS_SYMBIAN
-	RSemaphore s;
 #elif M_OS == M_OS_MACOSX
 	// emulate semaphore using mutex and condition variable
 	pthread_mutex_t m;

@@ -29,9 +29,9 @@ class queue : public opros::waitable{
 #if M_OS == M_OS_WINDOWS
 	HANDLE event_handle; // use Event to implement waitable on Windows
 #elif M_OS == M_OS_MACOSX
-	int pipeEnds[2]; // use pipe to implement waitable in *nix systems
+	int pipe_ends[2]; // use pipe to implement waitable in *nix systems
 #elif M_OS == M_OS_LINUX
-	int eventFD; // use eventfd()
+	int event_fd; // use eventfd()
 #else
 #	error "Unsupported OS"
 #endif

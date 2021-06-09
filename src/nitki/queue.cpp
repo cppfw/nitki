@@ -7,13 +7,6 @@
 #	include <cstring>
 #endif
 
-//#define M_ENABLE_QUEUE_TRACE
-#ifdef M_ENABLE_QUEUE_TRACE
-#	define M_QUEUE_TRACE(x) TRACE(<< "[QUEUE] ") TRACE(x)
-#else
-#	define M_QUEUE_TRACE(x)
-#endif
-
 using namespace nitki;
 
 queue::queue(){
@@ -22,21 +15,21 @@ queue::queue(){
 
 #if M_OS == M_OS_WINDOWS
 	this->event_handle = CreateEvent(
-			NULL, //security attributes
-			TRUE, //manual-reset
-			FALSE, //not signalled initially
-			NULL //no name
+			NULL, // security attributes
+			TRUE, // manual-reset
+			FALSE, // not signalled initially
+			NULL // no name
 		);
 	if(this->event_handle == NULL){
 		throw std::system_error(GetLastError(), std::generic_category(), "could not create event (Win32) for implementing waitable");
 	}
 #elif M_OS == M_OS_MACOSX
-	if(::pipe(&this->pipeEnds[0]) < 0){
+	if(::pipe(&this->pipe_ends[0]) < 0){
 		throw std::system_error(errno, std::generic_category(), "could not create pipe (*nix) for implementing waitable");
 	}
 #elif M_OS == M_OS_LINUX
-	this->eventFD = eventfd(0, EFD_NONBLOCK);
-	if(this->eventFD < 0){
+	this->event_fd = eventfd(0, EFD_NONBLOCK);
+	if(this->event_fd < 0){
 		throw std::system_error(errno, std::generic_category(), "could not create eventfd (linux) for implementing waitable");
 	}
 #else
@@ -48,10 +41,10 @@ queue::~queue()noexcept{
 #if M_OS == M_OS_WINDOWS
 	CloseHandle(this->event_handle);
 #elif M_OS == M_OS_MACOSX
-	close(this->pipeEnds[0]);
-	close(this->pipeEnds[1]);
+	close(this->pipe_ends[0]);
+	close(this->pipe_ends[1]);
 #elif M_OS == M_OS_LINUX
-	close(this->eventFD);
+	close(this->event_fd);
 #else
 #	error "Unsupported OS"
 #endif
@@ -79,12 +72,12 @@ void queue::push_back(std::function<void()>&& proc){
 #elif M_OS == M_OS_MACOSX
 		{
 			std::uint8_t oneByteBuf[1];
-			if(write(this->pipeEnds[1], oneByteBuf, 1) != 1){
+			if(write(this->pipe_ends[1], oneByteBuf, 1) != 1){
 				ASSERT(false)
 			}
 		}
 #elif M_OS == M_OS_LINUX
-		if(eventfd_write(this->eventFD, 1) < 0){
+		if(eventfd_write(this->event_fd, 1) < 0){
 			ASSERT(false)
 		}
 #else
@@ -110,14 +103,14 @@ std::function<void()> queue::pop_front(){
 #elif M_OS == M_OS_MACOSX
 			{
 				std::uint8_t oneByteBuf[1];
-				if(read(this->pipeEnds[0], oneByteBuf, 1) != 1){
+				if(read(this->pipe_ends[0], oneByteBuf, 1) != 1){
 					throw std::system_error(errno, std::generic_category(), "queue::wait(): read() failed");
 				}
 			}
 #elif M_OS == M_OS_LINUX
 			{
 				eventfd_t value;
-				if(eventfd_read(this->eventFD, &value) < 0){
+				if(eventfd_read(this->event_fd, &value) < 0){
 					throw std::system_error(errno, std::generic_category(), "queue::wait(): eventfd_read() failed");
 				}
 				ASSERT(value == 1)
@@ -171,12 +164,12 @@ bool queue::check_signaled(){
 
 #elif M_OS == M_OS_MACOSX
 int queue::get_handle(){
-	return this->pipeEnds[0]; // return read end of pipe
+	return this->pipe_ends[0]; // return read end of pipe
 }
 
 #elif M_OS == M_OS_LINUX
 int queue::get_handle(){
-	return this->eventFD;
+	return this->event_fd;
 }
 
 #else
