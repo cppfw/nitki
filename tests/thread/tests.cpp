@@ -61,6 +61,8 @@ namespace TestManyThreads{
 
 class TestThread1 : public nitki::thread{
 public:
+	TestThread1(){}
+
 	nitki::queue queue;
 	volatile bool quitFlag = false;
 
@@ -86,33 +88,38 @@ public:
 
 void Run(){
 	//TODO: read ulimit
-	std::array<
-			TestThread1,
+	size_t num_threads =
 #if M_OS == M_OS_MACOSX
 			50
 #else
 			500
 #endif
-		> thr;
+	;
 
-	for(auto i = thr.begin(); i != thr.end(); ++i){
+	std::vector<std::unique_ptr<TestThread1>> thr;
+
+	for(size_t i = 0; i != num_threads; ++i){
+		auto t = std::make_unique<TestThread1>();
+
 		try{
-			i->start();
+			t->start();
 		}catch(std::system_error& e){
 			utki::log([&](auto& o){
 				o << "exception caught during thread creation: " << e.what() << ",\n";
-				o << "continuing to stopping already created threads";
+				o << "continuing to stopping already created threads" << '\n';
 			});
 			break;
 		}
+
+		thr.push_back(std::move(t));
 	}
 
-	std::this_thread::sleep_for( std::chrono::milliseconds(1000));
+	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
 	for(auto i = thr.begin(); i != thr.end(); ++i){
-		i->quitFlag = true;
-		i->queue.push_back([](){});
-		i->join();
+		(*i)->quitFlag = true;
+		(*i)->queue.push_back([](){});
+		(*i)->join();
 	}
 }
 
