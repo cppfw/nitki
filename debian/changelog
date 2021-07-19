@@ -1,3 +1,9 @@
+libnitki (1.0.49) unstable; urgency=medium
+
+  * deploy to won repo
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 19 Jul 2021 16:54:04 +0300
+
 libnitki (1.0.48) unstable; urgency=medium
 
   * relink to latest libs
