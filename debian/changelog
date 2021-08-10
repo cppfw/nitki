@@ -1,3 +1,9 @@
+libnitki (1.0.50) unstable; urgency=medium
+
+  * homebrew: use latest make
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 10 Aug 2021 18:02:44 +0300
+
 libnitki (1.0.49) unstable; urgency=medium
 
   * deploy to won repo
