@@ -1,3 +1,9 @@
+libnitki (1.0.52) unstable; urgency=medium
+
+  * build for debian bullseye
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 29 Aug 2021 22:36:22 +0300
+
 libnitki (1.0.51) unstable; urgency=medium
 
   * msvs: build for v141 tools
