@@ -1,3 +1,9 @@
+libnitki (1.0.53) unstable; urgency=medium
+
+  * build for debian bullseye
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 30 Oct 2021 01:01:57 +0300
+
 libnitki (1.0.52) unstable; urgency=medium
 
   * build for debian bullseye
