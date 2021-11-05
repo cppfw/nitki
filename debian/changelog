@@ -1,3 +1,9 @@
+libnitki (1.0.54) unstable; urgency=medium
+
+  * xcode: static framework
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 05 Nov 2021 17:21:24 +0200
+
 libnitki (1.0.53) unstable; urgency=medium
 
   * build for debian bullseye
