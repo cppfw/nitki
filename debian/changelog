@@ -1,3 +1,9 @@
+libnitki (1.0.57) unstable; urgency=medium
+
+  * build conan for different macos versions
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 16 Dec 2021 18:33:30 +0200
+
 libnitki (1.0.56) unstable; urgency=medium
 
   * rebuild for conan
