@@ -1,3 +1,9 @@
+libnitki (1.0.58) unstable; urgency=medium
+
+  * build for debian arm64
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 06 Feb 2022 00:33:29 +0200
+
 libnitki (1.0.57) unstable; urgency=medium
 
   * build conan for different macos versions
