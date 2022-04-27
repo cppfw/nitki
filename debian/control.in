@@ -2,8 +2,14 @@ Source: libnitki
 Section: libs
 Priority: extra
 Maintainer: Ivan Gagis <igagis@gmail.com>
-Build-Depends: debhelper (>= 9), prorab, prorab-extra, myci,
-		libutki-dev (>= 1.1.112), libopros-dev (>= 1.0.44)
+Build-Depends:
+		debhelper (>= 9),
+		prorab,
+		prorab-extra,
+		myci,
+		clang-tidy,
+		libutki-dev (>= 1.1.112),
+		libopros-dev (>= 1.0.44)
 Build-Depends-Indep: doxygen
 Standards-Version: 3.9.2
 
