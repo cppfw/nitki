@@ -174,7 +174,7 @@ void queue::set_waiting_flags(utki::flags<opros::ready> wait_for){
 	// Error condition is not possible for queue.
 	// Thus, only possible flag values are READ and 0 (NOT_READY)
 	if(wait_for.get(opros::ready::write) || wait_for.get(opros::ready::error)){
-		ASSERT_INFO(false, "wait_for = " << wait_for)
+		ASSERT(false, [&](auto&o){o << "wait_for = " << wait_for;})
 		throw std::invalid_argument("queue::set_waiting_flags(): wait_for can only have read flag set or no flags set");
 	}
 
