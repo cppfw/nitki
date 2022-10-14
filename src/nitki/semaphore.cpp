@@ -50,7 +50,7 @@ semaphore::semaphore(unsigned initialValue){
 #	error "unknown OS"
 #endif
 	{
-		TRACE(<< "semaphore::semaphore(): failed" << std::endl)
+		LOG([&](auto&o){o << "semaphore::semaphore(): failed" << std::endl;})
 		throw std::system_error(errno, std::generic_category(), "semaphore::semaphore(): sem_init() failed");
 	}
 }
@@ -151,7 +151,7 @@ bool semaphore::wait(uint32_t timeout_ms){
 			if(error == ETIMEDOUT){
 				return false;
 			}else{
-				TRACE(<< "semaphore::wait(): pthread_cond_wait() failed, error code = " << err << std::endl)
+				LOG([&](auto&o){o << "semaphore::wait(): pthread_cond_wait() failed, error code = " << err << std::endl;})
 				throw std::system_error(error, std::generic_category(), "semaphore::wait(): pthread_cond_wait() failed");
 			}
 		}
