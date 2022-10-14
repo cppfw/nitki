@@ -195,7 +195,7 @@ void Run(){
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
-	ASSERT_ALWAYS(runner.success)
+	utki::assert(runner.success, SL);
 
 	runner.join();
 }
