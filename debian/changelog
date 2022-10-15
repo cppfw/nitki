@@ -1,3 +1,9 @@
+libnitki (1.0.60) unstable; urgency=medium
+
+  * remove usages of deprecated macros
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 15 Oct 2022 23:25:59 +0300
+
 libnitki (1.0.59) unstable; urgency=medium
 
   * test release
