@@ -9,7 +9,9 @@
 
 #include "tests.hpp"
 
-
+#ifdef assert
+#	undef assert
+#endif
 
 namespace TestJoinBeforeAndAfterThreadHasFinished{
 
