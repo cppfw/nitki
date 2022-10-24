@@ -1,3 +1,9 @@
+libnitki (1.0.61) unstable; urgency=medium
+
+  * build for ubuntu jammy
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 24 Oct 2022 20:24:53 +0300
+
 libnitki (1.0.60) unstable; urgency=medium
 
   * remove usages of deprecated macros
