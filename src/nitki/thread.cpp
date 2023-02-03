@@ -31,7 +31,7 @@ using namespace nitki;
 namespace {
 void run_thread(void* data)
 {
-	thread* thr = reinterpret_cast<thread*>(data);
+	auto thr = reinterpret_cast<thread*>(data);
 
 	thr->run();
 }

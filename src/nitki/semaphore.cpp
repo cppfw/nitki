@@ -33,20 +33,20 @@ SOFTWARE.
 
 using namespace nitki;
 
-semaphore::semaphore(unsigned initialValue)
+semaphore::semaphore(unsigned initial_value)
 {
 #if M_OS == M_OS_WINDOWS
-	if ((this->s = CreateSemaphore(NULL, initialValue, 0xffffff, NULL)) == NULL)
+	if ((this->s = CreateSemaphore(NULL, initial_value, 0xffffff, NULL)) == NULL)
 #elif M_OS == M_OS_MACOSX
 	if (pthread_mutex_init(&this->m, 0) == 0) {
 		if (pthread_cond_init(&this->c, 0) == 0) {
-			this->v = initialValue;
+			this->v = initial_value;
 			return;
 		}
 		pthread_mutex_destroy(&this->m);
 	}
 #elif M_OS == M_OS_LINUX
-	if (sem_init(&this->s, 0, initialValue) < 0)
+	if (sem_init(&this->s, 0, initial_value) < 0)
 #else
 #	error "unknown OS"
 #endif
@@ -110,11 +110,11 @@ void semaphore::wait()
 		ASSERT(false)
 	}
 #elif M_OS == M_OS_LINUX
-	int retVal;
+	int res;
 	do {
-		retVal = sem_wait(&this->s);
-	} while (retVal == -1 && errno == EINTR);
-	if (retVal < 0) {
+		res = sem_wait(&this->s);
+	} while (res == -1 && errno == EINTR);
+	if (res < 0) {
 		throw std::system_error(errno, std::generic_category(), "semaphore::wait(): sem_wait() failed");
 	}
 #else

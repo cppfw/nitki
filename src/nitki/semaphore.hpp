@@ -70,10 +70,10 @@ class semaphore
 #	error "unknown OS"
 #endif
 
+public:
 	semaphore(const semaphore&) = delete;
 	semaphore& operator=(const semaphore&) = delete;
 
-public:
 	/**
 	 * @brief Create the semaphore with given initial value.
 	 * @param initial_value - initial value of the semaphore.

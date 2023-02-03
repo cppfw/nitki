@@ -47,8 +47,9 @@ public:
 	thread(const thread&) = delete;
 	thread& operator=(const thread&) = delete;
 
-	thread() {}
+	thread() = default;
 
+	// NOLINTNEXTLINE(modernize-use-equals-default, "destructor is not trivial in debug build configuration")
 	virtual ~thread() noexcept
 	{
 		ASSERT(!this->thr.joinable(), [](auto& o) {

@@ -62,10 +62,10 @@ class queue : public opros::waitable
 #	error "Unsupported OS"
 #endif
 
+public:
 	queue(const queue&) = delete;
 	queue& operator=(const queue&) = delete;
 
-public:
 	/**
 	 * @brief Constructor, creates empty message queue.
 	 */
