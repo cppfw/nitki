@@ -26,37 +26,36 @@ SOFTWARE.
 
 #pragma once
 
+#include <mutex>
+#include <thread>
+
 #include <utki/config.hpp>
 #include <utki/debug.hpp>
 
-#include <thread>
-#include <mutex>
-
-namespace nitki{
+namespace nitki {
 
 /**
  * @brief a base class for threads.
  * This class should be used as a base class for thread objects, one should override the
  * thread::run() method.
  */
-class thread{
+class thread
+{
 	std::thread thr;
 
 public:
 	thread(const thread&) = delete;
 	thread& operator=(const thread&) = delete;
-	
-	thread(){}
-	
-	virtual ~thread()noexcept{
-		ASSERT(
-				!this->thr.joinable(),
-				[](auto&o){
-					o <<"~thread() destructor is called while the thread was not joined before. "
-							<< "Make sure the thread is joined by calling thread::join() "
-							<< "before destroying the thread object.";
-				}
-		)
+
+	thread() {}
+
+	virtual ~thread() noexcept
+	{
+		ASSERT(!this->thr.joinable(), [](auto& o) {
+			o << "~thread() destructor is called while the thread was not joined before. "
+			  << "Make sure the thread is joined by calling thread::join() "
+			  << "before destroying the thread object.";
+		})
 
 		// NOTE: it is incorrect to put this->join() to this destructor, because
 		//       thread shall already be stopped at the moment when this destructor
@@ -84,7 +83,7 @@ public:
 	 * This function waits for the thread finishes its execution,
 	 * i.e. until the thread returns from its thread::run() method.
 	 */
-	void join()noexcept;
+	void join() noexcept;
 };
 
-}
+} // namespace nitki

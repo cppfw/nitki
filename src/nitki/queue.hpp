@@ -26,16 +26,15 @@ SOFTWARE.
 
 #pragma once
 
+#include <deque>
+#include <functional>
+
+#include <opros/wait_set.hpp>
 #include <utki/config.hpp>
 #include <utki/debug.hpp>
 #include <utki/spin_lock.hpp>
 
-#include <opros/wait_set.hpp>
-
-#include <deque>
-#include <functional>
-
-namespace nitki{
+namespace nitki {
 
 /**
  * @brief Procedure queue.
@@ -47,11 +46,12 @@ namespace nitki{
  * shall only be used to wait for read. If you are trying to wait for write the behavior will be
  * undefined.
  */
-class queue : public opros::waitable{
+class queue : public opros::waitable
+{
 	mutable utki::spin_lock mut;
 
 	std::deque<std::function<void()>> procedures;
-	
+
 #if M_OS == M_OS_WINDOWS
 	HANDLE event_handle; // use Event to implement waitable on Windows
 #elif M_OS == M_OS_MACOSX
@@ -75,7 +75,7 @@ public:
 	 * @brief Destructor.
 	 * When called, it also destroys all procedures on the queue.
 	 */
-	~queue()noexcept;
+	~queue() noexcept;
 
 	/**
 	 * @brief Pushes a new procedure to the end of the queue.
@@ -97,29 +97,32 @@ public:
 	 * This function involves mutex acquisition.
 	 * @return number of procedures in the queue.
 	 */
-	size_t size()const noexcept;
+	size_t size() const noexcept;
 
 #if M_OS == M_OS_WINDOWS
+
 protected:
-	HANDLE get_handle()override;
+	HANDLE get_handle() override;
 
 	utki::flags<opros::ready> waiting_flags;
 
-	void set_waiting_flags(utki::flags<opros::ready> wait_for)override;
+	void set_waiting_flags(utki::flags<opros::ready> wait_for) override;
 
-	bool check_signaled()override;
+	bool check_signaled() override;
 
 #elif M_OS == M_OS_LINUX
+
 public:
-	int get_handle()override;
+	int get_handle() override;
 
 #elif M_OS == M_OS_MACOSX
+
 public:
-	int get_handle()override;
+	int get_handle() override;
 
 #else
 #	error "Unsupported OS"
 #endif
 };
 
-}
+} // namespace nitki

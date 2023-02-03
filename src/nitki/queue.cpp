@@ -35,35 +35,49 @@ SOFTWARE.
 
 using namespace nitki;
 
-queue::queue(){
+queue::queue()
+{
 	// it is always possible to post a message to the queue, so set ready to write flag
 	this->readiness_flags.set(opros::ready::write);
 
 #if M_OS == M_OS_WINDOWS
 	this->event_handle = CreateEvent(
-			NULL, // security attributes
-			TRUE, // manual-reset
-			FALSE, // not signalled initially
-			NULL // no name
+		NULL, // security attributes
+		TRUE, // manual-reset
+		FALSE, // not signalled initially
+		NULL // no name
+	);
+	if (this->event_handle == NULL) {
+		throw std::system_error(
+			GetLastError(),
+			std::generic_category(),
+			"could not create event (Win32) for implementing waitable"
 		);
-	if(this->event_handle == NULL){
-		throw std::system_error(GetLastError(), std::generic_category(), "could not create event (Win32) for implementing waitable");
 	}
 #elif M_OS == M_OS_MACOSX
-	if(::pipe(&this->pipe_ends[0]) < 0){
-		throw std::system_error(errno, std::generic_category(), "could not create pipe (*nix) for implementing waitable");
+	if (::pipe(&this->pipe_ends[0]) < 0) {
+		throw std::system_error(
+			errno,
+			std::generic_category(),
+			"could not create pipe (*nix) for implementing waitable"
+		);
 	}
 #elif M_OS == M_OS_LINUX
 	this->event_fd = eventfd(0, EFD_NONBLOCK);
-	if(this->event_fd < 0){
-		throw std::system_error(errno, std::generic_category(), "could not create eventfd (linux) for implementing waitable");
+	if (this->event_fd < 0) {
+		throw std::system_error(
+			errno,
+			std::generic_category(),
+			"could not create eventfd (linux) for implementing waitable"
+		);
 	}
 #else
 #	error "Unsupported OS"
 #endif
 }
 
-queue::~queue()noexcept{
+queue::~queue() noexcept
+{
 #if M_OS == M_OS_WINDOWS
 	CloseHandle(this->event_handle);
 #elif M_OS == M_OS_MACOSX
@@ -76,12 +90,13 @@ queue::~queue()noexcept{
 #endif
 }
 
-void queue::push_back(std::function<void()>&& proc){
+void queue::push_back(std::function<void()>&& proc)
+{
 	std::lock_guard<decltype(this->mut)> mutex_guard(this->mut);
 
 	this->procedures.push_back(std::move(proc));
-	
-	if(this->procedures.size() == 1){ // if it is a first message
+
+	if (this->procedures.size() == 1) { // if it is a first message
 		// Set read flag.
 		// NOTE: in linux implementation with epoll(), the read
 		// flag will also be set in wait_set::wait() method.
@@ -92,18 +107,18 @@ void queue::push_back(std::function<void()>&& proc){
 		this->readiness_flags.set(opros::ready::read);
 
 #if M_OS == M_OS_WINDOWS
-		if(SetEvent(this->event_handle) == 0){
+		if (SetEvent(this->event_handle) == 0) {
 			ASSERT(false)
 		}
 #elif M_OS == M_OS_MACOSX
 		{
 			std::uint8_t oneByteBuf[1];
-			if(write(this->pipe_ends[1], oneByteBuf, 1) != 1){
+			if (write(this->pipe_ends[1], oneByteBuf, 1) != 1) {
 				ASSERT(false)
 			}
 		}
 #elif M_OS == M_OS_LINUX
-		if(eventfd_write(this->event_fd, 1) < 0){
+		if (eventfd_write(this->event_fd, 1) < 0) {
 			ASSERT(false)
 		}
 #else
@@ -114,29 +129,30 @@ void queue::push_back(std::function<void()>&& proc){
 	ASSERT(this->flags().get(opros::ready::read))
 }
 
-std::function<void()> queue::pop_front(){
+std::function<void()> queue::pop_front()
+{
 	std::lock_guard<decltype(this->mut)> mutex_guard(this->mut);
 
-	if(!this->procedures.empty()){
+	if (!this->procedures.empty()) {
 		ASSERT(this->flags().get(opros::ready::read))
 
-		if(this->procedures.size() == 1){ // if we are taking away the last message from the queue
+		if (this->procedures.size() == 1) { // if we are taking away the last message from the queue
 #if M_OS == M_OS_WINDOWS
-			if(ResetEvent(this->event_handle) == 0){
+			if (ResetEvent(this->event_handle) == 0) {
 				ASSERT(false)
 				throw std::system_error(GetLastError(), std::generic_category(), "queue::wait(): ResetEvent() failed");
 			}
 #elif M_OS == M_OS_MACOSX
 			{
 				std::uint8_t oneByteBuf[1];
-				if(read(this->pipe_ends[0], oneByteBuf, 1) != 1){
+				if (read(this->pipe_ends[0], oneByteBuf, 1) != 1) {
 					throw std::system_error(errno, std::generic_category(), "queue::wait(): read() failed");
 				}
 			}
 #elif M_OS == M_OS_LINUX
 			{
 				eventfd_t value;
-				if(eventfd_read(this->event_fd, &value) < 0){
+				if (eventfd_read(this->event_fd, &value) < 0) {
 					throw std::system_error(errno, std::generic_category(), "queue::wait(): eventfd_read() failed");
 				}
 				ASSERT(value == 1)
@@ -145,43 +161,49 @@ std::function<void()> queue::pop_front(){
 #	error "Unsupported OS"
 #endif
 			this->readiness_flags.clear(opros::ready::read);
-		}else{
+		} else {
 			ASSERT(this->flags().get(opros::ready::read))
 		}
-		
+
 		auto ret = std::move(this->procedures.front());
-		
+
 		this->procedures.pop_front();
-		
+
 		return ret;
 	}
 	return nullptr;
 }
 
-size_t queue::size()const noexcept{
+size_t queue::size() const noexcept
+{
 	std::lock_guard<decltype(this->mut)> mutex_guard(this->mut);
 	return this->procedures.size();
 }
 
 #if M_OS == M_OS_WINDOWS
-HANDLE queue::get_handle(){
+HANDLE queue::get_handle()
+{
 	return this->event_handle;
 }
 
-void queue::set_waiting_flags(utki::flags<opros::ready> wait_for){
+void queue::set_waiting_flags(utki::flags<opros::ready> wait_for)
+{
 	// It is not allowed to wait on queue for write,
 	// because it is always possible to push new message to queue.
 	// Error condition is not possible for queue.
 	// Thus, only possible flag values are READ and 0 (NOT_READY)
-	if(wait_for.get(opros::ready::write) || wait_for.get(opros::ready::error)){
-		ASSERT(false, [&](auto&o){o << "wait_for = " << wait_for;})
+	if (wait_for.get(opros::ready::write) || wait_for.get(opros::ready::error)) {
+		ASSERT(false, [&](auto& o) {
+			o << "wait_for = " << wait_for;
+		})
 		throw std::invalid_argument("queue::set_waiting_flags(): wait_for can only have read flag set or no flags set");
 	}
 
 	this->waiting_flags = wait_for;
 }
 
-bool queue::check_signaled(){
+bool queue::check_signaled()
+{
 	// error condition is not possible for queue
 	ASSERT(!this->flags().get(opros::ready::error))
 
@@ -189,12 +211,14 @@ bool queue::check_signaled(){
 }
 
 #elif M_OS == M_OS_MACOSX
-int queue::get_handle(){
+int queue::get_handle()
+{
 	return this->pipe_ends[0]; // return read end of pipe
 }
 
 #elif M_OS == M_OS_LINUX
-int queue::get_handle(){
+int queue::get_handle()
+{
 	return this->event_fd;
 }
 

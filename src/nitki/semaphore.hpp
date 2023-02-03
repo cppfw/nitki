@@ -43,7 +43,7 @@ SOFTWARE.
 #	error "Unsupported OS"
 #endif
 
-namespace nitki{
+namespace nitki {
 
 /**
  * @brief Semaphore class.
@@ -55,7 +55,8 @@ namespace nitki{
  * some other thread increments it then only one of the hanging threads will be
  * resumed, other threads will remain waiting for next increment.
  */
-class semaphore{
+class semaphore
+{
 #if M_OS == M_OS_WINDOWS
 	HANDLE s;
 #elif M_OS == M_OS_MACOSX
@@ -71,16 +72,15 @@ class semaphore{
 
 	semaphore(const semaphore&) = delete;
 	semaphore& operator=(const semaphore&) = delete;
-    
-public:
 
+public:
 	/**
 	 * @brief Create the semaphore with given initial value.
 	 * @param initial_value - initial value of the semaphore.
 	 */
 	semaphore(unsigned initial_value = 0);
 
-	~semaphore()noexcept;
+	~semaphore() noexcept;
 
 	/**
 	 * @brief Wait on semaphore.
@@ -89,7 +89,7 @@ public:
 	 * by calling semaphore::signal() on that semaphore.
 	 */
 	void wait();
-	
+
 	/**
 	 * @brief Wait on semaphore with timeout.
 	 * Decrements semaphore value. If current value is 0 then this method will wait
@@ -110,4 +110,4 @@ public:
 	void signal();
 };
 
-}
+} // namespace nitki
