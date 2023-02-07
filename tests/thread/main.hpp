@@ -7,15 +7,15 @@
 
 
 inline void TestTingThread(){
-//	TRACE(<< "running TestManyThreads..." << std::endl)
+ 	std::cout << "running TestManyThreads..." << std::endl;
 	TestManyThreads::Run();
 
-//	TRACE(<< "running TestJoinBeforeAndAfterThreadHasFinished" << std::endl)
+	std::cout << "running TestJoinBeforeAndAfterThreadHasFinished" << std::endl;
 	TestJoinBeforeAndAfterThreadHasFinished::Run();
 
-//	TRACE(<< "running TestImmediateExitThread" << std::endl)
+	std::cout << "running TestImmediateExitThread" << std::endl;
 	TestImmediateExitThread::Run();
 
-//	TRACE(<< "running TestNestedJoin" << std::endl)
+	std::cout << "running TestNestedJoin" << std::endl;
 	TestNestedJoin::Run();
 }

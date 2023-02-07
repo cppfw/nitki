@@ -66,7 +66,7 @@ public:
 	TestThread1(){}
 
 	nitki::queue queue;
-	volatile bool quitFlag = false;
+	volatile bool quit_flag = false;
 
 	int a, b;
 
@@ -75,7 +75,7 @@ public:
 		
 		ws.add(this->queue, {opros::ready::read});
 		
-		while(!this->quitFlag){
+		while(!this->quit_flag){
 			ws.wait();
 			while(auto m = this->queue.pop_front()){
 				m();
@@ -86,10 +86,8 @@ public:
 	}
 };
 
-
-
 void Run(){
-	//TODO: read ulimit
+	// TODO: read ulimit
 	size_t num_threads =
 #if M_OS == M_OS_MACOSX
 			50
@@ -104,6 +102,7 @@ void Run(){
 		auto t = std::make_unique<TestThread1>();
 
 		try{
+			ASSERT(t)
 			t->start();
 		}catch(std::system_error& e){
 			utki::log([&](auto& o){
@@ -119,7 +118,7 @@ void Run(){
 	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
 	for(auto i = thr.begin(); i != thr.end(); ++i){
-		(*i)->quitFlag = true;
+		(*i)->quit_flag = true;
 		(*i)->queue.push_back([](){});
 		(*i)->join();
 	}

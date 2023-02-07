@@ -53,11 +53,12 @@ class queue : public opros::waitable
 	std::deque<std::function<void()>> procedures;
 
 #if M_OS == M_OS_WINDOWS
-	HANDLE event_handle; // use Event to implement waitable on Windows
 #elif M_OS == M_OS_MACOSX
-	int pipe_ends[2]; // use pipe to implement waitable in *nix systems
+	// use pipe to implement waitable in *nix systems
+	// one end will be saved in waitable::handle
+	// and the other one in this member variable
+	int pipe_end;
 #elif M_OS == M_OS_LINUX
-	int event_fd; // use eventfd()
 #else
 #	error "Unsupported OS"
 #endif
@@ -65,6 +66,8 @@ class queue : public opros::waitable
 public:
 	queue(const queue&) = delete;
 	queue& operator=(const queue&) = delete;
+	queue(queue&&) = delete;
+	queue& operator=(queue&&) = delete;
 
 	/**
 	 * @brief Constructor, creates empty message queue.
@@ -102,24 +105,11 @@ public:
 #if M_OS == M_OS_WINDOWS
 
 protected:
-	HANDLE get_handle() override;
-
-	utki::flags<opros::ready> waiting_flags;
-
-	void set_waiting_flags(utki::flags<opros::ready> wait_for) override;
-
-	bool check_signaled() override;
+	void set_waiting_flags(utki::flags<opros::ready>) override;
+	utki::flags<opros::ready> get_readiness_flags() override;
 
 #elif M_OS == M_OS_LINUX
-
-public:
-	int get_handle() override;
-
 #elif M_OS == M_OS_MACOSX
-
-public:
-	int get_handle() override;
-
 #else
 #	error "Unsupported OS"
 #endif
