@@ -29,14 +29,14 @@ SOFTWARE.
 #include <utki/config.hpp>
 #include <utki/debug.hpp>
 
-#if M_OS == M_OS_WINDOWS
+#if CFG_OS == CFG_OS_WINDOWS
 #	include <utki/windows.hpp>
 
-#elif M_OS == M_OS_LINUX || M_OS == M_OS_UNIX
+#elif CFG_OS == CFG_OS_LINUX || CFG_OS == CFG_OS_UNIX
 #	include <semaphore.h>
 #	include <errno.h>
 
-#elif M_OS == M_OS_MACOSX
+#elif CFG_OS == CFG_OS_MACOSX
 #	include <pthread.h>
 
 #else
@@ -57,14 +57,14 @@ namespace nitki {
  */
 class semaphore
 {
-#if M_OS == M_OS_WINDOWS
+#if CFG_OS == CFG_OS_WINDOWS
 	HANDLE s;
-#elif M_OS == M_OS_MACOSX
+#elif CFG_OS == CFG_OS_MACOSX
 	// emulate semaphore using mutex and condition variable
 	pthread_mutex_t m;
 	pthread_cond_t c;
 	unsigned v; // current semaphore value
-#elif M_OS == M_OS_LINUX
+#elif CFG_OS == CFG_OS_LINUX
 	sem_t s;
 #else
 #	error "unknown OS"

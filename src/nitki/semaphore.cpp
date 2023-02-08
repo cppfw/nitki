@@ -26,7 +26,7 @@ SOFTWARE.
 
 #include "semaphore.hpp"
 
-#if M_OS == M_OS_MACOSX
+#if CFG_OS == CFG_OS_MACOSX
 #	include <cerrno>
 #	include <sys/time.h>
 #endif
@@ -35,9 +35,9 @@ using namespace nitki;
 
 semaphore::semaphore(unsigned initial_value)
 {
-#if M_OS == M_OS_WINDOWS
+#if CFG_OS == CFG_OS_WINDOWS
 	if ((this->s = CreateSemaphore(NULL, initial_value, 0xffffff, NULL)) == NULL)
-#elif M_OS == M_OS_MACOSX
+#elif CFG_OS == CFG_OS_MACOSX
 	if (pthread_mutex_init(&this->m, 0) == 0) {
 		if (pthread_cond_init(&this->c, 0) == 0) {
 			this->v = initial_value;
@@ -45,7 +45,7 @@ semaphore::semaphore(unsigned initial_value)
 		}
 		pthread_mutex_destroy(&this->m);
 	}
-#elif M_OS == M_OS_LINUX
+#elif CFG_OS == CFG_OS_LINUX
 	if (sem_init(&this->s, 0, initial_value) < 0)
 #else
 #	error "unknown OS"
@@ -60,12 +60,12 @@ semaphore::semaphore(unsigned initial_value)
 
 semaphore::~semaphore() noexcept
 {
-#if M_OS == M_OS_WINDOWS
+#if CFG_OS == CFG_OS_WINDOWS
 	CloseHandle(this->s);
-#elif M_OS == M_OS_MACOSX
+#elif CFG_OS == CFG_OS_MACOSX
 	pthread_cond_destroy(&this->c);
 	pthread_mutex_destroy(&this->m);
-#elif M_OS == M_OS_LINUX
+#elif CFG_OS == CFG_OS_LINUX
 	sem_destroy(&this->s);
 #else
 #	error "unknown OS"
@@ -74,7 +74,7 @@ semaphore::~semaphore() noexcept
 
 void semaphore::wait()
 {
-#if M_OS == M_OS_WINDOWS
+#if CFG_OS == CFG_OS_WINDOWS
 	switch (WaitForSingleObject(this->s, DWORD(INFINITE))) {
 		case WAIT_OBJECT_0:
 			//				TRACE(<< "semaphore::wait(): exit" << std::endl)
@@ -90,7 +90,7 @@ void semaphore::wait()
 				"semaphore::wait(): WaitForSingleObject() failed"
 			);
 	}
-#elif M_OS == M_OS_MACOSX
+#elif CFG_OS == CFG_OS_MACOSX
 	if (int error = pthread_mutex_lock(&this->m)) {
 		throw std::system_error(error, std::generic_category(), "semaphore::wait(): pthread_mutex_lock() failed");
 	}
@@ -109,7 +109,7 @@ void semaphore::wait()
 	if (pthread_mutex_unlock(&this->m) != 0) {
 		ASSERT(false)
 	}
-#elif M_OS == M_OS_LINUX
+#elif CFG_OS == CFG_OS_LINUX
 	int res;
 	do {
 		res = sem_wait(&this->s);
@@ -124,7 +124,7 @@ void semaphore::wait()
 
 bool semaphore::wait(uint32_t timeout_ms)
 {
-#if M_OS == M_OS_WINDOWS
+#if CFG_OS == CFG_OS_WINDOWS
 	static_assert(INFINITE == 0xffffffff, "error");
 	switch (WaitForSingleObject(this->s, DWORD(timeout_ms == INFINITE ? INFINITE - 1 : timeout_ms))) {
 		case WAIT_OBJECT_0:
@@ -134,7 +134,7 @@ bool semaphore::wait(uint32_t timeout_ms)
 		default:
 			throw std::system_error(GetLastError(), std::generic_category(), "semaphore::wait(): wait failed");
 	}
-#elif M_OS == M_OS_MACOSX
+#elif CFG_OS == CFG_OS_MACOSX
 	struct timeval tv;
 
 	gettimeofday(&tv, NULL);
@@ -178,7 +178,7 @@ bool semaphore::wait(uint32_t timeout_ms)
 	if (pthread_mutex_unlock(&this->m) != 0) {
 		ASSERT(false)
 	}
-#elif M_OS == M_OS_LINUX
+#elif CFG_OS == CFG_OS_LINUX
 	// if timeout is 0 then use sem_trywait() to avoid unnecessary time calculation for sem_timedwait()
 	if (timeout_ms == 0) {
 		if (sem_trywait(&this->s) == -1) {
@@ -200,9 +200,9 @@ bool semaphore::wait(uint32_t timeout_ms)
 		}
 
 		ts.tv_sec += timeout_ms / 1000;
-		ts.tv_nsec += (timeout_ms % 1000) * 1000 * 1000;
-		ts.tv_sec += ts.tv_nsec / (1000 * 1000 * 1000);
-		ts.tv_nsec = ts.tv_nsec % (1000 * 1000 * 1000);
+		ts.tv_nsec += long(timeout_ms % 1000) * 1000 * 1000;
+		ts.tv_sec += ts.tv_nsec / (long(1000) * 1000 * 1000);
+		ts.tv_nsec = ts.tv_nsec % (long(1000) * 1000 * 1000);
 
 		if (sem_timedwait(&this->s, &ts) == -1) {
 			if (errno == ETIMEDOUT) {
@@ -221,11 +221,11 @@ bool semaphore::wait(uint32_t timeout_ms)
 void semaphore::signal()
 {
 	//		TRACE(<< "semaphore::signal(): invoked" << std::endl)
-#if M_OS == M_OS_WINDOWS
+#if CFG_OS == CFG_OS_WINDOWS
 	if (ReleaseSemaphore(this->s, 1, NULL) == 0) {
 		throw std::system_error(GetLastError(), std::generic_category(), "ReleaseSemaphore() failed");
 	}
-#elif M_OS == M_OS_MACOSX
+#elif CFG_OS == CFG_OS_MACOSX
 	if (int error = pthread_mutex_lock(&this->m)) {
 		throw std::system_error(error, std::generic_category(), "pthread_mutex_lock() failed");
 	}
@@ -244,7 +244,7 @@ void semaphore::signal()
 	if (int error = pthread_mutex_unlock(&this->m)) {
 		throw std::system_error(error, std::generic_category(), "pthread_mutex_unlock() failed");
 	}
-#elif M_OS == M_OS_LINUX
+#elif CFG_OS == CFG_OS_LINUX
 	if (sem_post(&this->s) < 0) {
 		throw std::system_error(errno, std::generic_category(), "sem_post() failed");
 	}

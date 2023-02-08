@@ -2,7 +2,7 @@
 
 
 int main(int argc, char *argv[]){
-	TestTingThread();
+	test_nitki_thread();
 	
 	return 0;
 }
