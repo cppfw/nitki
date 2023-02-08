@@ -13,9 +13,9 @@
 #	undef assert
 #endif
 
-namespace TestJoinBeforeAndAfterThreadHasFinished{
+namespace test_join_before_and_after_thread_has_finished{
 
-class TestThread : public nitki::thread{
+class test_thread : public nitki::thread{
 public:
 	int a, b;
 
@@ -29,10 +29,10 @@ public:
 
 
 
-void Run(){
+void run(){
 	//Test join after thread has finished
 	{
-		TestThread t;
+		test_thread t;
 
 		t.start();
 
@@ -45,7 +45,7 @@ void Run(){
 
 	//Test join before thread has finished
 	{
-		TestThread t;
+		test_thread t;
 
 		t.start();
 
@@ -59,11 +59,11 @@ void Run(){
 //===================
 // Test many threads
 //===================
-namespace TestManyThreads{
+namespace test_many_threads{
 
-class TestThread1 : public nitki::thread{
+class test_thread_1 : public nitki::thread{
 public:
-	TestThread1(){}
+	test_thread_1() = default;
 
 	nitki::queue queue;
 	volatile bool quit_flag = false;
@@ -86,7 +86,7 @@ public:
 	}
 };
 
-void Run(){
+void run(){
 	// TODO: read ulimit
 	size_t num_threads =
 #if CFG_OS == CFG_OS_MACOSX
@@ -96,10 +96,10 @@ void Run(){
 #endif
 	;
 
-	std::vector<std::unique_ptr<TestThread1>> thr;
+	std::vector<std::unique_ptr<test_thread_1>> thr;
 
 	for(size_t i = 0; i != num_threads; ++i){
-		auto t = std::make_unique<TestThread1>();
+		auto t = std::make_unique<test_thread_1>();
 
 		try{
 			ASSERT(t)
@@ -117,10 +117,10 @@ void Run(){
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
-	for(auto i = thr.begin(); i != thr.end(); ++i){
-		(*i)->quit_flag = true;
-		(*i)->queue.push_back([](){});
-		(*i)->join();
+	for(auto& t : thr){
+		t->quit_flag = true;
+		t->queue.push_back([](){});
+		t->join();
 	}
 }
 
@@ -132,9 +132,9 @@ void Run(){
 //Test immediate thread exit
 //==========================
 
-namespace TestImmediateExitThread{
+namespace test_immediate_exit_thread{
 
-class ImmediateExitThread : public nitki::thread{
+class immediate_exit_thread : public nitki::thread{
 public:
 	void run()override{
 		return;
@@ -142,9 +142,9 @@ public:
 };
 
 
-void Run(){
+void run(){
 	for(unsigned i = 0; i < 100; ++i){
-		ImmediateExitThread t;
+		immediate_exit_thread t;
 		t.start();
 		t.join();
 	}
@@ -154,14 +154,14 @@ void Run(){
 
 
 
-namespace TestNestedJoin{
+namespace test_nested_join{
 
-class TestRunnerThread : public nitki::thread{
+class test_runner_thread : public nitki::thread{
 public:
-	class TopLevelThread : public nitki::thread{
+	class top_level_thread : public nitki::thread{
 	public:
 
-		class InnerLevelThread : public nitki::thread{
+		class inner_level_thread : public nitki::thread{
 		public:
 
 			void run()override{
@@ -175,11 +175,9 @@ public:
 		}
 	} top;
 
-	volatile bool success;
+	volatile bool success = false;
 
-	TestRunnerThread() :
-			success(false)
-	{}
+	test_runner_thread() = default;
 
 	void run()override{
 		this->top.start();
@@ -190,8 +188,8 @@ public:
 
 
 
-void Run(){
-	TestRunnerThread runner;
+void run(){
+	test_runner_thread runner;
 	runner.start();
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(1000));

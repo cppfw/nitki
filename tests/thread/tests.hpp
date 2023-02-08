@@ -2,24 +2,24 @@
 
 
 
-namespace TestJoinBeforeAndAfterThreadHasFinished{
-void Run();
+namespace test_join_before_and_after_thread_has_finished{
+void run();
 }//~namespace
 
 //====================
 //Test many threads
 //====================
-namespace TestManyThreads{
-void Run();
+namespace test_many_threads{
+void run();
 }//~namespace
 
 //==========================
 //Test immediate thread exit
 //==========================
-namespace TestImmediateExitThread{
-void Run();
+namespace test_immediate_exit_thread{
+void run();
 }//~namespace
 
-namespace TestNestedJoin{
-void Run();
+namespace test_nested_join{
+void run();
 }//~namespace

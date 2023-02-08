@@ -200,9 +200,9 @@ bool semaphore::wait(uint32_t timeout_ms)
 		}
 
 		ts.tv_sec += timeout_ms / 1000;
-		ts.tv_nsec += (timeout_ms % 1000) * 1000 * 1000;
-		ts.tv_sec += ts.tv_nsec / (1000 * 1000 * 1000);
-		ts.tv_nsec = ts.tv_nsec % (1000 * 1000 * 1000);
+		ts.tv_nsec += long(timeout_ms % 1000) * 1000 * 1000;
+		ts.tv_sec += ts.tv_nsec / (long(1000) * 1000 * 1000);
+		ts.tv_nsec = ts.tv_nsec % (long(1000) * 1000 * 1000);
 
 		if (sem_timedwait(&this->s, &ts) == -1) {
 			if (errno == ETIMEDOUT) {
