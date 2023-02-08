@@ -52,13 +52,13 @@ class queue : public opros::waitable
 
 	std::deque<std::function<void()>> procedures;
 
-#if M_OS == M_OS_WINDOWS
-#elif M_OS == M_OS_MACOSX
+#if CFG_OS == CFG_OS_WINDOWS
+#elif CFG_OS == CFG_OS_MACOSX
 	// use pipe to implement waitable in *nix systems
 	// one end will be saved in waitable::handle
 	// and the other one in this member variable
 	int pipe_end;
-#elif M_OS == M_OS_LINUX
+#elif CFG_OS == CFG_OS_LINUX
 #else
 #	error "Unsupported OS"
 #endif
@@ -102,14 +102,14 @@ public:
 	 */
 	size_t size() const noexcept;
 
-#if M_OS == M_OS_WINDOWS
+#if CFG_OS == CFG_OS_WINDOWS
 
 protected:
 	void set_waiting_flags(utki::flags<opros::ready>) override;
 	utki::flags<opros::ready> get_readiness_flags() override;
 
-#elif M_OS == M_OS_LINUX
-#elif M_OS == M_OS_MACOSX
+#elif CFG_OS == CFG_OS_LINUX
+#elif CFG_OS == CFG_OS_MACOSX
 #else
 #	error "Unsupported OS"
 #endif

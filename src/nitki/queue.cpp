@@ -28,7 +28,7 @@ SOFTWARE.
 
 #include <mutex>
 
-#if M_OS == M_OS_LINUX
+#if CFG_OS == CFG_OS_LINUX
 #	include <sys/eventfd.h>
 #	include <cstring>
 #endif
@@ -104,18 +104,18 @@ void queue::push_back(std::function<void()>&& proc)
 	this->procedures.push_back(std::move(proc));
 
 	if (this->procedures.size() == 1) { // if it is a first message
-#if M_OS == M_OS_WINDOWS
+#if CFG_OS == CFG_OS_WINDOWS
 		if (SetEvent(this->handle) == 0) {
 			ASSERT(false)
 		}
-#elif M_OS == M_OS_MACOSX
+#elif CFG_OS == CFG_OS_MACOSX
 		{
 			std::uint8_t one_byte_buf[1];
 			if (write(this->pipe_end, one_byte_buf, 1) != 1) {
 				ASSERT(false)
 			}
 		}
-#elif M_OS == M_OS_LINUX
+#elif CFG_OS == CFG_OS_LINUX
 		if (eventfd_write(this->handle, 1) < 0) {
 			ASSERT(false)
 		}
@@ -134,19 +134,19 @@ std::function<void()> queue::pop_front()
 	}
 
 	if (this->procedures.size() == 1) { // if we are taking away the last message from the queue
-#if M_OS == M_OS_WINDOWS
+#if CFG_OS == CFG_OS_WINDOWS
 		if (ResetEvent(this->handle) == 0) {
 			ASSERT(false)
 			throw std::system_error(GetLastError(), std::generic_category(), "queue::wait(): ResetEvent() failed");
 		}
-#elif M_OS == M_OS_MACOSX
+#elif CFG_OS == CFG_OS_MACOSX
 		{
 			std::uint8_t one_byte_buf[1];
 			if (read(this->handle, one_byte_buf, 1) != 1) {
 				throw std::system_error(errno, std::generic_category(), "queue::wait(): read() failed");
 			}
 		}
-#elif M_OS == M_OS_LINUX
+#elif CFG_OS == CFG_OS_LINUX
 		{
 			eventfd_t value;
 			if (eventfd_read(this->handle, &value) < 0) {
@@ -172,7 +172,7 @@ size_t queue::size() const noexcept
 	return this->procedures.size();
 }
 
-#if M_OS == M_OS_WINDOWS
+#if CFG_OS == CFG_OS_WINDOWS
 void queue::set_waiting_flags(utki::flags<opros::ready> wait_for)
 {
 	// It is not allowed to wait on queue for write,
