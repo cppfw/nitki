@@ -97,31 +97,49 @@ queue::~queue() noexcept
 #endif
 }
 
+void queue::set_ready_to_read_state() noexcept
+{
+#if CFG_OS == CFG_OS_WINDOWS
+	if (SetEvent(this->handle) == 0) {
+		ASSERT(false)
+	}
+#elif CFG_OS == CFG_OS_MACOSX
+	{
+		std::uint8_t one_byte_buf[1];
+		if (write(this->pipe_end, one_byte_buf, 1) != 1) {
+			ASSERT(false)
+		}
+	}
+#elif CFG_OS == CFG_OS_LINUX
+	if (eventfd_write(this->handle, 1) < 0) {
+		ASSERT(false)
+	}
+#else
+#	error "Unsupported OS"
+#endif
+}
+
+void queue::poke() noexcept
+{
+	std::lock_guard<decltype(this->mut)> mutex_guard(this->mut);
+
+	if (!this->procedures.empty()) {
+		// there are procedures in the queue, it is already ready to read
+		return;
+	}
+
+	this->set_ready_to_read_state();
+}
+
 void queue::push_back(std::function<void()>&& proc)
 {
 	std::lock_guard<decltype(this->mut)> mutex_guard(this->mut);
 
 	this->procedures.push_back(std::move(proc));
 
-	if (this->procedures.size() == 1) { // if it is a first message
-#if CFG_OS == CFG_OS_WINDOWS
-		if (SetEvent(this->handle) == 0) {
-			ASSERT(false)
-		}
-#elif CFG_OS == CFG_OS_MACOSX
-		{
-			std::uint8_t one_byte_buf[1];
-			if (write(this->pipe_end, one_byte_buf, 1) != 1) {
-				ASSERT(false)
-			}
-		}
-#elif CFG_OS == CFG_OS_LINUX
-		if (eventfd_write(this->handle, 1) < 0) {
-			ASSERT(false)
-		}
-#else
-#	error "Unsupported OS"
-#endif
+	if (this->procedures.size() == 1) {
+		// we've just pushed the first message
+		this->set_ready_to_read_state();
 	}
 }
 
@@ -134,6 +152,7 @@ std::function<void()> queue::pop_front()
 	}
 
 	if (this->procedures.size() == 1) { // if we are taking away the last message from the queue
+		// clear ready to read state
 #if CFG_OS == CFG_OS_WINDOWS
 		if (ResetEvent(this->handle) == 0) {
 			ASSERT(false)

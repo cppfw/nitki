@@ -81,6 +81,13 @@ public:
 	~queue() noexcept;
 
 	/**
+	 * @brief Trigger the waitable ready to read.
+	 * This method triggers the waitable to be ready to read.
+	 * No actual procedures are posted to the queue.
+	 */
+	void poke() noexcept;
+
+	/**
 	 * @brief Pushes a new procedure to the end of the queue.
 	 * @param proc - the procedure to push into the queue.
 	 */
@@ -101,6 +108,9 @@ public:
 	 * @return number of procedures in the queue.
 	 */
 	size_t size() const noexcept;
+
+private:
+	void set_ready_to_read_state() noexcept;
 
 #if CFG_OS == CFG_OS_WINDOWS
 
