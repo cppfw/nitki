@@ -50,6 +50,8 @@ class queue : public opros::waitable
 {
 	mutable utki::spin_lock mut;
 
+	bool is_ready_to_read = false;
+
 	std::deque<std::function<void()>> procedures;
 
 #if CFG_OS == CFG_OS_WINDOWS
@@ -111,6 +113,7 @@ public:
 
 private:
 	void set_ready_to_read_state() noexcept;
+	void clear_ready_to_read_state() noexcept;
 
 #if CFG_OS == CFG_OS_WINDOWS
 

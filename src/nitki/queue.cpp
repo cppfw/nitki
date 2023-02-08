@@ -99,6 +99,10 @@ queue::~queue() noexcept
 
 void queue::set_ready_to_read_state() noexcept
 {
+	if (this->is_ready_to_read) {
+		return;
+	}
+
 #if CFG_OS == CFG_OS_WINDOWS
 	if (SetEvent(this->handle) == 0) {
 		ASSERT(false)
@@ -117,16 +121,41 @@ void queue::set_ready_to_read_state() noexcept
 #else
 #	error "Unsupported OS"
 #endif
+
+	this->is_ready_to_read = true;
+}
+
+void queue::clear_ready_to_read_state() noexcept
+{
+#if CFG_OS == CFG_OS_WINDOWS
+	if (ResetEvent(this->handle) == 0) {
+		ASSERT(false)
+	}
+#elif CFG_OS == CFG_OS_MACOSX
+	{
+		std::uint8_t one_byte_buf[1];
+		if (read(this->handle, one_byte_buf, 1) != 1) {
+			ASSERT(false)
+		}
+	}
+#elif CFG_OS == CFG_OS_LINUX
+	{
+		eventfd_t value;
+		if (eventfd_read(this->handle, &value) < 0) {
+			ASSERT(false)
+		}
+		ASSERT(value == 1)
+	}
+#else
+#	error "Unsupported OS"
+#endif
+
+	this->is_ready_to_read = false;
 }
 
 void queue::poke() noexcept
 {
 	std::lock_guard<decltype(this->mut)> mutex_guard(this->mut);
-
-	if (!this->procedures.empty()) {
-		// there are procedures in the queue, it is already ready to read
-		return;
-	}
 
 	this->set_ready_to_read_state();
 }
@@ -137,10 +166,7 @@ void queue::push_back(std::function<void()>&& proc)
 
 	this->procedures.push_back(std::move(proc));
 
-	if (this->procedures.size() == 1) {
-		// we've just pushed the first message
-		this->set_ready_to_read_state();
-	}
+	this->set_ready_to_read_state();
 }
 
 std::function<void()> queue::pop_front()
@@ -152,30 +178,7 @@ std::function<void()> queue::pop_front()
 	}
 
 	if (this->procedures.size() == 1) { // if we are taking away the last message from the queue
-		// clear ready to read state
-#if CFG_OS == CFG_OS_WINDOWS
-		if (ResetEvent(this->handle) == 0) {
-			ASSERT(false)
-			throw std::system_error(GetLastError(), std::generic_category(), "queue::wait(): ResetEvent() failed");
-		}
-#elif CFG_OS == CFG_OS_MACOSX
-		{
-			std::uint8_t one_byte_buf[1];
-			if (read(this->handle, one_byte_buf, 1) != 1) {
-				throw std::system_error(errno, std::generic_category(), "queue::wait(): read() failed");
-			}
-		}
-#elif CFG_OS == CFG_OS_LINUX
-		{
-			eventfd_t value;
-			if (eventfd_read(this->handle, &value) < 0) {
-				throw std::system_error(errno, std::generic_category(), "queue::wait(): eventfd_read() failed");
-			}
-			ASSERT(value == 1)
-		}
-#else
-#	error "Unsupported OS"
-#endif
+		this->clear_ready_to_read_state();
 	}
 
 	auto ret = std::move(this->procedures.front());
@@ -188,6 +191,7 @@ std::function<void()> queue::pop_front()
 size_t queue::size() const noexcept
 {
 	std::lock_guard<decltype(this->mut)> mutex_guard(this->mut);
+
 	return this->procedures.size();
 }
 
