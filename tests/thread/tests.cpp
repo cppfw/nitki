@@ -76,7 +76,7 @@ public:
 		ws.add(this->queue, {opros::ready::read});
 		
 		while(!this->quit_flag){
-			ws.wait();
+			ws.wait(nullptr);
 			while(auto m = this->queue.pop_front()){
 				m();
 			}
