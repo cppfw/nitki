@@ -29,6 +29,8 @@ SOFTWARE.
 #if CFG_OS == CFG_OS_MACOSX
 #	include <cerrno>
 #	include <sys/time.h>
+#elif CFG_OS == CFG_OS_WINDOWS
+#	include <limits>
 #endif
 
 using namespace nitki;
