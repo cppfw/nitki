@@ -31,6 +31,8 @@ SOFTWARE.
 #if CFG_OS == CFG_OS_LINUX
 #	include <sys/eventfd.h>
 #	include <cstring>
+#elif CFG_OS == CFG_OS_MACOSX
+#	include <array>
 #endif
 
 using namespace nitki;
@@ -57,8 +59,8 @@ queue::queue() :
 		}
 		return handle;
 #elif CFG_OS == CFG_OS_MACOSX
-		int ends[2];
-		if (::pipe(&ends[0]) < 0) {
+		std::array<int, 2> ends;
+		if (::pipe(ends.data()) < 0) {
 			throw std::system_error(
 				errno,
 				std::generic_category(),
@@ -109,8 +111,8 @@ void queue::set_ready_to_read_state() noexcept
 	}
 #elif CFG_OS == CFG_OS_MACOSX
 	{
-		std::uint8_t one_byte_buf[1];
-		if (write(this->pipe_end, one_byte_buf, 1) != 1) {
+		std::array<uint8_t, 1> one_byte_buf;
+		if (write(this->pipe_end, one_byte_buf.data(), 1) != 1) {
 			ASSERT(false)
 		}
 	}
@@ -133,8 +135,8 @@ void queue::clear_ready_to_read_state() noexcept
 	}
 #elif CFG_OS == CFG_OS_MACOSX
 	{
-		std::uint8_t one_byte_buf[1];
-		if (read(this->handle, one_byte_buf, 1) != 1) {
+		std::array<uint8_t, 1> one_byte_buf;
+		if (read(this->handle, one_byte_buf.data(), 1) != 1) {
 			ASSERT(false)
 		}
 	}

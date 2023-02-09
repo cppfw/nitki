@@ -34,7 +34,7 @@ SOFTWARE.
 
 #elif CFG_OS == CFG_OS_LINUX || CFG_OS == CFG_OS_UNIX
 #	include <semaphore.h>
-#	include <errno.h>
+#	include <cerrno>
 
 #elif CFG_OS == CFG_OS_MACOSX
 #	include <pthread.h>

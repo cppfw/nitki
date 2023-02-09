@@ -38,8 +38,8 @@ semaphore::semaphore(unsigned initial_value)
 #if CFG_OS == CFG_OS_WINDOWS
 	if ((this->s = CreateSemaphore(NULL, initial_value, 0xffffff, NULL)) == NULL)
 #elif CFG_OS == CFG_OS_MACOSX
-	if (pthread_mutex_init(&this->m, 0) == 0) {
-		if (pthread_cond_init(&this->c, 0) == 0) {
+	if (pthread_mutex_init(&this->m, nullptr) == 0) {
+		if (pthread_cond_init(&this->c, nullptr) == 0) {
 			this->v = initial_value;
 			return;
 		}
@@ -137,17 +137,17 @@ bool semaphore::wait(uint32_t timeout_ms)
 #elif CFG_OS == CFG_OS_MACOSX
 	struct timeval tv;
 
-	gettimeofday(&tv, NULL);
+	gettimeofday(&tv, nullptr);
 
 	struct timespec ts;
 
 	ts.tv_sec = tv.tv_sec;
-	ts.tv_nsec = tv.tv_usec * 1000;
+	ts.tv_nsec = sattic_cast<long>(tv.tv_usec) * 1000;
 
 	ts.tv_sec += timeout_ms / 1000;
-	ts.tv_nsec += (timeout_ms % 1000) * 1000 * 1000;
-	ts.tv_sec += ts.tv_nsec / (1000 * 1000 * 1000);
-	ts.tv_nsec = ts.tv_nsec % (1000 * 1000 * 1000);
+	ts.tv_nsec += static_cast<long>(timeout_ms % 1000) * 1000 * 1000;
+	ts.tv_sec += ts.tv_nsec / static_cast<long>(1000 * 1000 * 1000);
+	ts.tv_nsec = ts.tv_nsec % static_cast<long>(1000 * 1000 * 1000);
 
 	if (int error = pthread_mutex_lock(&this->m)) {
 		throw std::system_error(error, std::generic_category(), "semaphore::wait(): failed to lock the mutex");
