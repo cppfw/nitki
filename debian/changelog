@@ -1,3 +1,9 @@
+libnitki (1.0.63) unstable; urgency=medium
+
+  * add queue::poke() method
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 10 Feb 2023 00:39:33 +0200
+
 libnitki (1.0.62) unstable; urgency=medium
 
   * msvs: build v143 configs
