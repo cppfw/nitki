@@ -31,6 +31,7 @@ SOFTWARE.
 #	include <sys/time.h>
 #elif CFG_OS == CFG_OS_WINDOWS
 #	include <limits>
+#	include <sstream>
 #endif
 
 using namespace nitki;
@@ -39,9 +40,11 @@ semaphore::semaphore(unsigned initial_value)
 {
 #if CFG_OS == CFG_OS_WINDOWS
 	using namespace std::string_literals;
-	auto max_val = std::numeric_limits<LONG>::max();
+	auto max_val = unsigned(std::numeric_limits<LONG>::max());
 	if (initial_value >= max_val) {
-		throw std::invalid_argument("semaphore::semaphore(): initial_value cannot be >= "s + max_val);
+		std::stringstream ss;
+		ss << "semaphore::semaphore(): initial_value cannot be >= " << max_val;
+		throw std::invalid_argument(ss.str());
 	}
 	this->s = CreateSemaphore(nullptr, LONG(initial_value), 0xffffff, nullptr);
 	if (!this->s)
