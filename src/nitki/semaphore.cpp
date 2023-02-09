@@ -87,12 +87,12 @@ void semaphore::wait()
 {
 #if CFG_OS == CFG_OS_WINDOWS
 	switch (WaitForSingleObject(this->s, DWORD(INFINITE))) {
-		case WAIT_OBJECT_0:
-			//				TRACE(<< "semaphore::wait(): exit" << std::endl)
-			break;
 		case WAIT_TIMEOUT:
+			[[fallthrough]];
 		case WAIT_ABANDONED:
 			ASSERT(false)
+			[[fallthrough]];
+		case WAIT_OBJECT_0:
 			break;
 		case WAIT_FAILED:
 			throw std::system_error(
@@ -143,7 +143,7 @@ bool semaphore::wait(uint32_t timeout_ms)
 		case WAIT_TIMEOUT:
 			return false;
 		default:
-			throw std::system_error(GetLastError(), std::generic_category(), "semaphore::wait(): wait failed");
+			throw std::system_error(int(GetLastError()), std::generic_category(), "semaphore::wait(): wait failed");
 	}
 #elif CFG_OS == CFG_OS_MACOSX
 	struct timeval tv;
