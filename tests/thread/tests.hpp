@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 namespace test_join_before_and_after_thread_has_finished{
 void run();
 }//~namespace

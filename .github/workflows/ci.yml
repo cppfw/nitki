@@ -116,6 +116,12 @@ jobs:
     steps:
     - name: git clone
       uses: myci-actions/checkout@master
+    - name: install clang-tidy and clang-format
+      run: |
+        brew install llvm
+        ln -s "$(brew --prefix llvm)/bin/clang-format" "/usr/local/bin/clang-format"
+        ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
+        ln -s "$(brew --prefix llvm)/bin/clang-apply-replacements" "/usr/local/bin/clang-apply-replacements"
     - name: add cppfw tap
       run: |
         brew tap cppfw/tap
@@ -297,7 +303,7 @@ jobs:
           repo: deb http://apt.llvm.org/${{ matrix.codename }} llvm-toolchain-${{ matrix.codename }} main
           repo-name: llvm
           keys-asc: https://apt.llvm.org/llvm-snapshot.gpg.key
-          install: clang-format
+          install: clang-format clang-tidy
       - name: add cppfw deb repo
         uses: myci-actions/add-deb-repo@master
         with:
@@ -341,6 +347,12 @@ jobs:
     steps:
       - name: git clone
         uses: myci-actions/checkout@master
+      - name: install clang-tidy and clang-format
+        run: |
+          brew install llvm
+          ln -s "$(brew --prefix llvm)/bin/clang-format" "/usr/local/bin/clang-format"
+          ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
+          ln -s "$(brew --prefix llvm)/bin/clang-apply-replacements" "/usr/local/bin/clang-apply-replacements"
       - name: add cppfw tap
         run: |
           brew tap cppfw/tap
