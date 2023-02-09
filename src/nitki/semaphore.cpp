@@ -87,7 +87,7 @@ void semaphore::wait()
 {
 #if CFG_OS == CFG_OS_WINDOWS
 	switch (WaitForSingleObject(this->s, DWORD(INFINITE))) {
-		case WAIT_TIMEOUT:
+		case WAIT_TIMEOUT: // NOLINT(bugprone-branch-clone)
 			[[fallthrough]];
 		case WAIT_ABANDONED:
 			ASSERT(false)
@@ -234,7 +234,7 @@ void semaphore::signal()
 	//		TRACE(<< "semaphore::signal(): invoked" << std::endl)
 #if CFG_OS == CFG_OS_WINDOWS
 	if (ReleaseSemaphore(this->s, 1, nullptr) == 0) {
-		throw std::system_error(GetLastError(), std::generic_category(), "ReleaseSemaphore() failed");
+		throw std::system_error(int(GetLastError()), std::generic_category(), "ReleaseSemaphore() failed");
 	}
 #elif CFG_OS == CFG_OS_MACOSX
 	if (int error = pthread_mutex_lock(&this->m)) {
