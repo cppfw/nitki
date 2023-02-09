@@ -36,7 +36,13 @@ using namespace nitki;
 semaphore::semaphore(unsigned initial_value)
 {
 #if CFG_OS == CFG_OS_WINDOWS
-	if ((this->s = CreateSemaphore(NULL, initial_value, 0xffffff, NULL)) == NULL)
+	using namespace std::string_literals;
+	auto max_val = std::numeric_limits<LONG>::max();
+	if (initial_value >= max_val) {
+		throw std::invalid_argument("semaphore::semaphore(): initial_value cannot be >= "s + max_val);
+	}
+	this->s = CreateSemaphore(nullptr, LONG(initial_value), 0xffffff, nullptr);
+	if (!this->s)
 #elif CFG_OS == CFG_OS_MACOSX
 	if (pthread_mutex_init(&this->m, nullptr) == 0) {
 		if (pthread_cond_init(&this->c, nullptr) == 0) {
@@ -85,7 +91,7 @@ void semaphore::wait()
 			break;
 		case WAIT_FAILED:
 			throw std::system_error(
-				GetLastError(),
+				int(GetLastError()),
 				std::generic_category(),
 				"semaphore::wait(): WaitForSingleObject() failed"
 			);
@@ -222,7 +228,7 @@ void semaphore::signal()
 {
 	//		TRACE(<< "semaphore::signal(): invoked" << std::endl)
 #if CFG_OS == CFG_OS_WINDOWS
-	if (ReleaseSemaphore(this->s, 1, NULL) == 0) {
+	if (ReleaseSemaphore(this->s, 1, nullptr) == 0) {
 		throw std::system_error(GetLastError(), std::generic_category(), "ReleaseSemaphore() failed");
 	}
 #elif CFG_OS == CFG_OS_MACOSX

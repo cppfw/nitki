@@ -80,7 +80,11 @@ public:
 	 * @brief Destructor.
 	 * When called, it also destroys all procedures on the queue.
 	 */
-	~queue() noexcept;
+	~queue() noexcept
+#if CFG_OS == CFG_OS_WINDOWS
+		override
+#endif
+		;
 
 	/**
 	 * @brief Trigger the waitable ready to read.

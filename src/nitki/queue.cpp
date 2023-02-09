@@ -45,14 +45,14 @@ queue::queue() :
 ]() {
 #if CFG_OS == CFG_OS_WINDOWS
 		auto handle = CreateEvent(
-			NULL, // security attributes
+			nullptr, // security attributes
 			TRUE, // manual-reset
 			FALSE, // not signalled initially
-			NULL // no name
+			nullptr // no name
 		);
-		if (handle == NULL) {
+		if (handle == nullptr) {
 			throw std::system_error(
-				GetLastError(),
+				int(GetLastError()),
 				std::generic_category(),
 				"could not create event (Win32) for implementing Waitable"
 			);
