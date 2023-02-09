@@ -142,7 +142,7 @@ bool semaphore::wait(uint32_t timeout_ms)
 	struct timespec ts;
 
 	ts.tv_sec = tv.tv_sec;
-	ts.tv_nsec = sattic_cast<long>(tv.tv_usec) * 1000;
+	ts.tv_nsec = static_cast<long>(tv.tv_usec) * 1000;
 
 	ts.tv_sec += timeout_ms / 1000;
 	ts.tv_nsec += static_cast<long>(timeout_ms % 1000) * 1000 * 1000;
