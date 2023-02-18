@@ -20,7 +20,7 @@ ifeq ($(os),linux)
     this_ldlibs += -lpthread
 endif
 
-this_ldlibs += -lutki
+this_ldlibs += -lutki -lopros
 
 $(eval $(prorab-build-lib))
 
