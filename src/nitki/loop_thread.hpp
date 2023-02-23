@@ -84,6 +84,25 @@ public:
 	 * @brief Request this thread to quit.
 	 */
 	void quit() noexcept;
+
+	/**
+	 * @brief Pushes a new procedure to the end of the thread's queue.
+	 * @param proc - the procedure to push into the queue.
+	 */
+	void push_back(std::function<void()>&& proc)
+	{
+		this->queue.push_back(std::move(proc));
+	}
+
+	/**
+	 * @brief Trigger the queue ready to read.
+	 * This method triggers the thread's queue to be ready to read
+	 * without actually posting a procedure into the queue.
+	 */
+	void poke() noexcept
+	{
+		this->queue.poke();
+	}
 };
 
 } // namespace nitki
