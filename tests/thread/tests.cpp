@@ -73,10 +73,10 @@ public:
 	void run()override{
 		opros::wait_set ws(1);
 		
-		ws.add(this->queue, {opros::ready::read});
+		ws.add(this->queue, {opros::ready::read}, nullptr);
 		
 		while(!this->quit_flag){
-			ws.wait(nullptr);
+			ws.wait();
 			while(auto m = this->queue.pop_front()){
 				m();
 			}

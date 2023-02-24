@@ -43,7 +43,7 @@ loop_thread::loop_thread(unsigned wait_set_capacity) :
 		return wait_set_capacity + 1;
 	}())
 {
-	this->wait_set.add(this->queue, opros::ready::read);
+	this->wait_set.add(this->queue, opros::ready::read, &this->queue);
 }
 
 loop_thread::~loop_thread()
@@ -64,13 +64,16 @@ void loop_thread::run()
 	std::optional<uint32_t> timeout = this->on_loop(nullptr);
 
 	while (!this->quit_flag.load()) {
-		auto num_triggered =
-			timeout.has_value() ? this->wait_set.wait(timeout.value(), triggered) : this->wait_set.wait(triggered);
+		if (timeout.has_value()) {
+			this->wait_set.wait(timeout.value());
+		} else {
+			this->wait_set.wait();
+		}
 
 		while (auto proc = this->queue.pop_front()) {
 			proc.operator()();
 		}
 
-		timeout = this->on_loop(utki::make_span(triggered.data(), num_triggered));
+		timeout = this->on_loop(this->wait_set.get_triggered());
 	}
 }
