@@ -1002,14 +1002,10 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\nitki\queue.cpp" />
-    <ClCompile Include="..\..\src\nitki\semaphore.cpp" />
-    <ClCompile Include="..\..\src\nitki\thread.cpp" />
+    <ClCompile Include="..\..\src\**\*.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\nitki\queue.hpp" />
-    <ClInclude Include="..\..\src\nitki\semaphore.hpp" />
-    <ClInclude Include="..\..\src\nitki\thread.hpp" />
+    <ClInclude Include="..\..\src\**\*.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
