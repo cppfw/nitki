@@ -33,7 +33,7 @@ using namespace nitki;
 loop_thread::loop_thread(unsigned wait_set_capacity) :
 	wait_set([&]() {
 		auto max = std::numeric_limits<std::remove_reference_t<decltype(wait_set_capacity)>>::max();
-		if (wait_set_capacity == std::numeric_limits<decltype(wait_set_capacity)>::max()) {
+		if (wait_set_capacity == max) {
 			std::stringstream ss;
 			ss << "loop_thread::loop_thread(): wait_set_capacity must be less "
 				  "than "
