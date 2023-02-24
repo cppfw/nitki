@@ -1,3 +1,9 @@
+libnitki (1.0.67) unstable; urgency=medium
+
+  * update to latest opros
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 24 Feb 2023 16:46:40 +0200
+
 libnitki (1.0.66) unstable; urgency=medium
 
   * give access to loop_thread::queue
