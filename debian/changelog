@@ -1,3 +1,9 @@
+libnitki (1.0.69) unstable; urgency=medium
+
+  * refactor loop_thread's API
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 26 Feb 2023 17:55:46 +0200
+
 libnitki (1.0.68) unstable; urgency=medium
 
   * include loop_thread into build for msvs
