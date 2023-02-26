@@ -59,9 +59,7 @@ void loop_thread::quit() noexcept
 
 void loop_thread::run()
 {
-	std::vector<opros::event_info> triggered(this->wait_set.capacity());
-
-	std::optional<uint32_t> timeout = this->on_loop(nullptr);
+	std::optional<uint32_t> timeout = this->on_loop();
 
 	while (!this->quit_flag.load()) {
 		if (timeout.has_value()) {
@@ -74,6 +72,6 @@ void loop_thread::run()
 			proc.operator()();
 		}
 
-		timeout = this->on_loop(this->wait_set.get_triggered());
+		timeout = this->on_loop();
 	}
 }

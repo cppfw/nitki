@@ -71,14 +71,13 @@ public:
 	 * This function is called every main loop iteration, right after
 	 * handling thread's queue.
 	 * This function is also called once right before entering the main loop
-	 * to get the first waiting timeout, the list of triggered waitable objects
+	 * to get the first waiting timeout, the wait_set's list of triggered waitable objects
 	 * in this case is empty.
-	 * @param triggered - list of triggered waitable objects of the wait_set.
 	 * @return desired triggering objects waiting timeout in milliseconds for next
 	 * iteration.
 	 * @return empty std::optional for infinite waiting for triggering objects.
 	 */
-	virtual std::optional<uint32_t> on_loop(utki::span<const opros::event_info> triggered) = 0;
+	virtual std::optional<uint32_t> on_loop() = 0;
 
 	/**
 	 * @brief Request this thread to quit.

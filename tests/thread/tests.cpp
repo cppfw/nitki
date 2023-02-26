@@ -5,6 +5,7 @@
 #include <opros/wait_set.hpp>
 
 #include "../../src/nitki/thread.hpp"
+#include "../../src/nitki/loop_thread.hpp"
 #include "../../src/nitki/queue.hpp"
 
 #include "tests.hpp"
@@ -61,28 +62,14 @@ void run(){
 //===================
 namespace test_many_threads{
 
-class test_thread_1 : public nitki::thread{
+class test_thread_1 : public nitki::loop_thread{
 public:
-	test_thread_1() = default;
-
-	nitki::queue queue;
-	volatile bool quit_flag = false;
+	test_thread_1() : loop_thread(0){}
 
 	int a, b;
 
-	void run()override{
-		opros::wait_set ws(1);
-		
-		ws.add(this->queue, {opros::ready::read}, nullptr);
-		
-		while(!this->quit_flag){
-			ws.wait();
-			while(auto m = this->queue.pop_front()){
-				m();
-			}
-		}
-		
-		ws.remove(this->queue);
+	std::optional<uint32_t> on_loop()override{
+		return {};
 	}
 };
 
@@ -118,8 +105,7 @@ void run(){
 	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
 	for(auto& t : thr){
-		t->quit_flag = true;
-		t->queue.push_back([](){});
+		t->quit();
 		t->join();
 	}
 }
