@@ -68,11 +68,8 @@ public:
 
 	/**
 	 * @brief Loop iteration procedure.
-	 * This function is called every main loop iteration, right after
-	 * handling thread's queue.
-	 * This function is also called once right before entering the main loop
-	 * to get the first waiting timeout, the wait_set's list of triggered waitable objects
-	 * in this case is empty.
+	 * This function is called every main loop iteration, right before waiting on the
+	 * wait_set and running thread's queue procedures.
 	 * @return desired triggering objects waiting timeout in milliseconds for next
 	 * iteration.
 	 * @return empty std::optional for infinite waiting for triggering objects.

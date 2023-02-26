@@ -59,9 +59,9 @@ void loop_thread::quit() noexcept
 
 void loop_thread::run()
 {
-	std::optional<uint32_t> timeout = this->on_loop();
-
 	while (!this->quit_flag.load()) {
+		std::optional<uint32_t> timeout = this->on_loop();
+
 		if (timeout.has_value()) {
 			this->wait_set.wait(timeout.value());
 		} else {
@@ -71,7 +71,5 @@ void loop_thread::run()
 		while (auto proc = this->queue.pop_front()) {
 			proc.operator()();
 		}
-
-		timeout = this->on_loop();
 	}
 }
