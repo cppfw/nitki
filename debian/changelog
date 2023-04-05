@@ -1,3 +1,9 @@
+libnitki (1.0.70) unstable; urgency=medium
+
+  * loop_thread: add queue with nullptr user_data
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 05 Apr 2023 18:48:13 +0300
+
 libnitki (1.0.69) unstable; urgency=medium
 
   * refactor loop_thread's API
