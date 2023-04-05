@@ -64,11 +64,21 @@ namespace test_many_threads{
 
 class test_thread_1 : public nitki::loop_thread{
 public:
-	test_thread_1() : loop_thread(0){}
+	test_thread_1() : loop_thread(0){
+		this->push_back([](){});
+	}
 
 	int a, b;
 
 	std::optional<uint32_t> on_loop()override{
+		auto triggered = this->wait_set.get_triggered();
+		if(!triggered.empty()){
+			// only internal loop_thread::queue is added to the wait_set
+			utki::assert(triggered.size() == 1, SL);
+
+			// user_data for the loop_thread::queue must be nullptr
+			utki::assert(triggered[0].user_data == nullptr, SL);
+		}
 		return {};
 	}
 };

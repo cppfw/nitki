@@ -52,8 +52,12 @@ public:
 
 	/**
 	 * @brief Construct a new loop thread object.
+	 * The actual wait_set capacity will be more than requested by 1.
+	 * This is because internal loop_thread::queue is added to the wait_set as well.
+	 * The internal loop_thread::queue is added with nullptr user_data, so it will be easy
+	 * to identify the queue from the list returned by wait_set::get_triggered().
 	 *
-	 * @param wait_set_capacity - requested capasity of the thread's wait_set.
+	 * @param wait_set_capacity - requested capacity of the thread's wait_set.
 	 */
 	loop_thread(unsigned wait_set_capacity);
 

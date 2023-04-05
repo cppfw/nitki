@@ -40,10 +40,10 @@ loop_thread::loop_thread(unsigned wait_set_capacity) :
 			   << max;
 			throw std::invalid_argument(ss.str());
 		}
-		return wait_set_capacity + 1;
+		return wait_set_capacity + 1; // +1 for the this->queue
 	}())
 {
-	this->wait_set.add(this->queue, opros::ready::read, &this->queue);
+	this->wait_set.add(this->queue, opros::ready::read, nullptr);
 }
 
 loop_thread::~loop_thread()
