@@ -201,7 +201,7 @@ jobs:
         myci-apply-version.sh --version $PACKAGE_VERSION *.pom.in
         myci-apply-version.sh --version $PACKAGE_VERSION *.aar.in --filename-only
     - name: deploy
-      run: myci-deploy-maven-nexus.sh --base-url http://gagis.hopto.org/nexus --repo android android/$PACKAGE_NAME-$PACKAGE_VERSION.aar
+      run: myci-deploy-maven-nexus.sh --base-url https://gagis.hopto.org/nexus --repo android android/$PACKAGE_NAME-$PACKAGE_VERSION.aar
       if: startsWith(github.ref, 'refs/tags/')
 ##### msys2 #####
   msys2:
