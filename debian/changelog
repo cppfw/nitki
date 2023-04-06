@@ -1,3 +1,9 @@
+libnitki (1.0.71) unstable; urgency=medium
+
+  * use https when deploying to android
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 06 Apr 2023 09:58:21 +0300
+
 libnitki (1.0.70) unstable; urgency=medium
 
   * loop_thread: add queue with nullptr user_data
