@@ -324,12 +324,10 @@ jobs:
         uses: myci-actions/export-env-var@master
         with: {name: PACKAGE_VERSION, value: $(myci-deb-version.sh debian/changelog)}
         if: startsWith(github.ref, 'refs/tags/')
-      - name: prepare conanfile
-        run: myci-apply-version.sh --version $PACKAGE_VERSION conan/conanfile.py.in
       - name: build
         run: |
           conan remote add cppfw $MYCI_CONAN_REMOTE
-          conan create conan --user $MYCI_CONAN_USER --channel main
+          conan create conan --user $MYCI_CONAN_USER --channel main --version $PACKAGE_VERSION
       - name: deploy conan package
         run: |
           conan remote login --password $MYCI_CONAN_PASSWORD cppfw $MYCI_CONAN_USER
@@ -374,12 +372,10 @@ jobs:
         uses: myci-actions/export-env-var@master
         with: {name: PACKAGE_VERSION, value: $(myci-deb-version.sh debian/changelog)}
         if: startsWith(github.ref, 'refs/tags/')
-      - name: prepare conanfile
-        run: myci-apply-version.sh --version $PACKAGE_VERSION conan/conanfile.py.in
       - name: build
         run: |
           conan remote add cppfw $MYCI_CONAN_REMOTE
-          conan create conan --user $MYCI_CONAN_USER --channel main
+          conan create conan --user $MYCI_CONAN_USER --channel main --version $PACKAGE_VERSION
       - name: deploy conan package
         run: |
           conan remote login --password $MYCI_CONAN_PASSWORD cppfw $MYCI_CONAN_USER

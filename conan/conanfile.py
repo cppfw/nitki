@@ -6,7 +6,9 @@ from conan.tools.layout import basic_layout
 
 class NitkiConan(ConanFile):
 	name = "nitki"
-	version = "$(version)"
+	# NOTE: version is supposed to be specified as `--version` argument
+	#  to 'conan create' command from command line
+	# version = ""
 	license = "MIT"
 	author = "Ivan Gagis <igagis@gmail.com>"
 	url = "http://github.com/cppfw/" + name
