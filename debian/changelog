@@ -1,3 +1,10 @@
+libnitki (1.0.73) unstable; urgency=medium
+
+  * conan: package only shared or only static binaries depending on the
+    options
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 11 May 2023 19:13:26 +0300
+
 libnitki (1.0.72) unstable; urgency=medium
 
   * conan: migrate to conan2
