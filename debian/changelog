@@ -1,3 +1,9 @@
+libnitki (1.0.72) unstable; urgency=medium
+
+  * conan: migrate to conan2
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 11 May 2023 13:40:38 +0300
+
 libnitki (1.0.71) unstable; urgency=medium
 
   * use https when deploying to android
