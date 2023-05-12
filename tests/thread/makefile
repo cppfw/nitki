@@ -20,8 +20,6 @@ $(eval $(call prorab-depend, $(prorab_this_name), ../../src/out/$(c)/libnitki$(d
 this_test_cmd := $(prorab_this_name)
 this_test_deps := $(prorab_this_name)
 this_test_ld_path := ../../src/out/$(c)
-# for conan get ld paths from LDFLAGS
-this_test_ld_path += $(patsubst -L%,%,$(filter -L%,$(LDFLAGS)))
 $(eval $(prorab-test))
 
 # include makefile for building nitki
