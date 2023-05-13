@@ -89,7 +89,7 @@ public:
 	 * @brief Pushes a new procedure to the end of the thread's queue.
 	 * @param proc - the procedure to push into the queue.
 	 */
-	void push_back(std::function<void()>&& proc)
+	void push_back(std::function<void()> proc)
 	{
 		this->queue.push_back(std::move(proc));
 	}

@@ -162,7 +162,7 @@ void queue::poke() noexcept
 	this->set_ready_to_read_state();
 }
 
-void queue::push_back(std::function<void()>&& proc)
+void queue::push_back(std::function<void()> proc)
 {
 	std::lock_guard<decltype(this->mut)> mutex_guard(this->mut);
 
