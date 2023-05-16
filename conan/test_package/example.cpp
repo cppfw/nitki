@@ -23,5 +23,7 @@ int main(int argc, const char** argv){
 	t->quit();
 	t->join();
 
-	std::cout << "\tPASSED: hello nitki!"
+	std::cout << "\tPASSED: hello nitki!" << std::endl;
+
+	return 0;
 }
