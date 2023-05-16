@@ -75,12 +75,12 @@ class NitkiConan(ConanFile):
 		self.cpp_info.libs = [self.name]
 
 		if self.settings.os == "Linux":
+			# in case of static linking we need -pthread flag on Linux when using threads
 			if not self.options.shared:
 				ldflags = '-pthread'
 				self.cpp_info.sharedlinkflags.extend([ldflags])
 				self.cpp_info.exelinkflags.extend([ldflags])
 
 	def package_id(self):
-
 		# change package id only when minor or major version changes, i.e. when ABI breaks
 		self.info.requires.minor_mode()
