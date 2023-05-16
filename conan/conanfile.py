@@ -21,8 +21,8 @@ class NitkiConan(ConanFile):
 	generators = "AutotoolsDeps" # this will set CXXFLAGS etc. env vars
 
 	def requirements(self):
-		self.requires("utki/[>=1.1.192]@cppfw/main", transitive_headers=True)
-		self.requires("opros/[>=0.0.1]@cppfw/main", transitive_headers=True)
+		self.requires("utki/[>=1.1.192]@cppfw/main", transitive_headers=True, transitive_libs=True)
+		self.requires("opros/[>=0.0.1]@cppfw/main", transitive_headers=True, transitive_libs=True)
 
 	def config_options(self):
 		if self.settings.os == "Windows":
@@ -73,6 +73,12 @@ class NitkiConan(ConanFile):
 
 	def package_info(self):
 		self.cpp_info.libs = [self.name]
+
+		if not self.options.shared:
+			ldflags = '-pthread'
+
+			self.cpp_info.sharedlinkflags.extend([ldflags])
+			self.cpp_info.exelinkflags.extend([ldflags])
 
 	def package_id(self):
 
