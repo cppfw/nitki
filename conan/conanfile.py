@@ -74,10 +74,11 @@ class NitkiConan(ConanFile):
 	def package_info(self):
 		self.cpp_info.libs = [self.name]
 
-		# if not self.options.shared:
-		# 	ldflags = '-pthread'
-		# 	self.cpp_info.sharedlinkflags.extend([ldflags])
-		# 	self.cpp_info.exelinkflags.extend([ldflags])
+		if self.settings.os == "Linux":
+			if not self.options.shared:
+				ldflags = '-pthread'
+				self.cpp_info.sharedlinkflags.extend([ldflags])
+				self.cpp_info.exelinkflags.extend([ldflags])
 
 	def package_id(self):
 
