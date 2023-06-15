@@ -47,7 +47,7 @@ semaphore::semaphore(unsigned initial_value)
 		ss << "semaphore::semaphore(): initial_value cannot be >= " << max_val;
 		throw std::invalid_argument(ss.str());
 	}
-	this->s = CreateSemaphore(nullptr, LONG(initial_value), 0xffffff, nullptr);
+	this->s = CreateSemaphore(nullptr, LONG(initial_value), max_val, nullptr);
 	if (!this->s)
 #elif CFG_OS == CFG_OS_MACOSX
 	if (pthread_mutex_init(&this->m, nullptr) == 0) {
