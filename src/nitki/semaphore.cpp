@@ -141,7 +141,7 @@ void semaphore::wait()
 bool semaphore::wait(uint32_t timeout_ms)
 {
 #if CFG_OS == CFG_OS_WINDOWS
-	static_assert(INFINITE == 0xffffffff, "error");
+	static_assert(INFINITE == std::numeric_limits<DWORD>::max(), "error");
 	switch (WaitForSingleObject(this->s, DWORD(timeout_ms == INFINITE ? INFINITE - 1 : timeout_ms))) {
 		case WAIT_OBJECT_0:
 			return true;
