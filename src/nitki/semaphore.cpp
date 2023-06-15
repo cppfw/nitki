@@ -41,10 +41,10 @@ semaphore::semaphore(unsigned initial_value)
 {
 #if CFG_OS == CFG_OS_WINDOWS
 	using namespace std::string_literals;
-	auto max_val = unsigned(std::numeric_limits<LONG>::max());
-	if (initial_value >= max_val) {
+	auto max_val = std::numeric_limits<LONG>::max();
+	if (initial_value >= unsigned(max_val)) {
 		std::stringstream ss;
-		ss << "semaphore::semaphore(): initial_value cannot be >= " << max_val;
+		ss << "semaphore::semaphore(): initial_value cannot be >= " << unsigned(max_val);
 		throw std::invalid_argument(ss.str());
 	}
 	this->s = CreateSemaphore(nullptr, LONG(initial_value), max_val, nullptr);
