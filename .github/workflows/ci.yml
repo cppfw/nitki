@@ -113,16 +113,13 @@ jobs:
     steps:
     - name: workaround python2 and python3 issue when upgrading python
       run : |
-        rm -rf /usr/local/bin/2to3
-        rm -rf /usr/local/bin/2to3-3.11
-        rm -rf /usr/local/bin/idle3
-        rm -rf /usr/local/bin/idle3.11
-        rm -rf /usr/local/bin/pydoc3
-        rm -rf /usr/local/bin/pydoc3.11
+        rm -rf /usr/local/bin/2to3*
+        rm -rf /usr/local/bin/idle3*
+        rm -rf /usr/local/bin/pydoc3*
         rm -rf /usr/local/bin/python3
         rm -rf /usr/local/bin/python3-config
-        rm -rf /usr/local/bin/python3.11
-        rm -rf /usr/local/bin/python3.11-config
+        rm -rf /usr/local/bin/python3*
+        rm -rf /usr/local/bin/python3*-config
     - name: git clone
       uses: myci-actions/checkout@master
     - name: install clang-tidy and clang-format
