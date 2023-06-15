@@ -142,7 +142,7 @@ void queue::clear_ready_to_read_state() noexcept
 	}
 #elif CFG_OS == CFG_OS_LINUX
 	{
-		eventfd_t value;
+		eventfd_t value{};
 		if (eventfd_read(this->handle, &value) < 0) {
 			ASSERT(false)
 		}

@@ -18,7 +18,7 @@ namespace test_join_before_and_after_thread_has_finished{
 
 class test_thread : public nitki::thread{
 public:
-	int a, b;
+	int a{}, b{};
 
 	void run()override{
 		this->a = 10;
@@ -68,7 +68,7 @@ public:
 		this->push_back([](){});
 	}
 
-	int a, b;
+	int a{}, b{};
 
 	std::optional<uint32_t> on_loop()override{
 		auto triggered = this->wait_set.get_triggered();

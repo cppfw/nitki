@@ -63,6 +63,12 @@ public:
 
 	~loop_thread() override;
 
+	loop_thread(const loop_thread&) = delete;
+	loop_thread& operator=(const loop_thread&) = delete;
+
+	loop_thread(loop_thread&&) = delete;
+	loop_thread& operator=(loop_thread&&) = delete;
+
 	/**
 	 * @brief Main loop of the thread.
 	 * The run() method is overridden to implement main loop with procedure queue

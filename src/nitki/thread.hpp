@@ -47,10 +47,13 @@ public:
 	thread(const thread&) = delete;
 	thread& operator=(const thread&) = delete;
 
+	thread(thread&&) = delete;
+	thread& operator=(thread&&) = delete;
+
 	thread() = default;
 
 	// NOLINTNEXTLINE(modernize-use-equals-default, "destructor is not trivial in debug build configuration")
-	virtual ~thread() noexcept
+	virtual ~thread()
 	{
 		ASSERT(!this->thr.joinable(), [](auto& o) {
 			o << "~thread() destructor is called while the thread was not joined before. "

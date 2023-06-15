@@ -36,6 +36,7 @@ SOFTWARE.
 
 using namespace nitki;
 
+// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 semaphore::semaphore(unsigned initial_value)
 {
 #if CFG_OS == CFG_OS_WINDOWS
@@ -121,10 +122,14 @@ void semaphore::wait()
 		ASSERT(false)
 	}
 #elif CFG_OS == CFG_OS_LINUX
-	int res;
-	do {
+	int res = 0;
+	for (;;) {
 		res = sem_wait(&this->s);
-	} while (res == -1 && errno == EINTR);
+		if ((res == -1 && errno == EINTR)) {
+			continue;
+		}
+		break;
+	}
 	if (res < 0) {
 		throw std::system_error(errno, std::generic_category(), "semaphore::wait(): sem_wait() failed");
 	}
@@ -200,7 +205,7 @@ bool semaphore::wait(uint32_t timeout_ms)
 			}
 		}
 	} else {
-		timespec ts;
+		timespec ts{};
 
 		if (clock_gettime(CLOCK_REALTIME, &ts) == -1) {
 			throw std::system_error(
@@ -210,10 +215,13 @@ bool semaphore::wait(uint32_t timeout_ms)
 			);
 		}
 
-		ts.tv_sec += timeout_ms / 1000;
-		ts.tv_nsec += long(timeout_ms % 1000) * 1000 * 1000;
-		ts.tv_sec += ts.tv_nsec / (long(1000) * 1000 * 1000);
-		ts.tv_nsec = ts.tv_nsec % (long(1000) * 1000 * 1000);
+		// TODO: use same utki::num_millisec_in_sec
+		constexpr auto num_millisec_in_sec = 1000;
+
+		ts.tv_sec += timeout_ms / num_millisec_in_sec;
+		ts.tv_nsec += long(timeout_ms % num_millisec_in_sec) * num_millisec_in_sec * num_millisec_in_sec;
+		ts.tv_sec += ts.tv_nsec / (long(num_millisec_in_sec) * num_millisec_in_sec * num_millisec_in_sec);
+		ts.tv_nsec = ts.tv_nsec % (long(num_millisec_in_sec) * num_millisec_in_sec * num_millisec_in_sec);
 
 		if (sem_timedwait(&this->s, &ts) == -1) {
 			if (errno == ETIMEDOUT) {
