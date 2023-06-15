@@ -112,7 +112,9 @@ jobs:
     runs-on: macos-latest
     steps:
     - name: workaround python2 and python3 issue when upgrading python
-      run : rm -rf /usr/local/bin/2to3
+      run : |
+        rm -rf /usr/local/bin/2to3
+        rm -rf /usr/local/bin/2to3-3.11
     - name: git clone
       uses: myci-actions/checkout@master
     - name: install clang-tidy and clang-format
