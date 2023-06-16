@@ -1,3 +1,9 @@
+libnitki (1.0.76) unstable; urgency=medium
+
+  * fix macos lint issues
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 16 Jun 2023 23:31:29 +0300
+
 libnitki (1.0.75) unstable; urgency=medium
 
   * conan: pass -pthread linker flag
