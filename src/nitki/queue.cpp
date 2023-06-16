@@ -38,11 +38,7 @@ SOFTWARE.
 using namespace nitki;
 
 queue::queue() :
-	opros::waitable([
-#if CFG_OS == CFG_OS_MACOSX
-						this
-#endif
-]() {
+	queue([]() {
 #if CFG_OS == CFG_OS_WINDOWS
 		auto handle = CreateEvent(
 			nullptr, // security attributes
@@ -67,8 +63,7 @@ queue::queue() :
 				"could not create pipe (*nix) for implementing Waitable"
 			);
 		}
-		this->pipe_end = ends[1];
-		return ends[0];
+		return ends;
 #elif CFG_OS == CFG_OS_LINUX
 		int event_fd = eventfd(0, EFD_NONBLOCK);
 		if (event_fd < 0) {

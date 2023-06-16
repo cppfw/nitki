@@ -65,6 +65,21 @@ class queue : public opros::waitable
 #	error "Unsupported OS"
 #endif
 
+#if CFG_OS == CFG_OS_MACOSX
+	queue(std::array<int, 2> ends) :
+		opros::waitable(ends[0]),
+		pipe_end(ends[1])
+	{}
+#elif CFG_OS == CFG_OS_WINDOWS
+	queue(HANDLE handle) :
+		opros::waitable(handle)
+	{}
+#else
+	queue(int handle) :
+		opros::waitable(handle)
+	{}
+#endif
+
 public:
 	queue(const queue&) = delete;
 	queue& operator=(const queue&) = delete;
