@@ -29,6 +29,7 @@ SOFTWARE.
 #if CFG_OS == CFG_OS_MACOSX
 #	include <cerrno>
 #	include <sys/time.h>
+#	include <utki/time.hpp>
 #elif CFG_OS == CFG_OS_WINDOWS
 #	include <limits>
 #	include <sstream>
@@ -151,19 +152,19 @@ bool semaphore::wait(uint32_t timeout_ms)
 			throw std::system_error(int(GetLastError()), std::generic_category(), "semaphore::wait(): wait failed");
 	}
 #elif CFG_OS == CFG_OS_MACOSX
-	struct timeval tv;
+	struct timeval tv{};
 
 	gettimeofday(&tv, nullptr);
 
-	struct timespec ts;
+	struct timespec ts{};
 
 	ts.tv_sec = tv.tv_sec;
-	ts.tv_nsec = static_cast<long>(tv.tv_usec) * 1000;
+	ts.tv_nsec = static_cast<long>(tv.tv_usec) * utki::num_millisec_in_sec;
 
-	ts.tv_sec += timeout_ms / 1000;
-	ts.tv_nsec += static_cast<long>(timeout_ms % 1000) * 1000 * 1000;
-	ts.tv_sec += ts.tv_nsec / static_cast<long>(1000 * 1000 * 1000);
-	ts.tv_nsec = ts.tv_nsec % static_cast<long>(1000 * 1000 * 1000);
+	ts.tv_sec += timeout_ms / utki::num_millisec_in_sec;
+	ts.tv_nsec += static_cast<long>(timeout_ms % utki::num_millisec_in_sec) * utki::num_millisec_in_sec * utki::num_millisec_in_sec;
+	ts.tv_sec += ts.tv_nsec / static_cast<long>(utki::num_millisec_in_sec * utki::num_millisec_in_sec * utki::num_millisec_in_sec);
+	ts.tv_nsec = ts.tv_nsec % static_cast<long>(utki::num_millisec_in_sec * utki::num_millisec_in_sec * utki::num_millisec_in_sec);
 
 	if (int error = pthread_mutex_lock(&this->m)) {
 		throw std::system_error(error, std::generic_category(), "semaphore::wait(): failed to lock the mutex");
@@ -215,13 +216,10 @@ bool semaphore::wait(uint32_t timeout_ms)
 			);
 		}
 
-		// TODO: use same utki::num_millisec_in_sec
-		constexpr auto num_millisec_in_sec = 1000;
-
-		ts.tv_sec += timeout_ms / num_millisec_in_sec;
-		ts.tv_nsec += long(timeout_ms % num_millisec_in_sec) * num_millisec_in_sec * num_millisec_in_sec;
-		ts.tv_sec += ts.tv_nsec / (long(num_millisec_in_sec) * num_millisec_in_sec * num_millisec_in_sec);
-		ts.tv_nsec = ts.tv_nsec % (long(num_millisec_in_sec) * num_millisec_in_sec * num_millisec_in_sec);
+		ts.tv_sec += timeout_ms / utki::num_millisec_in_sec;
+		ts.tv_nsec += long(timeout_ms % utki::num_millisec_in_sec) * utki::num_millisec_in_sec * utki::num_millisec_in_sec;
+		ts.tv_sec += ts.tv_nsec / (long(utki::num_millisec_in_sec) * utki::num_millisec_in_sec * utki::num_millisec_in_sec);
+		ts.tv_nsec = ts.tv_nsec % (long(utki::num_millisec_in_sec) * utki::num_millisec_in_sec * utki::num_millisec_in_sec);
 
 		if (sem_timedwait(&this->s, &ts) == -1) {
 			if (errno == ETIMEDOUT) {
