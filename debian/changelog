@@ -1,3 +1,9 @@
+libnitki (1.0.77) unstable; urgency=medium
+
+  * do not use deprecated stuff
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 20 Jun 2023 19:14:10 +0300
+
 libnitki (1.0.76) unstable; urgency=medium
 
   * fix macos lint issues
