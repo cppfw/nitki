@@ -165,9 +165,9 @@ bool semaphore::wait(uint32_t timeout_ms)
 	ts.tv_nsec = static_cast<long>(tv.tv_usec) * std::milli::den;
 
 	ts.tv_sec += timeout_ms / std::milli::den;
-	ts.tv_nsec += static_cast<long>(timeout_ms % std::milli::den) * std::nano::den;
-	ts.tv_sec += ts.tv_nsec / static_cast<long>(std::milli::den * std::nano::den);
-	ts.tv_nsec = ts.tv_nsec % static_cast<long>(std::milli::den * std::nano::den);
+	ts.tv_nsec += static_cast<long>(timeout_ms % std::milli::den) * std::micro::den;
+	ts.tv_sec += ts.tv_nsec / static_cast<long>(std::nano::den);
+	ts.tv_nsec = ts.tv_nsec % static_cast<long>(std::nano::den);
 
 	if (int error = pthread_mutex_lock(&this->m)) {
 		throw std::system_error(error, std::generic_category(), "semaphore::wait(): failed to lock the mutex");
