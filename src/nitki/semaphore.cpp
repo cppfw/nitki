@@ -26,6 +26,8 @@ SOFTWARE.
 
 #include "semaphore.hpp"
 
+#include <ratio>
+
 #if CFG_OS == CFG_OS_MACOSX
 #	include <cerrno>
 #	include <sys/time.h>
@@ -160,12 +162,12 @@ bool semaphore::wait(uint32_t timeout_ms)
 	struct timespec ts {};
 
 	ts.tv_sec = tv.tv_sec;
-	ts.tv_nsec = static_cast<long>(tv.tv_usec) * utki::reciprocal_milli;
+	ts.tv_nsec = static_cast<long>(tv.tv_usec) * std::milli::den;
 
-	ts.tv_sec += timeout_ms / utki::reciprocal_milli;
-	ts.tv_nsec += static_cast<long>(timeout_ms % utki::reciprocal_milli) * utki::reciprocal_nano;
-	ts.tv_sec += ts.tv_nsec / static_cast<long>(utki::reciprocal_milli * utki::reciprocal_nano);
-	ts.tv_nsec = ts.tv_nsec % static_cast<long>(utki::reciprocal_milli * utki::reciprocal_nano);
+	ts.tv_sec += timeout_ms / std::milli::den;
+	ts.tv_nsec += static_cast<long>(timeout_ms % std::milli::den) * std::nano::den;
+	ts.tv_sec += ts.tv_nsec / static_cast<long>(std::milli::den * std::nano::den);
+	ts.tv_nsec = ts.tv_nsec % static_cast<long>(std::milli::den * std::nano::den);
 
 	if (int error = pthread_mutex_lock(&this->m)) {
 		throw std::system_error(error, std::generic_category(), "semaphore::wait(): failed to lock the mutex");
@@ -217,10 +219,10 @@ bool semaphore::wait(uint32_t timeout_ms)
 			);
 		}
 
-		ts.tv_sec += timeout_ms / utki::reciprocal_milli;
-		ts.tv_nsec += long(timeout_ms % utki::reciprocal_milli) * utki::reciprocal_nano;
-		ts.tv_sec += ts.tv_nsec / (long(utki::reciprocal_milli) * utki::reciprocal_nano);
-		ts.tv_nsec = ts.tv_nsec % (long(utki::reciprocal_milli) * utki::reciprocal_nano);
+		ts.tv_sec += timeout_ms / std::milli::den;
+		ts.tv_nsec += long(timeout_ms % std::milli::den) * std::nano::den;
+		ts.tv_sec += ts.tv_nsec / (long(std::milli::den) * std::nano::den);
+		ts.tv_nsec = ts.tv_nsec % (long(std::milli::den) * std::nano::den);
 
 		if (sem_timedwait(&this->s, &ts) == -1) {
 			if (errno == ETIMEDOUT) {
