@@ -1,3 +1,9 @@
+libnitki (1.0.78) unstable; urgency=medium
+
+  * use std::ratio
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 13 Jul 2023 10:44:44 +0300
+
 libnitki (1.0.77) unstable; urgency=medium
 
   * do not use deprecated stuff
