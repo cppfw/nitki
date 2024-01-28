@@ -57,7 +57,7 @@ public:
 	{
 		ASSERT(!this->thr.joinable(), [](auto& o) {
 			o << "~thread() destructor is called while the thread was not joined before. "
-			  << "Make sure the thread is joined by calling thread::join() "
+			  << "Make sure the thread is joined by calling thread::join() " //
 			  << "before destroying the thread object.";
 		})
 
