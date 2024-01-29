@@ -92,9 +92,11 @@ void semaphore::wait()
 {
 #if CFG_OS == CFG_OS_WINDOWS
 	switch (WaitForSingleObject(this->s, DWORD(INFINITE))) {
+		// NOLINTNEXTLINE(bugprone-branch-clone)
 		default:
 			[[fallthrough]];
-		case WAIT_TIMEOUT: // NOLINT(bugprone-branch-clone)
+		// NOLINTNEXTLINE(bugprone-branch-clone)
+		case WAIT_TIMEOUT:
 			[[fallthrough]];
 		case WAIT_ABANDONED:
 			ASSERT(false)
