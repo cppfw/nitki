@@ -87,6 +87,13 @@ public:
 	virtual std::optional<uint32_t> on_loop() = 0;
 
 	/**
+	 * @brief Thread exit procedure.
+	 * This function is called from within the thread after it has exited the main loop,
+	 * right before exiting the thread's run() function.
+	 */
+	virtual void on_quit() {}
+
+	/**
 	 * @brief Request this thread to quit.
 	 */
 	void quit() noexcept;

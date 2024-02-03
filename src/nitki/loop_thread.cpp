@@ -72,4 +72,6 @@ void loop_thread::run()
 			proc.operator()();
 		}
 	}
+
+	this->on_quit();
 }
