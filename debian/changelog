@@ -1,3 +1,9 @@
+libnitki (1.0.81) unstable; urgency=medium
+
+  * add loop_thread::on_quit() virtual function
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 03 Feb 2024 16:03:02 +0200
+
 libnitki (1.0.80) unstable; urgency=medium
 
   * archlinux: deploy to arch repos
