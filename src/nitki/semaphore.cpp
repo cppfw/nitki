@@ -223,10 +223,10 @@ bool semaphore::wait(uint32_t timeout_ms)
 			);
 		}
 
-		ts.tv_sec += timeout_ms / std::milli::den;
-		ts.tv_nsec += long(timeout_ms % std::milli::den) * std::micro::den;
-		ts.tv_sec += ts.tv_nsec / std::nano::den;
-		ts.tv_nsec = ts.tv_nsec % std::nano::den;
+		ts.tv_sec += decltype(ts.tv_sec)(timeout_ms / std::milli::den);
+		ts.tv_nsec += decltype(ts.tv_nsec)(long(timeout_ms % std::milli::den) * std::micro::den);
+		ts.tv_sec += decltype(ts.tv_sec)(ts.tv_nsec / std::nano::den);
+		ts.tv_nsec = decltype(ts.tv_nsec)(ts.tv_nsec % std::nano::den);
 
 		if (sem_timedwait(&this->s, &ts) == -1) {
 			if (errno == ETIMEDOUT) {
