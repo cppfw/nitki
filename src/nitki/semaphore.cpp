@@ -159,11 +159,11 @@ bool semaphore::wait(uint32_t timeout_ms)
 			throw std::system_error(int(GetLastError()), std::generic_category(), "semaphore::wait(): wait failed");
 	}
 #elif CFG_OS == CFG_OS_MACOSX
-	struct timeval tv {};
+	timeval tv{};
 
 	gettimeofday(&tv, nullptr);
 
-	struct timespec ts {};
+	timespec ts{};
 
 	ts.tv_sec = tv.tv_sec;
 	ts.tv_nsec = static_cast<long>(tv.tv_usec) * std::milli::den;
