@@ -1,3 +1,9 @@
+libnitki (1.0.87) unstable; urgency=medium
+
+  * build for ubuntu nobel
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 05 Jul 2024 14:11:06 +0300
+
 libnitki (1.0.86) unstable; urgency=medium
 
   * fix homebrew
