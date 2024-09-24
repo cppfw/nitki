@@ -21,17 +21,16 @@ Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: cross-platform C++ threading library.
  Threading library.
 
-Package: libnitki$(soname)-dbg
+Package: libnitki$(soname)-dbgsrc
 Section: debug
-Architecture: any
-Depends: libnitki$(soname) (= ${binary:Version}), ${misc:Depends}
-Description: debugging symbols for libnitki$(soname) package.
- Debugging symbols for libnitki.
+Architecture: all
+Depends: libnitki$(soname)-dbgsym (= ${binary:Version}), ${misc:Depends}
+Description: debugging sources for libnitki$(soname) package.
 
 Package: libnitki-dev
 Section: libdevel
 Architecture: any
-Depends: libnitki$(soname) (= ${binary:Version}), libnitki$(soname)-dbg (= ${binary:Version}), ${misc:Depends},
+Depends: libnitki$(soname) (= ${binary:Version}), ${misc:Depends},
 		libutki-dev, libopros-dev
 Suggests: libnitki-doc
 Description: cross-platform C++ threading library.
