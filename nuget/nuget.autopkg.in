@@ -18,9 +18,9 @@ nuget{
 		title: C++ threading library;
 		authors: {Ivan Gagis};
 		owners: {Ivan Gagis};
-		licenseUrl: "https://raw.githubusercontent.com/cppfw/nitki/master/LICENSE";
+		licenseUrl: "https://raw.githubusercontent.com/cppfw/nitki/main/LICENSE";
 		projectUrl: "https://github.com/cppfw/nitki";
-		iconUrl: "https://github.com/cppfw/nitki/blob/master/logo.svg";
+		iconUrl: "https://github.com/cppfw/nitki/blob/main/logo.svg";
 		requireLicenseAcceptance:false;
 		summary: C++ threading library;
 
@@ -79,7 +79,7 @@ nuget{
 		}
 */
 		// ======== v142 =========
-
+/*
 		[x86,v142,release,MultiThreaded] {
 			lib: ..\msvs_solution\v142_Release_MT\libnitki.lib;
 		}
@@ -104,7 +104,7 @@ nuget{
 		[x64,v142,debug,MultiThreadedDebugDLL] {
 			lib: ..\msvs_solution\x64\v142_Debug_MD\libnitki.lib;
 		}
-
+*/
 		//==== v143 tools ====
 
 		[x86,v143,release,MultiThreaded] {
