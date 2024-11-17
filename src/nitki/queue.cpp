@@ -131,6 +131,7 @@ void queue::clear_ready_to_read_state() noexcept
 #elif CFG_OS == CFG_OS_MACOSX
 	{
 		std::array<uint8_t, 1> one_byte_buf{};
+		// NOLINTNEXTLINE(clang-analyzer-unix.BlockInCriticalSection, "should not block")
 		if (read(this->handle, one_byte_buf.data(), 1) != 1) {
 			ASSERT(false)
 		}
