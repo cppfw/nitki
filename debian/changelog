@@ -1,3 +1,9 @@
+libnitki (1.0.90) unstable; urgency=medium
+
+  * vcpkgize
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 25 Nov 2024 22:28:45 +0200
+
 libnitki (1.0.89) unstable; urgency=medium
 
   * conan: rebuild
