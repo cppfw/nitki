@@ -1,0 +1,4 @@
+nitki provides CMake targets:
+
+find_package(nitki CONFIG REQUIRED)
+target_link_libraries(main PRIVATE nitki::nitki)
