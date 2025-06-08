@@ -1,7 +1,5 @@
 nitki provides CMake targets:
 
-find_package(utki CONFIG REQUIRED)
-find_package(opros CONFIG REQUIRED)
 find_package(nitki CONFIG REQUIRED)
 
 target_link_libraries(main PRIVATE nitki::nitki)
