@@ -5,21 +5,23 @@ include prorab-install-dbgsrc.mk
 
 $(eval $(call prorab-config, ../config))
 
-this_name := nitki
+this_src_dir := nitki
+
+this_name := $(this_src_dir)$(this_dbg)
 
 this_soname := $(shell cat $(d)soname.txt)
 
-this_srcs := $(call prorab-src-dir, .)
+this_srcs := $(call prorab-src-dir, $(this_src_dir))
 
 ifeq ($(os),linux)
-    this_ldlibs += -lpthread
+    this_ldlibs += -l pthread
 endif
 
-this_ldlibs += -lutki -lopros
+this_ldlibs += -l utki$(this_dbg)
+this_ldlibs += -l opros$(this_dbg)
 
 $(eval $(prorab-build-lib))
 
-this_src_dir := $(this_name)
 this_license_file := ../LICENSE
 $(eval $(prorab-license))
 

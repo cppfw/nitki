@@ -7,15 +7,16 @@ this_name := tests
 
 this_srcs += $(call prorab-src-dir, .)
 
-this_ldlibs += -lnitki -lopros -lutki
-this_ldflags += -L$(d)../../src/out/$(c)
+this_ldlibs += -lopros$(this_dbg)
+this_ldlibs += -lutki$(this_dbg)
+
+this__libnitki := ../../src/out/$(c)/libnitki$(this_dbg)$(dot_so)
+
+this_ldlibs += $(this__libnitki)
 
 this_no_install := true
 
 $(eval $(prorab-build-app))
-
-# add dependency on libnitki.so
-$(eval $(call prorab-depend, $(prorab_this_name), ../../src/out/$(c)/libnitki$(dot_so)))
 
 this_test_cmd := $(prorab_this_name)
 this_test_deps := $(prorab_this_name)
