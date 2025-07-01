@@ -45,8 +45,9 @@ Package: libnitki-dev
 Section: libdevel
 Architecture: any
 Depends:
-	libnitki$(soname) (= ${binary:Version}), ${misc:Depends},
-	libnitki-dbg$(soname) (= ${binary:Version}), ${misc:Depends},
+	libnitki$(soname) (= ${binary:Version}),
+	libnitki-dbg$(soname) (= ${binary:Version}),
+	${misc:Depends},
 	libutki-dev,
 	libopros-dev
 Suggests: libnitki-doc
