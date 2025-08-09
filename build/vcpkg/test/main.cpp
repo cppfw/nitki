@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <nitki/queue.hpp>
 
 int main(int argc, const char** argv){

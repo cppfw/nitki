@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <nitki/loop_thread.hpp>
 
 class my_thread : public nitki::loop_thread{

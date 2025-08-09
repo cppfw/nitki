@@ -1,10 +1,10 @@
 #pragma once
 
+#include <iostream>
+
 #include <utki/debug.hpp>
 
 #include "tests.hpp"
-
-
 
 inline void test_nitki_thread(){
  	std::cout << "running test_many_threads..." << std::endl;
