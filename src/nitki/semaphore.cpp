@@ -180,14 +180,14 @@ bool semaphore::wait(uint32_t timeout_ms)
 	if (this->v == 0) {
 		if (int error = pthread_cond_timedwait(&this->c, &this->m, &ts)) {
 			if (pthread_mutex_unlock(&this->m) != 0) {
-                utki::assert(false, SL);
+				utki::assert(false, SL);
 			}
 			if (error == ETIMEDOUT) {
 				return false;
 			} else {
 				utki::log_debug([&](auto& o) {
 					o << "semaphore::wait(): pthread_cond_wait() failed, error code = " << error << std::endl;
-                });
+				});
 				throw std::system_error(
 					error,
 					std::generic_category(),
