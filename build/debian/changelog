@@ -1,3 +1,9 @@
+libnitki (1.0.99) unstable; urgency=medium
+
+  * fix ios
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 23 Oct 2025 23:39:38 +0300
+
 libnitki (1.0.98) unstable; urgency=medium
 
   * debian trixie build
