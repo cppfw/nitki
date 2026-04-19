@@ -200,8 +200,9 @@ bool semaphore::wait(uint32_t timeout_ms)
 	--this->v;
 
 	if (pthread_mutex_unlock(&this->m) != 0) {
-		ASSERT(false)
+		utki::assert(false, SL);
 	}
+	return true;
 #elif CFG_OS == CFG_OS_LINUX
 	// if timeout is 0 then use sem_trywait() to avoid unnecessary time calculation for sem_timedwait()
 	if (timeout_ms == 0) {
@@ -236,10 +237,10 @@ bool semaphore::wait(uint32_t timeout_ms)
 			}
 		}
 	}
+	return true;
 #else
 #	error "unknown OS"
 #endif
-	return true;
 }
 
 void semaphore::signal()
