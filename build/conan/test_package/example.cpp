@@ -5,7 +5,7 @@
 class my_thread : public nitki::loop_thread{
 public:
 	my_thread() : loop_thread(0){
-		this->push_back([](){});
+		this->push([](){});
 	}
 
 	int a, b;
