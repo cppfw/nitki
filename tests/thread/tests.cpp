@@ -65,7 +65,7 @@ namespace test_many_threads{
 class test_thread_1 : public nitki::loop_thread{
 public:
 	test_thread_1() : loop_thread(0){
-		this->push_back([](){});
+		this->push([](){});
 	}
 
 	int a{}, b{};
