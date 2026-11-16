@@ -55,11 +55,15 @@ public:
 	// NOLINTNEXTLINE(modernize-use-equals-default, "destructor is not trivial in debug build configuration")
 	virtual ~thread()
 	{
-		ASSERT(!this->thr.joinable(), [](auto& o) {
-			o << "~thread() destructor is called while the thread was not joined before. "
-			  << "Make sure the thread is joined by calling thread::join() " //
-			  << "before destroying the thread object.";
-		})
+		utki::assert(
+			!this->thr.joinable(),
+			[](auto& o) {
+				o << "~thread() destructor is called while the thread was not joined before. "
+				  << "Make sure the thread is joined by calling thread::join() " //
+				  << "before destroying the thread object.";
+			},
+			SL
+		);
 
 		// NOTE: it is incorrect to put this->join() to this destructor, because
 		//       thread shall already be stopped at the moment when this destructor

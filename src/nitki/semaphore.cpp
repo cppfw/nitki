@@ -99,7 +99,7 @@ void semaphore::wait()
 		case WAIT_TIMEOUT:
 			[[fallthrough]];
 		case WAIT_ABANDONED:
-			ASSERT(false)
+			utki::assert(false, SL);
 			[[fallthrough]];
 		case WAIT_OBJECT_0:
 			break;
@@ -118,7 +118,7 @@ void semaphore::wait()
 	if (this->v == 0) {
 		if (int error = pthread_cond_wait(&this->c, &this->m)) {
 			if (pthread_mutex_unlock(&this->m) != 0) {
-				ASSERT(false)
+				utki::assert(false, SL);
 			}
 			throw std::system_error(error, std::generic_category(), "semaphore::wait(): pthread_cond_wait() failed");
 		}
@@ -127,7 +127,7 @@ void semaphore::wait()
 	--this->v;
 
 	if (pthread_mutex_unlock(&this->m) != 0) {
-		ASSERT(false)
+		utki::assert(false, SL);
 	}
 #elif CFG_OS == CFG_OS_LINUX
 	int res = 0;

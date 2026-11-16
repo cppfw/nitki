@@ -99,7 +99,7 @@ void run(){
 		auto t = std::make_unique<test_thread_1>();
 
 		try{
-			ASSERT(t)
+			utki::assert(t, SL);
 			t->start();
 		}catch(std::system_error& e){
 			utki::log([&](auto& o){

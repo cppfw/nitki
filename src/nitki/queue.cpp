@@ -102,18 +102,18 @@ void queue::set_ready_to_read_state() noexcept
 
 #if CFG_OS == CFG_OS_WINDOWS
 	if (SetEvent(this->handle) == 0) {
-		ASSERT(false)
+		utki::assert(false, SL);
 	}
 #elif CFG_OS == CFG_OS_MACOSX
 	{
 		std::array<uint8_t, 1> one_byte_buf{};
 		if (write(this->pipe_end, one_byte_buf.data(), 1) != 1) {
-			ASSERT(false)
+			utki::assert(false, SL);
 		}
 	}
 #elif CFG_OS == CFG_OS_LINUX
 	if (eventfd_write(this->handle, 1) < 0) {
-		ASSERT(false)
+		utki::assert(false, SL);
 	}
 #else
 #	error "Unsupported OS"
@@ -126,23 +126,23 @@ void queue::clear_ready_to_read_state() noexcept
 {
 #if CFG_OS == CFG_OS_WINDOWS
 	if (ResetEvent(this->handle) == 0) {
-		ASSERT(false)
+		utki::assert(false, SL);
 	}
 #elif CFG_OS == CFG_OS_MACOSX
 	{
 		std::array<uint8_t, 1> one_byte_buf{};
 		// NOLINTNEXTLINE(clang-analyzer-unix.BlockInCriticalSection, "should not block")
 		if (read(this->handle, one_byte_buf.data(), 1) != 1) {
-			ASSERT(false)
+			utki::assert(false, SL);
 		}
 	}
 #elif CFG_OS == CFG_OS_LINUX
 	{
 		eventfd_t value{};
 		if (eventfd_read(this->handle, &value) < 0) {
-			ASSERT(false)
+			utki::assert(false, SL);
 		}
-		ASSERT(value == 1)
+		utki::assert(value == 1, SL);
 	}
 #else
 #	error "Unsupported OS"
@@ -203,9 +203,13 @@ void queue::set_waiting_flags(utki::flags<opros::ready> wait_for)
 	// It make no sense to wait on queue for anything else than READ,
 	// so we restrict setting waiting flags to READ flag only.
 	if (!wait_for.get(opros::ready::read) && !wait_for.clear(opros::ready::read).is_clear()) {
-		ASSERT(false, [&](auto& o) {
-			o << "wait_for = " << wait_for;
-		})
+		utki::assert(
+			false,
+			[&](auto& o) {
+				o << "wait_for = " << wait_for;
+			},
+			SL
+		);
 		throw std::invalid_argument(
 			"queue::set_waiting_flags(): wait_for should have only ready::read flag set, other values are not allowed"
 		);
